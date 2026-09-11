@@ -3,29 +3,29 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>forcepush-ghost — scandal timeline</title>
-  <meta name="description" content="Offline scandal timeline of force-pushed commits — green still on main, red wiped. This page uses fixtures only; live scan is CLI." />
+  <title>forcepush-ghost — upstream wiped it, the fork still remembers</title>
+  <meta name="description" content="Upstream wiped it. The fork still remembers — offline dual-rail demo (upstream ✕ / fork ●). Fixtures only; live --vs is CLI." />
   <link rel="canonical" href="https://caoshurong.github.io/forcepush-ghost/demo/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="forcepush-ghost" />
-  <meta property="og:title" content="Force-push wiped it? Red ✕ scandal timeline" />
-  <meta property="og:description" content="Offline demo: ● still on main, ✕ wiped by force-push. Forward this page — fixtures only, not a secret scanner." />
+  <meta property="og:title" content="Upstream wiped it. The fork still remembers." />
+  <meta property="og:description" content="Offline dual-rail: same SHA upstream ✕ / fork ●. Pick Fork-witness A — fixtures only, not a secret scanner." />
   <meta property="og:url" content="https://caoshurong.github.io/forcepush-ghost/demo/" />
-  <meta property="og:image" content="https://caoshurong.github.io/forcepush-ghost/demo/timeline.png" />
+  <meta property="og:image" content="https://caoshurong.github.io/forcepush-ghost/demo/fork-witness.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="960" />
   <meta property="og:image:height" content="420" />
-  <meta property="og:image:alt" content="Red-X scandal timeline: wiped commits vs commits still on main" />
+  <meta property="og:image:alt" content="Dual rail: upstream wiped tip vs fork still alive on the same SHA" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Force-push wiped it? Red ✕ scandal timeline" />
-  <meta name="twitter:description" content="● on main · ✕ wiped · offline fixtures. https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner." />
-  <meta name="twitter:image" content="https://caoshurong.github.io/forcepush-ghost/demo/timeline.png" />
+  <meta name="twitter:title" content="Upstream wiped it. The fork still remembers." />
+  <meta name="twitter:description" content="Same SHA: upstream ✕ / fork ● — offline dual-rail. https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner." />
+  <meta name="twitter:image" content="https://caoshurong.github.io/forcepush-ghost/demo/fork-witness.png" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <header class="hero">
     <p class="eyebrow">forcepush-ghost</p>
-    <h1>The force-push scandal timeline for any public repo.</h1>
+    <h1>Upstream wiped it. The fork still remembers.</h1>
     <p class="sub"><span class="alive">● Green</span> = still on the default branch. <span class="wiped">✕ Red</span> = wiped by a force-push.</p>
     <figure class="hero-gif">
       <img src="./timeline.gif" width="960" height="420" alt="Force-push scandal timeline: red wiped commits, green still on main" />
@@ -72,7 +72,7 @@ node bin/forcepush-ghost.js mrdoob/three.js</pre>
 
   <section class="share-card" aria-label="Copy-paste share text">
     <p class="share-card-title">Share this (copy/paste)</p>
-    <pre id="shareText">Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.</pre>
+    <pre id="shareText">Upstream wiped it. The fork still remembers… pick Fork-witness A — https://caoshurong.github.io/forcepush-ghost/demo/ (offline dual-rail; story, not a scanner).</pre>
     <button type="button" id="copyShare" class="share-copy">Copy</button>
   </section>
 
@@ -97,10 +97,10 @@ node bin/forcepush-ghost.js mrdoob/three.js</pre>
   <section class="controls">
     <label>Fixture
       <select id="fixtureSelect">
+        <option value="fork-witness-a" selected>Fork-witness A — upstream ✕ / fork ● (offline V0.2)</option>
         <option value="scandal-a">Scandal A — org rewind (Jenkins-shaped)</option>
         <option value="scandal-b">Scandal B — oops rewrite</option>
         <option value="clean">Clean bill of health</option>
-        <option value="fork-witness-a">Fork-witness A — upstream ✕ / fork ● (offline V0.2)</option>
         <option value="fork-witness-clean">Fork-witness clean — both sides match</option>
       </select>
     </label>
@@ -113,7 +113,7 @@ node bin/forcepush-ghost.js mrdoob/three.js</pre>
   <p class="legend"><span class="alive">● alive on branch</span> <span class="wiped">✕ wiped by force-push</span></p>
 
   <footer>
-    <code>node bin/forcepush-ghost.js --fixture scandal-a</code> <span class="muted">(or Pages — already here)</span>
+    <code>node bin/forcepush-ghost.js --fixture fork-witness-a</code> <span class="muted">(or Pages — already here)</span>
     <p>Story / timeline tool — not a secret scanner. Page fixtures are sanitized; CLI can scan public repos live.</p>
   </footer>
 

@@ -1,4 +1,4 @@
-# One-click outbound pack — v0.1.12 (HOLD — wait for Star PM go)
+# One-click outbound pack — v0.1.13 (HOLD — wait for Star PM go)
 
 Star PM says go → paste these. Do not invent npx. **Do not post until go.**
 
@@ -12,7 +12,7 @@ Title: Show HN: forcepush-ghost – upstream wiped it, the fork still remembers
 
 Text: Offline dual-rail demo (zero install): https://caoshurong.github.io/forcepush-ghost/demo/ — pick Fork-witness A. Same SHA: upstream ✕ / fork ●.
 
-Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.12
+Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.13
 
 Clone CLI: `node bin/forcepush-ghost.js --fixture fork-witness-a`
 

@@ -76,11 +76,11 @@ Pages plays fixtures only. Label every card **offline / reconstructed** until li
 
 ## Acceptance (demo + README)
 
-- [ ] Dual-rail GIF first frame shows ✕ vs ● on the same SHA
-- [ ] Pages section titled “Fork still remembers (offline)”
-- [ ] Share blurb uses the hook above; no npx-until-publish lie
-- [ ] ERT claim-check: no restore/scanner drift
-- [ ] Whitespace: still one product family (`forcepush-ghost`)
+- [x] Dual-rail GIF first frame shows ✕ vs ● on the same SHA
+- [x] Pages section titled “Fork still remembers (offline)”
+- [x] Share blurb uses the hook above; no npx-until-publish lie
+- [x] ERT claim-check: no restore/scanner drift
+- [x] Whitespace: still one product family (`forcepush-ghost`)
 
 ## Out of scope for this draft
 

@@ -1,6 +1,6 @@
 # forcepush-ghost
 
-**The force-push scandal timeline for any public repo.**
+**Upstream wiped it. The fork still remembers.**
 
 ![Timeline demo](demo/timeline.gif)
 
@@ -8,7 +8,7 @@ Green = still on the default branch. Red = wiped by a force-push.
 
 ### Zero install (start here)
 
-**[Live demo →](https://caoshurong.github.io/forcepush-ghost/demo/)** — red ✕ timeline in the browser. Offline fixtures only; no auth, no clone.
+**[Live demo →](https://caoshurong.github.io/forcepush-ghost/demo/)** — offline dual-rail (Fork-witness A): upstream ✕ / fork ●. Fixtures only; no auth, no clone.
 
 Or open `demo/index.html` after clone — same story, zero network.
 

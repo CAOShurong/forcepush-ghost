@@ -1,8 +1,10 @@
 # 15s clip plan (story/timeline only) — HOLD, do not post
 
+**v0.1.13+:** Path B (fork-witness hook) is the default Pages share/OG; Path A remains classic Scandal fixtures.
+
 Target: X / Show HN reply GIF or screen recording of https://caoshurong.github.io/forcepush-ghost/demo/
 
-**Primary CTA:** Pages offline demo (`timeline.gif` / OG `timeline.png`)
+**Primary CTA:** Pages offline demo — Path B default (`fork-witness.gif` / OG `fork-witness.png`; Path A Scandal still available)
 **Status:** pack ready — record/post only after Star PM + user authorize outbound.
 
 ## Path A — Scandal wipe

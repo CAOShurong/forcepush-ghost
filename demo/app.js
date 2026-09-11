@@ -20,17 +20,17 @@ const singleRailWrap = document.getElementById("singleRailWrap");
 const shareText = document.getElementById("shareText");
 const playForkWitness = document.getElementById("playForkWitness");
 
-const SHARE_DEFAULT =
-  "Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.";
 const SHARE_FORK_WITNESS =
   "Upstream wiped it. The fork still remembers… pick Fork-witness A — https://caoshurong.github.io/forcepush-ghost/demo/ (offline dual-rail; story, not a scanner).";
+const SHARE_CLASSIC =
+  "Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.";
 
 function syncShareCard(id) {
   if (!shareText) return;
   shareText.textContent =
     id === "fork-witness-a" || id === "fork-witness-clean"
       ? SHARE_FORK_WITNESS
-      : SHARE_DEFAULT;
+      : SHARE_CLASSIC;
 }
 
 async function loadFixture(id) {
