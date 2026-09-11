@@ -39,10 +39,10 @@ Upstream wiped it. The fork still remembers.
 
 ### CLI (clone)
 node bin/forcepush-ghost.js --fixture fork-witness-a
-node bin/forcepush-ghost.js upstream/repo --vs fork/owner   # later; honest if not wired
+node bin/forcepush-ghost.js upstream/repo --vs forkOwner     # live CLI; Pages stays offline
 ```
 
-First screen must never claim live fork-compare until the CLI path is real and tested.
+First screen: Pages = offline fixtures; live fork-compare is CLI `--vs` only.
 
 ## Why someone Stars in ~30s
 
@@ -59,7 +59,7 @@ First screen must never claim live fork-compare until the CLI path is real and t
 
 Pages plays fixtures only. Label every card **offline / reconstructed** until live `--vs` exists.
 
-## Live path (later, honesty-gated)
+## Live path (CLI `--vs`, honesty-gated — shipped v0.1.8)
 
 - Input: `upstream/repo` + optional `fork/owner` (default: most-starred public fork still holding `before` SHA)
 - Signal: upstream rewrite (Events + compare) **and** fork still contains wiped tip
@@ -84,4 +84,4 @@ Pages plays fixtures only. Label every card **offline / reconstructed** until li
 
 ## Out of scope for this draft
 
-Implementing live `--vs`, picking real showcase fork pairs, opening a second GitHub repo.
+Picking real showcase fork pairs for README; opening a second GitHub repo (never).

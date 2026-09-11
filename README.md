@@ -35,6 +35,17 @@ Showcase (real public repo with live ✕ on tip):
 node bin/forcepush-ghost.js mrdoob/three.js
 ```
 
+### Live fork-witness (`--vs`, CLI only)
+
+```bash
+node bin/forcepush-ghost.js upstream/repo --vs forkOwner
+node bin/forcepush-ghost.js upstream/repo --vs forkOwner/forkRepo
+```
+
+Same repo name when only `forkOwner` is given. Probes whether a fork still holds wiped / `before` tip SHAs after an upstream rewrite. Fail closed: API errors exit 2 and never substitute fixtures; fork missing a SHA prints upstream ✕ / fork ——.
+
+**Pages stays offline fixtures** — the demo never runs live `--vs`.
+
 Live mode reads recent public GitHub Events for force-push signals and prints the same story timeline. Optional `GITHUB_TOKEN` / `GH_TOKEN` raises rate limits; if unset, the CLI soft-tries `gh auth token` when the GitHub CLI is logged in. The visual demo stays offline-fixtures so it never pretends it scanned a repo it did not.
 
 ## What you are looking at
@@ -55,7 +66,7 @@ Open the [Live demo](https://caoshurong.github.io/forcepush-ghost/demo/) for the
 
 ### Fork-witness offline preview (V0.2)
 
-Dual-rail fixtures: same SHA on **upstream ✕** vs **fork ●**. Offline only — not a live `--vs`.
+Dual-rail fixtures: same SHA on **upstream ✕** vs **fork ●**. Offline preview for Pages; live compare is CLI `--vs` only.
 
 ```bash
 node bin/forcepush-ghost.js --fixture fork-witness-a
@@ -67,7 +78,7 @@ Pages: pick **Fork-witness A** in the demo select. Hook: *Upstream wiped it. The
 ## Limitations
 
 - Live scan uses the public Events window only — older rewrites can fall outside it
-- Demo UI is offline fixtures; live `owner/repo` is CLI for now
+- Demo UI is offline fixtures; live `owner/repo` and live `--vs` are CLI only (Pages never runs live `--vs`)
 - Offline fixtures are sanitized — not real scandals dressed up as live results
 - Story/timeline positioning only — not a secret scanner and not secret recovery
 - `npx forcepush-ghost` works only after the package is on npm; until then use Pages or `node bin/…` from a clone

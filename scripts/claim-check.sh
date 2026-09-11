@@ -17,6 +17,36 @@ if [[ -n "${hits// }" ]]; then
   echo "$hits"
   exit 1
 fi
+
+# Pages / demo must never claim they *run* live --vs (CLI-only path).
+# Affirmative-only patterns; honest "no live --vs" / "CLI only" lines are filtered out.
+fake_vs=$(rg -n -i \
+  -e 'pages (demo )?(runs|does|supports|offers|has) live[^\n]{0,20}--vs' \
+  -e 'live[^\n]{0,20}--vs[^\n]{0,40}(in|on) (the )?pages' \
+  -e 'this page[^\n]{0,40}(runs|does)[^\n]{0,40}live[^\n]{0,20}(--vs|fork.?compare)' \
+  -e 'demo[^\n]{0,30}runs[^\n]{0,30}live[^\n]{0,20}--vs' \
+  "$root/demo" "$root/README.md" "$root/index.html" 2>/dev/null || true)
+fake_vs=$(printf '%s\n' "$fake_vs" | rg -v -i \
+  'not a live|no live --vs|never runs live|stays offline|offline fixtures only|not a live upstream|cli (--vs )?only|cli only' \
+  || true)
+if [[ -n "${fake_vs// }" ]]; then
+  echo "CLAIM CHECK FAIL (fake live --vs on Pages/demo):"
+  echo "$fake_vs"
+  exit 1
+fi
+
+# Kill-list drift in user-facing surfaces (affirmative restore/recover CTAs)
+kill=$(rg -n -i \
+  -e '\b(restore|recover|undelete)\b.{0,40}\b(commit|secret|file|history)\b' \
+  -e '\bget your commits back\b' \
+  "$root/README.md" "$root/demo" "$root/bin" "$root/src" 2>/dev/null || true)
+kill=$(printf '%s\n' "$kill" | rg -v -i 'does not recover|not recover|no restore|not.*restore|refusing' || true)
+if [[ -n "${kill// }" ]]; then
+  echo "CLAIM CHECK FAIL (restore/recover kill-list):"
+  echo "$kill"
+  exit 1
+fi
+
 test -f "$root/demo/timeline.gif" || { echo "missing timeline.gif"; exit 1; }
 echo "CLAIM CHECK PASS"
 echo "GIF OK"
