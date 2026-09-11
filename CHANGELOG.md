@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.15 — 2026-09-11
+
+- **Path B CLI lead:** README + launch PATHS/HOLD packs lead clone/CLI examples with `--fixture fork-witness-a` (scandal-a remains available)
+- Release retarget after tip docs(readme) Path B lead; Pages demo already on hero GIF
+- External X / Show HN remain **HOLD**; npm still unpublished (ENEEDAUTH) — Pages zero-install #1
+- Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.15
+
+
 ## 0.1.14 — 2026-09-11
 
 - **Path B hero:** Pages opens on `fork-witness.gif` (no Play-first beat); OG stays `fork-witness.png`

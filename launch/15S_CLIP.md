@@ -1,6 +1,6 @@
 # 15s clip plan (story/timeline only) — HOLD, do not post
 
-**v0.1.14+:** Path B (fork-witness hook) is the default Pages share/OG/hero; Path A remains classic Scandal fixtures.
+**v0.1.15+:** Path B (fork-witness hook) is the default Pages share/OG/hero; Path A remains classic Scandal fixtures.
 
 Target: X / Show HN reply GIF or screen recording of https://caoshurong.github.io/forcepush-ghost/demo/
 
@@ -17,7 +17,7 @@ Target: X / Show HN reply GIF or screen recording of https://caoshurong.github.i
 
 **Share freeze (Path A):** `Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.`
 
-## Path B — Fork-witness A (default @ v0.1.14+)
+## Path B — Fork-witness A (default @ v0.1.15+)
 | t | shot | overlay |
 |---|---|---|
 | 0–2s | Hero **`fork-witness.gif`** (FW-A already selected) | Upstream wiped it. The fork still remembers… |
