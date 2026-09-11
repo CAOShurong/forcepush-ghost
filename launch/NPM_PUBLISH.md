@@ -1,12 +1,12 @@
 # npm publish checklist — forcepush-ghost@0.1.6
 
 ## Pre-flight
-- [ ] `git status` clean on main; tip includes README Pages-first honesty + external post HOLD
-- [ ] `npm test` green + `bash scripts/claim-check.sh` PASS
-- [ ] `npm whoami` succeeds (**blocker: ENEEDAUTH** — need `npm login` / token on this machine)
+- [ ] `git status` clean on main; tip includes README Pages-first honesty
+- [ ] `npm test` + `bash scripts/claim-check.sh` PASS
+- [ ] `npm whoami` succeeds (**blocker today: ENEEDAUTH**)
 - [ ] `npm view forcepush-ghost` is 404 (name free) before first publish
 - [ ] `package.json` version is `0.1.6` (do not rewrite older tags)
-- [ ] `npm pack --dry-run` files list looks right (bin/demo/fixtures/src/README/LICENSE)
+- [ ] `npm pack --dry-run` files list looks right
 
 ## Publish
 ```bash
@@ -21,7 +21,7 @@ npx --yes forcepush-ghost@0.1.6 --fixture scandal-a
 ```
 
 ## Then
-- Star PM: Release `v0.1.6` notes already point at Pages demo as zero-install
-- Dist: README can promote `npx` as secondary CLI path (Pages stays primary)
-- External posts still wait for **user** authorization (HOLD) — Star PM must not auto-lift GO
+- Star PM: Release notes keep Pages as zero-install primary
+- Dist: promote `npx` only after verify; Pages stays #1
+- External posts still HOLD until Star PM / user authorization
 - Until published: never claim `npx forcepush-ghost` works from the registry
