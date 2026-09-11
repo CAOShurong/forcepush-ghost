@@ -1,40 +1,40 @@
 {
   "id": "scandal-b",
-  "label": "Fixture B — sanitized reconstruction (oops wipe, story not secrets)",
+  "label": "Fixture B \u2014 sanitized reconstruction (CocoaPods-style Specs repair rewrite)",
   "repo": "example-org/docs-site",
   "branch": "main",
   "scannedAt": "2026-09-11T00:00:00Z",
-  "disclaimer": "Sanitized composite demo. Pattern matches common public force-push 'oops' rewrites (bad commit shipped, history rewritten). Not a live scan; no secret material.",
-  "sourceNote": "Shape drawn from widely reported zero-commit force-push / history-rewrite patterns (story/timeline only — not a secrets scan).",
+  "disclaimer": "Sanitized reconstruction inspired by the public Jan 2014 CocoaPods Specs force-push repair (libgit2/GitHub web-editor corruption \u2192 history rewrite). Names/SHAs are fictional. Not a live scan of CocoaPods/Specs. Story/timeline only \u2014 not secrets.",
+  "sourceNote": "Public postmortem: CocoaPods Blog 2014-01-30 Repairing Our Broken Specs Repository (https://blog.cocoapods.org/Repairing-Our-Broken-Specs-Repository/). Shape: broken objects forced a rewritten tip; clones had to re-setup.",
   "events": [
     {
       "sha": "e1a90bb",
       "short": "e1a90bb",
-      "message": "Docs: paste full staging URL into quickstart",
+      "message": "Specs: web-editor merge that introduced a broken tree",
       "author": "writer-one",
       "timestamp": "2026-04-18T13:05:00Z",
       "status": "wiped",
       "wipedBy": "force-push",
-      "note": "Embarrassing quickstart commit — wiped from main within the hour."
+      "note": "Corrupt object entered via web edit \u2014 later wiped when history was rewritten."
     },
     {
       "sha": "55cd2af",
       "short": "55cd2af",
-      "message": "Docs: soften wording before launch thread",
+      "message": "Specs: follow-on commit still on the broken lineage",
       "author": "writer-one",
       "timestamp": "2026-04-18T13:40:00Z",
       "status": "wiped",
       "wipedBy": "force-push",
-      "note": "Second wipe on the same branch the same afternoon."
+      "note": "Still reachable before the repair force-push; tip moved afterward."
     },
     {
       "sha": "0ff3c21",
       "short": "0ff3c21",
-      "message": "Docs: public quickstart (clean rewrite)",
+      "message": "Specs: repaired history (force-push rewrite)",
       "author": "writer-two",
       "timestamp": "2026-04-18T14:10:00Z",
       "status": "alive",
-      "note": "Current tip after rewrite — green on main."
+      "note": "New tip after the forced repair \u2014 clones had to delete and re-setup."
     }
   ]
 }
