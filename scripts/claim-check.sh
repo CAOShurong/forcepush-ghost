@@ -39,8 +39,9 @@ fi
 kill=$(rg -n -i \
   -e '\b(restore|recover|undelete)\b.{0,40}\b(commit|secret|file|history)\b' \
   -e '\bget your commits back\b' \
+  -e '\breplace(s)? (GitHub )?Activity\b' \
   "$root/README.md" "$root/demo" "$root/bin" "$root/src" 2>/dev/null || true)
-kill=$(printf '%s\n' "$kill" | rg -v -i 'does not recover|not recover|no restore|not.*restore|refusing' || true)
+kill=$(printf '%s\n' "$kill" | rg -v -i 'does not recover|not recover|no restore|not.*restore|refusing|do not replace|does not replace|never claim we replace|we do not replace' || true)
 if [[ -n "${kill// }" ]]; then
   echo "CLAIM CHECK FAIL (restore/recover kill-list):"
   echo "$kill"
