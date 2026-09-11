@@ -1,11 +1,29 @@
-# 15s clip plan (story/timeline only)
+# 15s clip plan (story/timeline only) — HOLD, do not post
 
 Target: X / Show HN reply GIF or screen recording of https://caoshurong.github.io/forcepush-ghost/demo/
 
-1. 0–2s: land on hero + red ✕ GIF freeze frame
-2. 2–6s: point at figcaption (green vs red / offline fixtures)
-3. 6–11s: switch Scandal A → Replay wipe (rail red pulse)
-4. 11–15s: flash share card text + URL; end card: "story, not a scanner"
+**Primary CTA:** Pages offline demo (`timeline.gif` / OG `timeline.png`)
+**Status:** pack ready — record/post only after Star PM + user authorize outbound.
 
-Do **not** show secret recovery, malware, or ForceMemo detection claims.
-Primary CTA remains Pages demo; Release secondary; no fake npx.
+## Path A — Scandal wipe
+| t | shot | overlay |
+|---|---|---|
+| 0–2s | Hero + GIF first frame red ✕ | Force-push wiped it? |
+| 2–6s | Figcaption ●/✕ | offline fixtures |
+| 6–11s | Scandal A → Replay wipe | red pulse |
+| 11–15s | Share-card + URL | story, not a scanner |
+
+**Share freeze (Path A):** `Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.`
+
+## Path B — Fork-witness A
+| t | shot | overlay |
+|---|---|---|
+| 0–2s | fw-preview hook | Upstream wiped it. The fork still remembers… |
+| 2–6s | Click **Play Fork-witness A** | dual-rail offline |
+| 6–11s | upstream ✕ / fork ● same SHA | No restore |
+| 11–15s | Share-card (FW text) + URL | story, not a scanner |
+
+**Share freeze (Path B):** `Upstream wiped it. The fork still remembers… pick Fork-witness A — https://caoshurong.github.io/forcepush-ghost/demo/ (offline dual-rail; story, not a scanner).`
+
+**Forbidden:** secrets / scanner / ForceMemo / malware / fake npx / GO lift / Pages live `--vs`.
+**Out of scope:** live CLI `--vs` (demo never runs it).
