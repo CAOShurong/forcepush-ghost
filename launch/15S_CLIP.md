@@ -27,5 +27,13 @@ Target: X / Show HN reply GIF or screen recording of https://caoshurong.github.i
 
 **Share freeze (Path B):** `Upstream wiped it. The fork still remembers… pick Fork-witness A — https://caoshurong.github.io/forcepush-ghost/demo/ (offline dual-rail; story, not a scanner).`
 
+
+## Path B control — Fork-witness clean (honesty)
+When demo fixture is **Fork-witness clean**, share must **not** use the wipe hook.
+
+**Share freeze (FW-clean):** `Both tips still match… https://caoshurong.github.io/forcepush-ghost/demo/ (offline dual-rail; story, not a scanner).`
+
+Do not show wipe copy on the clean control path.
+
 **Forbidden:** secrets / scanner / ForceMemo / malware / fake npx / GO lift / Pages live `--vs`.
 **Out of scope:** live CLI `--vs` (demo never runs it).
