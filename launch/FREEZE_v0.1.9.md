@@ -1,7 +1,7 @@
 # Launch freeze sketch — v0.1.9 (verified `--vs` dual-hit + same-repo guard)
 
 **Primary CTA:** https://caoshurong.github.io/forcepush-ghost/demo/ (Fork-witness A dual-rail, offline)  
-**Secondary CTA:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.8 (v0.1.9 tag = Star PM)  
+**Secondary CTA:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.9  
 **CLI fixtures:** `node bin/forcepush-ghost.js --fixture fork-witness-a`  
 **Live fork-witness CLI (verified):** `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq`  
 **Optional alt fork:** `--vs brunosimon`  
