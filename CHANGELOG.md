@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.16 — 2026-09-11
+
+- **FW story wedge honesty:** fixture captions + Pages share blurb stay honest on fork-witness-clean (no fake wipe); PB/clean background notes in fixture docs
+- Tip includes PR #6 docs/fw-story-wedge + demo share fix; Pages already redeployed at tip
+- External X / Show HN remain **HOLD**; npm still unpublished (ENEEDAUTH) — Pages zero-install #1
+- Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.16
+
 ## 0.1.15 — 2026-09-11
 
 - **Path B CLI lead:** README + launch PATHS/HOLD packs lead clone/CLI examples with `--fixture fork-witness-a` (scandal-a remains available)

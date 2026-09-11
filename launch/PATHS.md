@@ -1,7 +1,7 @@
-# Launch install paths (v0.1.15)
+# Launch install paths (v0.1.16)
 
 1. **Primary — Pages demo:** https://caoshurong.github.io/forcepush-ghost/demo/
-2. **Secondary — GitHub Release:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.15
+2. **Secondary — GitHub Release:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.16
 3. **CLI from clone (Path B primary):** `node bin/forcepush-ghost.js --fixture fork-witness-a`
 4. **CLI JSON (scripting):** `node bin/forcepush-ghost.js --fixture fork-witness-a --json` (optional `--pretty`) — structured stdout; Pages stays offline
 5. **Classic scandal (Path A still available):** `node bin/forcepush-ghost.js --fixture scandal-a`
