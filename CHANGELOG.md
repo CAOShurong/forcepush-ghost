@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.1.11 — 2026-09-11
+
+- Live Events pagination: follow `Link` `rel="next"` with a hard cap of **3 pages** (`per_page=100`); dedupe by event `id`
+- Rate-limit honest stop: if `X-RateLimit-Remaining` is `0` after a page, stop early and keep results so far (no invented timeline)
+- `--json` schema freeze (timeline fields only — no score/secrets/confidence):
+
+```json
+{
+  "mode": "fork-witness",
+  "label": "…",
+  "repo": "owner/repo",
+  "upstream": { "repo": "owner/repo", "branch": "main" },
+  "fork": { "repo": "forkOwner/repo", "branch": "main" },
+  "caption": "Upstream force-pushed. Fork still has the tip.",
+  "disclaimer": "…",
+  "events": [
+    {
+      "sha": "9f2d7b1c…",
+      "short": "9f2d7b1",
+      "message": "…",
+      "author": "…",
+      "timestamp": "2026-08-03T14:22:00Z",
+      "status": "wiped",
+      "upstreamStatus": "wiped",
+      "forkStatus": "alive",
+      "note": "…"
+    }
+  ],
+  "clean": false
+}
+```
+
+- Fixture / live single-rail `--json` uses the same event shape without `mode` / dual statuses when not fork-witness
+- Tests: multi-page merge+dedupe, rate-limit early stop, hard page cap
+- External X / Show HN still HOLD; no npx claim; no GitHub Release/tag in this ship
+
 ## 0.1.10 — 2026-09-11
 
 - CLI `--json`: print structured JSON of the same scan/timeline object `formatTimeline` consumes (stdout)
