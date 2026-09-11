@@ -13,12 +13,13 @@ function usage() {
   console.log(`forcepush-ghost — The force-push scandal timeline for any public repo.
 
 Usage:
-  npx forcepush-ghost --fixture scandal-a|scandal-b|clean
-  npx forcepush-ghost owner/repo
+  node bin/forcepush-ghost.js --fixture scandal-a|scandal-b|clean
+  node bin/forcepush-ghost.js owner/repo
+  npx forcepush-ghost …   # only after npm publish
 
-Offline fixtures always work (recommended first look).
+Offline fixtures / Pages demo always work (recommended first look).
 Live mode uses recent public GitHub Events only (story/timeline — not a secret scanner).
-On live failure we refuse to invent results — use --fixture instead.
+On live failure we refuse to invent results — use --fixture or the Pages demo instead.
 `);
 }
 

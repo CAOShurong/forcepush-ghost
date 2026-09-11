@@ -8,8 +8,8 @@
   <link rel="canonical" href="https://caoshurong.github.io/forcepush-ghost/demo/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="forcepush-ghost" />
-  <meta property="og:title" content="forcepush-ghost — force-push scandal timeline" />
-  <meta property="og:description" content="Green = still on main. Red ✕ = wiped by a force-push. Offline fixtures demo — not a secret scanner." />
+  <meta property="og:title" content="Force-push wiped it? Red ✕ scandal timeline" />
+  <meta property="og:description" content="Offline demo: ● still on main, ✕ wiped by force-push. Forward this page — fixtures only, not a secret scanner." />
   <meta property="og:url" content="https://caoshurong.github.io/forcepush-ghost/demo/" />
   <meta property="og:image" content="https://caoshurong.github.io/forcepush-ghost/demo/timeline.png" />
   <meta property="og:image:type" content="image/png" />
@@ -17,8 +17,8 @@
   <meta property="og:image:height" content="420" />
   <meta property="og:image:alt" content="Red-X scandal timeline: wiped commits vs commits still on main" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="forcepush-ghost — force-push scandal timeline" />
-  <meta name="twitter:description" content="Offline demo: green still on main, red ✕ wiped. Not a secret scanner." />
+  <meta name="twitter:title" content="Force-push wiped it? Red ✕ scandal timeline" />
+  <meta name="twitter:description" content="● on main · ✕ wiped · offline fixtures. https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner." />
   <meta name="twitter:image" content="https://caoshurong.github.io/forcepush-ghost/demo/timeline.png" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
@@ -41,6 +41,13 @@
       <li>Pick a fixture below → hit <strong>Replay wipe</strong>.</li>
       <li>Forward this page — offline fixtures only (not a live scan of a real repo).</li>
     </ol>
+  </section>
+
+
+  <section class="share-card" aria-label="Copy-paste share text">
+    <p class="share-card-title">Share this (copy/paste)</p>
+    <pre id="shareText">Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.</pre>
+    <button type="button" id="copyShare" class="share-copy">Copy</button>
   </section>
 
   <section class="rail-wrap" aria-label="Horizontal scandal rail">
@@ -69,5 +76,22 @@
   </footer>
 
   <script type="module" src="./app.js"></script>
+
+  <script>
+    const btn = document.getElementById('copyShare');
+    const pre = document.getElementById('shareText');
+    if (btn && pre) {
+      btn.addEventListener('click', async () => {
+        const text = pre.textContent.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = 'Copied';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 1200);
+        } catch {
+          btn.textContent = 'Select & copy';
+        }
+      });
+    }
+  </script>
 </body>
 </html>

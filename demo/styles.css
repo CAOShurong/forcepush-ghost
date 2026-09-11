@@ -158,3 +158,37 @@ footer code { display: inline-block; background: var(--card); padding: 0.4rem 0.
 .how-to li { margin: 0.25rem 0; }
 .how-to .alive { color: var(--alive); font-weight: 600; }
 .how-to .wiped { color: var(--wiped); font-weight: 600; }
+
+.share-card {
+  max-width: 880px;
+  margin: 0 auto 1.25rem;
+  padding: 0.85rem 1rem 1rem;
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--alive) 25%, var(--line));
+  border-radius: 14px;
+}
+.share-card-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.share-card pre {
+  margin: 0 0 0.65rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font: inherit;
+  line-height: 1.4;
+  color: var(--fg);
+}
+.share-copy {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.45rem 0.8rem;
+  font: inherit;
+  cursor: pointer;
+}
+.share-copy:hover { border-color: #4a5d78; }
