@@ -1,37 +1,40 @@
 {
   "id": "scandal-b",
-  "label": "Fixture B — sanitized public reconstruction",
-  "repo": "example-lab/model-cards",
+  "label": "Fixture B — sanitized reconstruction (oops wipe, story not secrets)",
+  "repo": "example-org/docs-site",
   "branch": "main",
-  "scannedAt": "2026-09-01T12:00:00Z",
-  "disclaimer": "Synthetic demo fixture. Names and SHAs are fictional.",
+  "scannedAt": "2026-09-11T00:00:00Z",
+  "disclaimer": "Sanitized composite demo. Pattern matches common public force-push 'oops' rewrites (bad commit shipped, history rewritten). Not a live scan; no secret material.",
+  "sourceNote": "Shape drawn from widely reported zero-commit force-push / history-rewrite patterns (story/timeline only — not a secrets scan).",
   "events": [
     {
-      "sha": "d4e5f6a",
-      "short": "d4e5f6a",
-      "message": "Publish internal eval scores ahead of embargo",
-      "author": "lab-gamma",
-      "timestamp": "2026-05-02T18:20:00Z",
+      "sha": "e1a90bb",
+      "short": "e1a90bb",
+      "message": "Docs: paste full staging URL into quickstart",
+      "author": "writer-one",
+      "timestamp": "2026-04-18T13:05:00Z",
       "status": "wiped",
       "wipedBy": "force-push",
-      "note": "Removed from main within the hour."
+      "note": "Embarrassing quickstart commit — wiped from main within the hour."
     },
     {
-      "sha": "e5f6a7b",
-      "short": "e5f6a7b",
-      "message": "Hold scores until public blog",
-      "author": "lab-gamma",
-      "timestamp": "2026-05-02T19:05:00Z",
+      "sha": "55cd2af",
+      "short": "55cd2af",
+      "message": "Docs: soften wording before launch thread",
+      "author": "writer-one",
+      "timestamp": "2026-04-18T13:40:00Z",
       "status": "wiped",
-      "wipedBy": "force-push"
+      "wipedBy": "force-push",
+      "note": "Second wipe on the same branch the same afternoon."
     },
     {
-      "sha": "f6a7b8c",
-      "short": "f6a7b8c",
-      "message": "Public model card (embargo-safe)",
-      "author": "lab-delta",
-      "timestamp": "2026-05-03T10:00:00Z",
-      "status": "alive"
+      "sha": "0ff3c21",
+      "short": "0ff3c21",
+      "message": "Docs: public quickstart (clean rewrite)",
+      "author": "writer-two",
+      "timestamp": "2026-04-18T14:10:00Z",
+      "status": "alive",
+      "note": "Current tip after rewrite — green on main."
     }
   ]
 }
