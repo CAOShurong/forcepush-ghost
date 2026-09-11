@@ -1,16 +1,22 @@
 {
   "id": "fork-witness-clean",
   "mode": "fork-witness",
-  "label": "Fork-witness clean — both sides match (offline V0.2 control)",
+  "label": "Fork-witness clean \u2014 both sides match (offline V0.2 control)",
   "repo": "example-labs/widget-core",
   "branch": "main",
-  "upstream": { "repo": "example-labs/widget-core", "branch": "main" },
-  "fork": { "repo": "contrib-mirror/widget-core", "branch": "main" },
+  "upstream": {
+    "repo": "example-labs/widget-core",
+    "branch": "main"
+  },
+  "fork": {
+    "repo": "contrib-mirror/widget-core",
+    "branch": "main"
+  },
   "scannedAt": "2026-09-11T00:00:00Z",
-  "disclaimer": "Offline fork-witness control (V0.2). Sanitized reconstruction — names/SHAs are fictional. Both sides match; no wipe drama. Not a live upstream↔fork compare.",
-  "sourceNote": "Fictional dual-rail control fixture for the Pages/CLI offline demo.",
+  "disclaimer": "Offline fork-witness control (V0.2). Sanitized reconstruction \u2014 names/SHAs are fictional. Both sides match; no wipe drama. Not a live upstream\u2194fork compare.",
+  "sourceNote": "Fictional dual-rail control for the Pages/CLI offline demo. Hook differs from Fork-witness A on purpose \u2014 this path has no asymmetry.",
   "caption": "Upstream and fork both still have the tip.",
-  "hook": "Upstream wiped it. The fork still remembers.",
+  "hook": "Both tips still match \u2014 no wipe to remember.",
   "events": [
     {
       "sha": "111aaaabbbbccccddddeeeeffff000011112222",
@@ -41,7 +47,7 @@
       "upstreamStatus": "alive",
       "forkStatus": "alive",
       "status": "alive",
-      "note": "Control bill of health — no asymmetry between upstream and fork."
+      "note": "Control bill of health \u2014 no asymmetry between upstream and fork."
     }
   ]
 }

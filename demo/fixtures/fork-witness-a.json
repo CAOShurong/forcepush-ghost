@@ -1,14 +1,20 @@
 {
   "id": "fork-witness-a",
   "mode": "fork-witness",
-  "label": "Fork-witness A — upstream wipe, fork still holds tip (offline V0.2)",
+  "label": "Fork-witness A \u2014 upstream wipe, fork still holds tip (offline V0.2)",
   "repo": "example-labs/widget-core",
   "branch": "main",
-  "upstream": { "repo": "example-labs/widget-core", "branch": "main" },
-  "fork": { "repo": "contrib-mirror/widget-core", "branch": "main" },
+  "upstream": {
+    "repo": "example-labs/widget-core",
+    "branch": "main"
+  },
+  "fork": {
+    "repo": "contrib-mirror/widget-core",
+    "branch": "main"
+  },
   "scannedAt": "2026-09-11T00:00:00Z",
-  "disclaimer": "Offline fork-witness preview (V0.2). Sanitized reconstruction — names/SHAs are fictional. Not a live upstream↔fork compare.",
-  "sourceNote": "Fictional dual-rail story for the Pages/CLI offline demo. No live --vs.",
+  "disclaimer": "Offline fork-witness preview (V0.2). Sanitized reconstruction \u2014 names/SHAs are fictional. Not a live upstream\u2194fork compare.",
+  "sourceNote": "Fictional dual-rail story for the Pages/CLI offline demo (not a live --vs). Why wipe drama matters: GitHub Protected Branches (2015-09) were motivated in part by blocking accidental force-pushes that overwrite others' work \u2014 https://github.blog/news-insights/product-news/protected-branches-and-required-status-checks/ (background only \u2014 this tool does not detect protected branches).",
   "caption": "Upstream force-pushed. Fork still has the tip.",
   "hook": "Upstream wiped it. The fork still remembers.",
   "events": [
@@ -33,7 +39,7 @@
       "forkStatus": "alive",
       "status": "wiped",
       "wipedBy": "force-push",
-      "note": "Shared tip SHA — ✕ wiped on upstream after force-push; ● still alive on the fork."
+      "note": "Shared tip SHA \u2014 \u2715 wiped on upstream after force-push; \u25cf still alive on the fork."
     },
     {
       "sha": "c0ffee12ab34cd56ef7890aa11bb22cc33dd44ee",
