@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.12 — 2026-09-11
+
+- `--json` prints **compact** JSON by default (scripting-friendly)
+- `--pretty` with `--json`: pretty-print via `JSON.stringify(data, null, 2)` (no effect without `--json`)
+- `--help` documents `--json` / `--pretty` and live Events pagination: follow Link `rel="next"` up to hard cap **3 pages** (`per_page=100`); stop early when `X-RateLimit-Remaining` is `0`; never invent timeline rows
+- Tests cover compact vs pretty JSON and help text for pagination / `--pretty`
+- PATHS: light note only — Release CTA / HOLD packs still point at **v0.1.11** until Dist tags 0.1.12
+- External X / Show HN still HOLD; no npx claim; no GitHub Release/tag in this ship
+
+
 ## 0.1.11 — 2026-09-11
 
 - Live Events pagination: follow `Link` `rel="next"` with a hard cap of **3 pages** (`per_page=100`); dedupe by event `id`

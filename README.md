@@ -23,6 +23,8 @@ npx forcepush-ghost --fixture scandal-a
 
 # scripting: structured JSON of the same timeline object (Pages stays offline; live --vs is CLI-only)
 node bin/forcepush-ghost.js --fixture scandal-a --json
+# human-readable indent: add --pretty
+node bin/forcepush-ghost.js --fixture scandal-a --json --pretty
 ```
 
 ### Live public scan (CLI)
@@ -88,7 +90,7 @@ Pages: pick **Fork-witness A** in the demo select. Hook: *Upstream wiped it. The
 
 ## Limitations
 
-- Live scan uses the public Events window only — older rewrites can fall outside it
+- Live scan uses the public Events window only — older rewrites can fall outside it; Events pagination follows Link next up to 3 pages and stops early on rate-limit remaining=0 (no invented rows)
 - Demo UI is offline fixtures; live `owner/repo` and live `--vs` are CLI only (Pages never runs live `--vs`)
 - Offline fixtures are sanitized — not real scandals dressed up as live results
 - Story/timeline positioning only — not a secret scanner and not secret recovery

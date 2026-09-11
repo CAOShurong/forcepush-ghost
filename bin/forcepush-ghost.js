@@ -21,27 +21,29 @@ Usage:
   npx forcepush-ghost …   # only after npm publish
 
 Options:
-  --json     Print structured JSON of the scan/timeline result (stdout) instead of the human timeline
+  --json     Print structured JSON of the scan/timeline result (stdout) instead of the human timeline (compact by default)
+  --pretty   With --json: pretty-print JSON with indent 2 (JSON.stringify(data, null, 2)). No effect without --json
   -h, --help Show this help
 
 Offline fixtures / Pages demo always work (recommended first look).
 Live mode uses recent public activity + events windows (story/timeline — not a secret scanner).
+Live Events follow Link rel="next" up to a hard cap of 3 pages (per_page=100); if X-RateLimit-Remaining hits 0, stop early and keep results so far — never invent timeline rows.
 Live --vs compares upstream rewrite signals against a fork's commit graph.
 On live / --vs failure we refuse to invent results — use --fixture or the Pages demo instead.
 Pages demo stays offline fixtures — it never runs live --vs.
---json is for scripting; human mode remains the default.
+--json is for scripting; --json --pretty for humans; human timeline remains the default.
 `);
 }
 
-function emitResult(data, asJson) {
+function emitResult(data, asJson, pretty) {
   if (asJson) {
-    console.log(JSON.stringify(data, null, 2));
+    console.log(pretty ? JSON.stringify(data, null, 2) : JSON.stringify(data));
   } else {
     console.log(formatTimeline(data));
   }
 }
 
-function printFixture(id, asJson) {
+function printFixture(id, asJson, pretty) {
   if (!ALLOWED.has(id)) {
     console.error(`Unknown fixture "${id}". Use: scandal-a | scandal-b | clean | fork-witness-a | fork-witness-clean`);
     process.exit(1);
@@ -52,17 +54,19 @@ function printFixture(id, asJson) {
     process.exit(1);
   }
   const data = JSON.parse(readFileSync(path, "utf8"));
-  emitResult(data, asJson);
+  emitResult(data, asJson, pretty);
 }
 
 function parseArgs(argv) {
-  const out = { fixture: null, target: null, vs: null, help: false, json: false };
+  const out = { fixture: null, target: null, vs: null, help: false, json: false, pretty: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "-h" || a === "--help") {
       out.help = true;
     } else if (a === "--json") {
       out.json = true;
+    } else if (a === "--pretty") {
+      out.pretty = true;
     } else if (a === "--fixture") {
       out.fixture = argv[++i] || "scandal-a";
     } else if (a === "--vs") {
@@ -106,7 +110,7 @@ if (args.help || (process.argv.slice(2).length === 0)) {
 }
 
 if (args.fixture != null) {
-  printFixture(args.fixture, args.json);
+  printFixture(args.fixture, args.json, args.pretty);
   process.exit(0);
 }
 
@@ -132,7 +136,7 @@ if (args.vs !== null && args.vs !== undefined) {
   const token = resolveGithubToken();
   try {
     const data = await scanForkWitness(args.target, forkRepo, { token });
-    emitResult(data, args.json);
+    emitResult(data, args.json, args.pretty);
   } catch (err) {
     console.error(String(err?.message || err));
     console.error("Live --vs failed — refusing to substitute a fixture (that would be a false claim).");
@@ -147,7 +151,7 @@ if (args.vs !== null && args.vs !== undefined) {
 const token = resolveGithubToken();
 try {
   const data = await scanPublicRepo(args.target, { token });
-  emitResult(data, args.json);
+  emitResult(data, args.json, args.pretty);
 } catch (err) {
   console.error(String(err?.message || err));
   console.error("Live scan failed — refusing to substitute a fixture (that would be a false claim).");

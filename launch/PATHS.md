@@ -13,3 +13,5 @@ Pages never runs live `--vs` — offline fixtures only.
 Same-repo `--vs` refused (exit 2).
 External X / Show HN remain **HOLD** until Star PM / user authorization.
 Post-publish: Pages stays #1; add registry install after Dist verifies.
+
+Pending tip (unreleased): **0.1.12** adds `--json --pretty` + Events pagination help — do not retarget Release CTA until Dist tags `v0.1.12`.
