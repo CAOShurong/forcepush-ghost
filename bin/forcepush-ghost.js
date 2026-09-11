@@ -20,15 +20,28 @@ Usage:
   node bin/forcepush-ghost.js owner/repo --vs forkOwner/forkRepo
   npx forcepush-ghost …   # only after npm publish
 
+Options:
+  --json     Print structured JSON of the scan/timeline result (stdout) instead of the human timeline
+  -h, --help Show this help
+
 Offline fixtures / Pages demo always work (recommended first look).
 Live mode uses recent public activity + events windows (story/timeline — not a secret scanner).
 Live --vs compares upstream rewrite signals against a fork's commit graph.
 On live / --vs failure we refuse to invent results — use --fixture or the Pages demo instead.
 Pages demo stays offline fixtures — it never runs live --vs.
+--json is for scripting; human mode remains the default.
 `);
 }
 
-function printFixture(id) {
+function emitResult(data, asJson) {
+  if (asJson) {
+    console.log(JSON.stringify(data, null, 2));
+  } else {
+    console.log(formatTimeline(data));
+  }
+}
+
+function printFixture(id, asJson) {
   if (!ALLOWED.has(id)) {
     console.error(`Unknown fixture "${id}". Use: scandal-a | scandal-b | clean | fork-witness-a | fork-witness-clean`);
     process.exit(1);
@@ -39,15 +52,17 @@ function printFixture(id) {
     process.exit(1);
   }
   const data = JSON.parse(readFileSync(path, "utf8"));
-  console.log(formatTimeline(data));
+  emitResult(data, asJson);
 }
 
 function parseArgs(argv) {
-  const out = { fixture: null, target: null, vs: null, help: false };
+  const out = { fixture: null, target: null, vs: null, help: false, json: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "-h" || a === "--help") {
       out.help = true;
+    } else if (a === "--json") {
+      out.json = true;
     } else if (a === "--fixture") {
       out.fixture = argv[++i] || "scandal-a";
     } else if (a === "--vs") {
@@ -91,7 +106,7 @@ if (args.help || (process.argv.slice(2).length === 0)) {
 }
 
 if (args.fixture != null) {
-  printFixture(args.fixture);
+  printFixture(args.fixture, args.json);
   process.exit(0);
 }
 
@@ -117,7 +132,7 @@ if (args.vs !== null && args.vs !== undefined) {
   const token = resolveGithubToken();
   try {
     const data = await scanForkWitness(args.target, forkRepo, { token });
-    console.log(formatTimeline(data));
+    emitResult(data, args.json);
   } catch (err) {
     console.error(String(err?.message || err));
     console.error("Live --vs failed — refusing to substitute a fixture (that would be a false claim).");
@@ -132,7 +147,7 @@ if (args.vs !== null && args.vs !== undefined) {
 const token = resolveGithubToken();
 try {
   const data = await scanPublicRepo(args.target, { token });
-  console.log(formatTimeline(data));
+  emitResult(data, args.json);
 } catch (err) {
   console.error(String(err?.message || err));
   console.error("Live scan failed — refusing to substitute a fixture (that would be a false claim).");

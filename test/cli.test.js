@@ -73,3 +73,49 @@ test("CLI --vs same-repo refuses and exits 2", () => {
     assert.doesNotMatch(out, /Upstream ✕|Fork ●|Live fork-witness —/i);
   }
 });
+
+test("fixture --json prints parseable structured result", () => {
+  const r = spawnSync(process.execPath, [bin, "--fixture", "scandal-a", "--json"], { encoding: "utf8" });
+  assert.equal(r.status, 0);
+  assert.equal(r.stderr, "");
+  const data = JSON.parse(r.stdout);
+  assert.equal(data.repo, "example-ci/plugin-mirror");
+  assert.ok(Array.isArray(data.events));
+  assert.ok(data.events.some((e) => e.status === "wiped"));
+  assert.ok(data.label);
+  assert.ok(data.disclaimer);
+  assert.doesNotMatch(r.stdout, /✕ WIPED/);
+});
+
+test("fixture fork-witness --json includes mode and dual statuses", () => {
+  const r = spawnSync(process.execPath, [bin, "--fixture", "fork-witness-a", "--json"], { encoding: "utf8" });
+  assert.equal(r.status, 0);
+  const data = JSON.parse(r.stdout);
+  assert.equal(data.mode, "fork-witness");
+  assert.ok(data.caption || data.label);
+  assert.ok(Array.isArray(data.events));
+  assert.ok(data.events.some((e) => e.upstreamStatus || e.forkStatus || e.status));
+});
+
+test("CLI --help documents --json", () => {
+  const r = spawnSync(process.execPath, [bin, "--help"], { encoding: "utf8" });
+  assert.equal(r.status, 0);
+  assert.match(r.stdout, /--json/);
+});
+
+test("CLI --vs same-repo still exits 2 with --json (no success JSON)", () => {
+  const r = spawnSync(process.execPath, [bin, "acme/widget", "--vs", "acme", "--json"], {
+    encoding: "utf8",
+    env: { ...process.env, GH_TOKEN: "", GITHUB_TOKEN: "", PATH: "/usr/bin:/bin" },
+  });
+  assert.equal(r.status, 2);
+  assert.match(r.stderr, /Refusing same-repo --vs/i);
+  // Must not emit a successful timeline JSON object on stdout
+  const trimmed = r.stdout.trim();
+  if (trimmed) {
+    assert.throws(() => {
+      const obj = JSON.parse(trimmed);
+      assert.ok(obj.events || obj.mode === "fork-witness");
+    });
+  }
+});
