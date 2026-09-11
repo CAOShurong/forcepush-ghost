@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.9 — 2026-09-11
+
+- Document verified live `--vs` dual-hit: `mrdoob/three.js --vs alteredq` (optional alt: `brunosimon`)
+- Guard: refuse same-repo `--vs` (upstream === fork) with clear error; exit 2 (no fake dual-rail)
+- Pages stays offline primary CTA; live `--vs` remains CLI-only
+- External X / Show HN still HOLD; no npx claim
+
 ## 0.1.8 — 2026-09-11
 
 - Live CLI `--vs`: `owner/repo --vs forkOwner` or `--vs forkOwner/forkRepo`

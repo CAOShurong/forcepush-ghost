@@ -53,3 +53,23 @@ test("fixture fork-witness-clean exits 0 without wipe drama", () => {
   assert.match(r.stdout, /Fork/i);
   assert.doesNotMatch(r.stdout, /\brestore\b/i);
 });
+
+test("CLI --vs same-repo refuses and exits 2", () => {
+  const cases = [
+    ["acme/widget", "acme"],
+    ["acme/widget", "acme/widget"],
+    ["Acme/Widget", "ACME/widget"],
+  ];
+  for (const [target, vs] of cases) {
+    const r = spawnSync(process.execPath, [bin, target, "--vs", vs], {
+      encoding: "utf8",
+      env: { ...process.env, GH_TOKEN: "", GITHUB_TOKEN: "", PATH: "/usr/bin:/bin" },
+    });
+    const out = r.stdout + r.stderr;
+    assert.equal(r.status, 2, `expected exit 2 for ${target} --vs ${vs}`);
+    assert.match(out, /Refusing same-repo --vs/i);
+    assert.match(out, /identical|different fork owner/i);
+    // Must not print a dual-rail timeline
+    assert.doesNotMatch(out, /Upstream ✕|Fork ●|Live fork-witness —/i);
+  }
+});

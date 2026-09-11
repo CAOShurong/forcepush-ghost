@@ -108,7 +108,10 @@ if (args.vs !== null && args.vs !== undefined) {
   try {
     forkRepo = resolveForkRepo(args.target, args.vs);
   } catch (err) {
-    console.error(String(err?.message || err));
+    const msg = String(err?.message || err);
+    console.error(msg);
+    // Same-repo --vs is a usage error that would print a fake dual-rail — exit 2.
+    if (/same-repo --vs/i.test(msg)) process.exit(2);
     process.exit(1);
   }
   const token = resolveGithubToken();

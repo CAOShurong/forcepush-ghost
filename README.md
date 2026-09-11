@@ -42,7 +42,14 @@ node bin/forcepush-ghost.js upstream/repo --vs forkOwner
 node bin/forcepush-ghost.js upstream/repo --vs forkOwner/forkRepo
 ```
 
-Same repo name when only `forkOwner` is given. Probes whether a fork still holds wiped / `before` tip SHAs after an upstream rewrite. Fail closed: API errors exit 2 and never substitute fixtures; fork missing a SHA prints upstream ✕ / fork ——.
+Same repo name when only `forkOwner` is given. Probes whether a fork still holds wiped / `before` tip SHAs after an upstream rewrite. Fail closed: API errors exit 2 and never substitute fixtures; fork missing a SHA prints upstream ✕ / fork ——. Same-repo `--vs` (upstream === fork) is refused with exit 2 — pick a different fork owner.
+
+Verified dual-hit showcase (Upstream ✕ | Fork ● on shared tip SHA):
+
+```bash
+node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq
+# optional alt fork: --vs brunosimon
+```
 
 **Pages stays offline fixtures** — the demo never runs live `--vs`.
 

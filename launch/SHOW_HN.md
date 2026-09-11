@@ -10,4 +10,6 @@ Clone CLI fixtures: `node bin/forcepush-ghost.js --fixture fork-witness-a`
 
 Live showcase (needs GitHub API access): `node bin/forcepush-ghost.js mrdoob/three.js`
 
+Optional follow-up (CLI only): `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq` — verified Upstream ✕ | Fork ●. Pages never runs live `--vs`.
+
 Closest tools hunt secrets in dangling commits; this one is only the story/timeline. Not recovery, not malware detection. npm package pending — don’t rely on `npx` yet.

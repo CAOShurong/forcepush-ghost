@@ -22,9 +22,17 @@ export function resolveForkRepo(upstreamOwnerRepo, vsArg) {
   const [upOwner, upRepo] = String(upstreamOwnerRepo).split("/");
   if (!upOwner || !upRepo) throw new Error("Expected upstream owner/repo before --vs");
   const s = String(vsArg);
-  if (/^[\w.-]+\/[\w.-]+$/.test(s)) return s;
-  if (/^[\w.-]+$/.test(s)) return `${s}/${upRepo}`;
-  throw new Error(`Invalid --vs value "${vsArg}". Use forkOwner or forkOwner/forkRepo`);
+  let resolved;
+  if (/^[\w.-]+\/[\w.-]+$/.test(s)) resolved = s;
+  else if (/^[\w.-]+$/.test(s)) resolved = `${s}/${upRepo}`;
+  else throw new Error(`Invalid --vs value "${vsArg}". Use forkOwner or forkOwner/forkRepo`);
+  const upstream = `${upOwner}/${upRepo}`;
+  if (resolved.toLowerCase() === upstream.toLowerCase()) {
+    throw new Error(
+      "Refusing same-repo --vs (upstream and fork are identical). Pick a different fork owner."
+    );
+  }
+  return resolved;
 }
 
 function authHeaders(token) {
@@ -248,6 +256,14 @@ export async function scanForkWitness(
   const [fkOwner, fkRepo] = String(forkOwnerRepo).split("/");
   if (!upOwner || !upRepo) throw new Error("Expected upstream owner/repo");
   if (!fkOwner || !fkRepo) throw new Error("Expected fork owner/repo");
+  if (
+    `${fkOwner}/${fkRepo}`.toLowerCase() ===
+    `${upOwner}/${upRepo}`.toLowerCase()
+  ) {
+    throw new Error(
+      "Refusing same-repo --vs (upstream and fork are identical). Pick a different fork owner."
+    );
+  }
 
   const headers = authHeaders(token);
   const { notFound, wiped, aliveHints, beforeShas } = await collectUpstreamSignals(upOwner, upRepo, {

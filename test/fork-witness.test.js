@@ -22,6 +22,30 @@ test("resolveForkRepo: rejects empty / junk", () => {
   assert.throws(() => resolveForkRepo("acme/widget", "bad/name/extra"), /Invalid/);
 });
 
+test("resolveForkRepo: refuses same-repo --vs (case-insensitive)", () => {
+  assert.throws(
+    () => resolveForkRepo("acme/widget", "acme"),
+    /same-repo --vs|identical/i
+  );
+  assert.throws(
+    () => resolveForkRepo("acme/widget", "acme/widget"),
+    /same-repo --vs|identical/i
+  );
+  assert.throws(
+    () => resolveForkRepo("Acme/Widget", "ACME/widget"),
+    /same-repo --vs|identical/i
+  );
+  // Different owner with same repo name is fine
+  assert.equal(resolveForkRepo("acme/widget", "mirror"), "mirror/widget");
+});
+
+test("scanForkWitness: refuses same-repo even if called directly", async () => {
+  await assert.rejects(
+    () => scanForkWitness("acme/widget", "acme/widget", { fetchImpl: async () => ({}) }),
+    /same-repo --vs|identical/i
+  );
+});
+
 function mockFetch(routes) {
   return async (url) => {
     const u = String(url);
