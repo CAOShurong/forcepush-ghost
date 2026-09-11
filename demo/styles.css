@@ -357,3 +357,31 @@ footer code { display: inline-block; background: var(--card); padding: 0.4rem 0.
 
 .fw-preview-actions { margin: 0.75rem 0 0; }
 .fw-preview-actions .share-copy { font-size: 0.95rem; }
+
+.real-world {
+  max-width: 720px;
+  margin: 1.25rem auto 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+}
+.real-world-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.real-world ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+.real-world-note {
+  margin: 0.65rem 0 0;
+  font-size: 0.82rem;
+  opacity: 0.75;
+  line-height: 1.4;
+}

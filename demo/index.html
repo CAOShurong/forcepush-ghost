@@ -94,12 +94,22 @@ node bin/forcepush-ghost.js mrdoob/three.js</pre>
     </div>
   </section>
 
+  <section class="real-world" aria-label="Real-world shape behind fixtures">
+    <p class="real-world-title">Real-world shape (sanitized in fixtures)</p>
+    <ul>
+      <li><strong>Jenkins, Nov 2013</strong> — org-wide stale-clone force-push → Scandal A</li>
+      <li><strong>CocoaPods Specs, Jan 2014</strong> — history rewrite repair → Scandal B</li>
+      <li><strong>Protected Branches, 2015</strong> — why wipe matters (background only; we do not detect branch protection)</li>
+    </ul>
+    <p class="real-world-note">Names/SHAs here are fictional. Not live scans of jenkinsci/* or CocoaPods/Specs. GitHub Activity can show a force-push <code>before</code> SHA — same shape as our ✕ rail; we do not replace Activity and we do not offer restore.</p>
+  </section>
+
   <section class="controls">
     <label>Fixture
       <select id="fixtureSelect">
         <option value="fork-witness-a" selected>Fork-witness A — upstream ✕ / fork ● (offline V0.2)</option>
         <option value="scandal-a">Scandal A — org rewind (Jenkins-shaped)</option>
-        <option value="scandal-b">Scandal B — oops rewrite</option>
+        <option value="scandal-b">Scandal B — Specs rewrite (CocoaPods-shaped)</option>
         <option value="clean">Clean bill of health</option>
         <option value="fork-witness-clean">Fork-witness clean — both sides match</option>
       </select>
@@ -114,7 +124,7 @@ node bin/forcepush-ghost.js mrdoob/three.js</pre>
 
   <footer>
     <code>node bin/forcepush-ghost.js --fixture fork-witness-a</code> <span class="muted">(or Pages — already here)</span>
-    <p>Story / timeline tool — not a secret scanner. Page fixtures are sanitized; CLI can scan public repos live.</p>
+    <p>Story / timeline tool — not a secret scanner. Page fixtures are sanitized; CLI can scan public repos live. We do not replace GitHub Activity and we do not offer restore.</p>
   </footer>
 
   <script type="module" src="./app.js"></script>
