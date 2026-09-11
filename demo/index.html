@@ -56,7 +56,7 @@
       </select>
     </label>
     <button id="replay" type="button">Replay wipe</button>
-    <span class="hint">This page = offline fixtures only. Live scan lives in the CLI: <code>npx forcepush-ghost owner/repo</code>.</span>
+    <span class="hint">This page = offline fixtures only. Live scan: clone then <code>node bin/forcepush-ghost.js owner/repo</code> (npx after npm publish).</span>
   </section>
 
   <section class="meta" id="meta"></section>
@@ -64,7 +64,7 @@
   <p class="legend"><span class="alive">● alive on branch</span> <span class="wiped">✕ wiped by force-push</span></p>
 
   <footer>
-    <code>npx forcepush-ghost --fixture scandal-a</code>
+    <code>node bin/forcepush-ghost.js --fixture scandal-a</code> <span class="muted">(or Pages — already here)</span>
     <p>Story / timeline tool — not a secret scanner. Page fixtures are sanitized; CLI can scan public repos live.</p>
   </footer>
 
