@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.13 — 2026-09-11
+
+- **Path B primary:** Pages demo defaults to Fork-witness A; share/OG hook = *Upstream wiped it. The fork still remembers*
+- Share assets: `demo/fork-witness.png` + `demo/fork-witness.gif` on Pages (classic Scandal A Path A still available)
+- Launch packs (`PATHS` / `READY_TO_POST` / `FREEZE` / X / Show HN) retargeted to **v0.1.13**; external X / Show HN remain **HOLD**
+- npm / Packages still blocked (ENEEDAUTH) — no `npx` claims; Pages stays zero-install #1
+- Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.13
+
 ## 0.1.12 — 2026-09-11
 
 - `--json` prints **compact** JSON by default (scripting-friendly)
