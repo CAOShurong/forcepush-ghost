@@ -61,21 +61,106 @@ async function isNonFastForward(owner, repo, before, head, { headers, fetchImpl 
   return { wiped: false, reason: `compare-${status || "ok"}` };
 }
 
+/** Read a response header from Headers API or plain mock object. */
+function headerGet(res, name) {
+  if (!res || !res.headers) return null;
+  const h = res.headers;
+  if (typeof h.get === "function") {
+    return h.get(name) ?? h.get(name.toLowerCase()) ?? null;
+  }
+  return h[name] ?? h[name.toLowerCase()] ?? h[name.toUpperCase()] ?? null;
+}
+
+/** Parse GitHub Link header for rel="next". */
+function parseLinkNext(linkHeader) {
+  if (!linkHeader) return null;
+  const parts = String(linkHeader).split(",");
+  for (const part of parts) {
+    const m = part.match(/<([^>]+)>;\s*rel="next"/i);
+    if (m) return m[1].trim();
+  }
+  return null;
+}
+
 /**
- * Shared rewrite detection over recent PushEvents.
+ * Fetch recent public Events with a small page cap.
+ * Follows Link rel="next" (or stops). Dedupes by event id.
+ * If X-RateLimit-Remaining is 0 after a page, stop early — keep what we have.
+ */
+async function fetchEventsPages(
+  owner,
+  repo,
+  { headers, fetchImpl, maxPages = 3 }
+) {
+  const all = [];
+  const seenIds = new Set();
+  let url = `https://api.github.com/repos/${owner}/${repo}/events?per_page=100`;
+  let pagesFetched = 0;
+  let stoppedEarly = null;
+
+  while (url && pagesFetched < maxPages) {
+    const res = await ghJson(url, { headers, fetchImpl });
+    pagesFetched += 1;
+
+    if (res.status === 404) {
+      return { notFound: true, events: [], pagesFetched, stoppedEarly: null };
+    }
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`GitHub API ${res.status}: ${body.slice(0, 200)}`);
+    }
+
+    const raw = await res.json();
+    for (const ev of Array.isArray(raw) ? raw : []) {
+      const id = ev && ev.id != null ? String(ev.id) : null;
+      if (id) {
+        if (seenIds.has(id)) continue;
+        seenIds.add(id);
+      }
+      all.push(ev);
+    }
+
+    const remaining = headerGet(res, "X-RateLimit-Remaining");
+    if (remaining != null && String(remaining).trim() === "0") {
+      stoppedEarly = "rate-limit";
+      break;
+    }
+
+    const next = parseLinkNext(headerGet(res, "Link"));
+    url = next && pagesFetched < maxPages ? next : null;
+  }
+
+  return { notFound: false, events: all, pagesFetched, stoppedEarly };
+}
+
+/**
+ * Shared rewrite detection over recent PushEvents (paginated, rate-limit aware).
  * Returns wiped rows, alive hints, and before-SHAs from rewrite pushes.
  */
-async function collectUpstreamSignals(owner, repo, { headers, fetchImpl, maxCompares = 12 }) {
-  const eventsUrl = `https://api.github.com/repos/${owner}/${repo}/events?per_page=100`;
-  const res = await ghJson(eventsUrl, { headers, fetchImpl });
-  if (res.status === 404) {
-    return { notFound: true, wiped: [], aliveHints: [], beforeShas: [], rawError: null };
+async function collectUpstreamSignals(
+  owner,
+  repo,
+  { headers, fetchImpl, maxCompares = 12, maxEventPages = 3 }
+) {
+  const {
+    notFound,
+    events: raw,
+    stoppedEarly,
+  } = await fetchEventsPages(owner, repo, {
+    headers,
+    fetchImpl,
+    maxPages: maxEventPages,
+  });
+  if (notFound) {
+    return {
+      notFound: true,
+      wiped: [],
+      aliveHints: [],
+      beforeShas: [],
+      rawError: null,
+      stoppedEarly: null,
+    };
   }
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`GitHub API ${res.status}: ${body.slice(0, 200)}`);
-  }
-  const raw = await res.json();
   const wiped = [];
   const aliveHints = [];
   const beforeShas = [];
@@ -149,7 +234,14 @@ async function collectUpstreamSignals(owner, repo, { headers, fetchImpl, maxComp
     }
   }
 
-  return { notFound: false, wiped, aliveHints, beforeShas, rawError: null };
+  return {
+    notFound: false,
+    wiped,
+    aliveHints,
+    beforeShas,
+    rawError: null,
+    stoppedEarly,
+  };
 }
 
 /** Probe whether a fork still has a commit SHA (full or abbreviated). */
