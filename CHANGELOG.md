@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.14 — 2026-09-11
+
+- **Path B hero:** Pages opens on `fork-witness.gif` (no Play-first beat); OG stays `fork-witness.png`
+- Launch `15S_CLIP` / `FREEZE` notes aligned — Path B starts on hero GIF
+- External X / Show HN remain **HOLD**; npm still unpublished (ENEEDAUTH) — Pages zero-install #1
+- Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.14
+
 ## 0.1.13 — 2026-09-11
 
 - **Path B primary:** Pages demo defaults to Fork-witness A; share/OG hook = *Upstream wiped it. The fork still remembers*
