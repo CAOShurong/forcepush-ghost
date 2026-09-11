@@ -1,4 +1,4 @@
-# One-click outbound pack — v0.1.6 (HOLD)
+# One-click outbound pack — v0.1.6 (GO — Star PM)
 
 Star PM says go → paste these. Do not invent npx.
 

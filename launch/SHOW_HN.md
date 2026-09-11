@@ -1,4 +1,4 @@
-# Show HN — one-click final pack (HOLD until Star PM go)
+# Show HN — one-click final pack (GO — Star PM)
 
 **Title:** Show HN: forcepush-ghost – a red-X timeline of force-pushed commits
 
