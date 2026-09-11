@@ -1,0 +1,49 @@
+{
+  "id": "scandal-a",
+  "label": "Fixture A — sanitized reconstruction (Jenkins-style org rewind)",
+  "repo": "example-ci/plugin-mirror",
+  "branch": "master",
+  "scannedAt": "2026-09-11T00:00:00Z",
+  "disclaimer": "Sanitized reconstruction inspired by the public Nov 2013 Jenkins GitHub force-push incident (186 repos rewound). Names/SHAs are fictional. Not a live scan of jenkinsci/*.",
+  "sourceNote": "Public postmortems: jenkins.io blog 2013-11-25; InfoQ coverage of the same incident.",
+  "events": [
+    {
+      "sha": "7f3a91c",
+      "short": "7f3a91c",
+      "message": "Release notes for 1.2.0",
+      "author": "maintainer-a",
+      "timestamp": "2013-10-15T11:20:00Z",
+      "status": "wiped",
+      "wipedBy": "force-push",
+      "note": "About a month of tip history vanished when a misconfigured mirror force-pushed stale clones."
+    },
+    {
+      "sha": "2c88e01",
+      "short": "2c88e01",
+      "message": "Fix flaky acceptance test on master",
+      "author": "maintainer-b",
+      "timestamp": "2013-11-02T16:45:00Z",
+      "status": "wiped",
+      "wipedBy": "force-push",
+      "note": "Still reachable as a dangling commit after the rewind; branch tip moved backward."
+    },
+    {
+      "sha": "9ab12de",
+      "short": "9ab12de",
+      "message": "Stale local clone tip (pre-rewind)",
+      "author": "mirror-bot",
+      "timestamp": "2013-11-10T04:12:00Z",
+      "status": "alive",
+      "note": "Force-push landed here — older checkout replayed as the new master."
+    },
+    {
+      "sha": "c4e77f0",
+      "short": "c4e77f0",
+      "message": "recovery: restore pre-force-push master",
+      "author": "maintainer-a",
+      "timestamp": "2013-11-10T18:30:00Z",
+      "status": "alive",
+      "note": "Community + GitHub support reconstructed tips; story ends with an explicit recovery commit."
+    }
+  ]
+}

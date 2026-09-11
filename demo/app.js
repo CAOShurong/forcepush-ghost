@@ -1,7 +1,7 @@
 const FIXTURES = {
-  "scandal-a": "../fixtures/scandal-a.json",
-  "scandal-b": "../fixtures/scandal-b.json",
-  clean: "../fixtures/clean.json",
+  "scandal-a": "./fixtures/scandal-a.json",
+  "scandal-b": "./fixtures/scandal-b.json",
+  clean: "./fixtures/clean.json",
 };
 
 const select = document.getElementById("fixtureSelect");

@@ -1,0 +1,26 @@
+{
+  "id": "clean",
+  "label": "Clean bill of health",
+  "repo": "example-org/healthy-repo",
+  "branch": "main",
+  "scannedAt": "2026-09-01T12:00:00Z",
+  "disclaimer": "Demo of the no-force-push path so the UI never goes blank.",
+  "events": [
+    {
+      "sha": "111aaaa",
+      "short": "111aaaa",
+      "message": "Initial commit",
+      "author": "owner",
+      "timestamp": "2026-01-01T00:00:00Z",
+      "status": "alive"
+    },
+    {
+      "sha": "222bbbb",
+      "short": "222bbbb",
+      "message": "Add README",
+      "author": "owner",
+      "timestamp": "2026-01-02T00:00:00Z",
+      "status": "alive"
+    }
+  ]
+}

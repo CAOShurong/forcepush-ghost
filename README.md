@@ -6,6 +6,10 @@
 
 Green = still on the default branch. Red = wiped by a force-push.
 
+### Open the timeline (no clone)
+
+**[Live demo →](https://caoshurong.github.io/forcepush-ghost/demo/)** — red ✕ timeline in the browser.
+
 ### Try it in 10 seconds (offline)
 
 ```bash
