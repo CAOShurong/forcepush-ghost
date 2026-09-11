@@ -354,3 +354,6 @@ footer code { display: inline-block; background: var(--card); padding: 0.4rem 0.
   border: 1px solid color-mix(in srgb, var(--wiped) 28%, var(--alive) 18%, var(--line));
   background: #070b10;
 }
+
+.fw-preview-actions { margin: 0.75rem 0 0; }
+.fw-preview-actions .share-copy { font-size: 0.95rem; }
