@@ -2,9 +2,9 @@
 
 **Upstream wiped it. The fork still remembers.**
 
-![Timeline demo](demo/timeline.gif)
+![Fork-witness dual-rail](demo/fork-witness.gif)
 
-Green = still on the default branch. Red = wiped by a force-push.
+Same SHA: upstream ✕ wiped · fork ● still alive. Classic scandal timeline GIF still in `demo/timeline.gif`.
 
 ### Zero install (start here)
 

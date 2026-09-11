@@ -28,8 +28,8 @@
     <h1>Upstream wiped it. The fork still remembers.</h1>
     <p class="sub"><span class="alive">● Green</span> = still on the default branch. <span class="wiped">✕ Red</span> = wiped by a force-push.</p>
     <figure class="hero-gif">
-      <img src="./timeline.gif" width="960" height="420" alt="Force-push scandal timeline: red wiped commits, green still on main" />
-      <figcaption>● green = still on main · ✕ red = wiped · this page = offline fixtures</figcaption>
+      <img src="./fork-witness.gif" width="960" height="420" alt="Dual rail: upstream wiped tip vs fork still alive on the same SHA" />
+      <figcaption>Same SHA: upstream ✕ / fork ● · Path B primary · this page = offline fixtures</figcaption>
     </figure>
   </header>
 
@@ -37,7 +37,7 @@
   <section class="how-to" aria-label="How to play in 10 seconds">
     <p class="how-to-title">10 seconds — how to play</p>
     <ol>
-      <li>Watch the GIF: <span class="wiped">✕ red</span> = wiped by force-push, <span class="alive">● green</span> = still on main.</li>
+      <li>Watch the GIF: same SHA — upstream <span class="wiped">✕ wiped</span> / fork <span class="alive">● alive</span> (Path B). Classic scandal fixtures still below.</li>
       <li>Pick a fixture below → hit <strong>Replay wipe</strong>.</li>
       <li>Forward this page — offline fixtures only (not a live scan of a real repo).</li>
       <li>Live CLI (after clone): try showcase <code>mrdoob/three.js</code> below, or any <code>owner/repo</code> — Events + compare; failures never fake a fixture.</li>

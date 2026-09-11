@@ -48,5 +48,6 @@ if [[ -n "${kill// }" ]]; then
 fi
 
 test -f "$root/demo/timeline.gif" || { echo "missing timeline.gif"; exit 1; }
+test -f "$root/demo/fork-witness.gif" || { echo "missing fork-witness.gif"; exit 1; }
 echo "CLAIM CHECK PASS"
 echo "GIF OK"
