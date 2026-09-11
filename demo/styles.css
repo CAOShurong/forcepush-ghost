@@ -192,3 +192,59 @@ footer code { display: inline-block; background: var(--card); padding: 0.4rem 0.
   cursor: pointer;
 }
 .share-copy:hover { border-color: #4a5d78; }
+
+.showcase {
+  max-width: 880px;
+  margin: 0 auto 1.25rem;
+  padding: 0.85rem 1rem 1rem;
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--wiped) 28%, var(--line));
+  border-radius: 14px;
+}
+.showcase-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.showcase-body {
+  margin: 0 0 0.65rem;
+  color: var(--fg);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.showcase pre {
+  margin: 0 0 0.65rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--fg);
+  background: #0a1018;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+}
+.showcase-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  margin-bottom: 0.55rem;
+}
+.showcase-link {
+  color: var(--alive);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.showcase-link:hover { text-decoration: underline; }
+.showcase-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+.showcase-note .wiped { color: var(--wiped); font-weight: 600; }

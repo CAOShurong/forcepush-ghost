@@ -40,10 +40,24 @@
       <li>Watch the GIF: <span class="wiped">✕ red</span> = wiped by force-push, <span class="alive">● green</span> = still on main.</li>
       <li>Pick a fixture below → hit <strong>Replay wipe</strong>.</li>
       <li>Forward this page — offline fixtures only (not a live scan of a real repo).</li>
-      <li>Live CLI (after clone): <code>node bin/forcepush-ghost.js owner/repo</code> — rewrite signals via Events + compare; failures never fake a fixture.</li>
+      <li>Live CLI (after clone): try showcase <code>mrdoob/three.js</code> below, or any <code>owner/repo</code> — Events + compare; failures never fake a fixture.</li>
     </ol>
   </section>
 
+
+
+  <section class="showcase" aria-label="Try a live showcase repo">
+    <p class="showcase-title">Try showcase — real public repo</p>
+    <p class="showcase-body">This page stays <strong>offline fixtures</strong>. For a live red ✕ on a real repo (verified on <code>v0.1.6+</code>):</p>
+    <pre id="showcaseCmd">git clone https://github.com/CAOShurong/forcepush-ghost.git
+cd forcepush-ghost
+node bin/forcepush-ghost.js mrdoob/three.js</pre>
+    <div class="showcase-actions">
+      <button type="button" id="copyShowcase" class="share-copy">Copy command</button>
+      <a class="showcase-link" href="https://github.com/mrdoob/three.js" target="_blank" rel="noopener noreferrer">mrdoob/three.js ↗</a>
+    </div>
+    <p class="showcase-note">Expect real <span class="wiped">✕ WIPED</span> rewrite signals (Events + compare). Failures never substitute a fixture. Story/timeline only — not a scanner.</p>
+  </section>
 
   <section class="share-card" aria-label="Copy-paste share text">
     <p class="share-card-title">Share this (copy/paste)</p>
@@ -79,20 +93,24 @@
   <script type="module" src="./app.js"></script>
 
   <script>
-    const btn = document.getElementById('copyShare');
-    const pre = document.getElementById('shareText');
-    if (btn && pre) {
+    async function copyFrom(preId, btnId, okLabel) {
+      const btn = document.getElementById(btnId);
+      const pre = document.getElementById(preId);
+      if (!btn || !pre) return;
       btn.addEventListener('click', async () => {
         const text = pre.textContent.trim();
         try {
           await navigator.clipboard.writeText(text);
-          btn.textContent = 'Copied';
-          setTimeout(() => { btn.textContent = 'Copy'; }, 1200);
+          const prev = btn.textContent;
+          btn.textContent = okLabel || 'Copied';
+          setTimeout(() => { btn.textContent = prev; }, 1200);
         } catch {
           btn.textContent = 'Select & copy';
         }
       });
     }
+    copyFrom('shareText', 'copyShare', 'Copied');
+    copyFrom('showcaseCmd', 'copyShowcase', 'Copied');
   </script>
 </body>
 </html>

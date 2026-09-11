@@ -29,6 +29,12 @@ node bin/forcepush-ghost.js owner/repo
 # or: npx forcepush-ghost owner/repo   # after npm publish
 ```
 
+Showcase (real public repo with live ✕ on tip):
+
+```bash
+node bin/forcepush-ghost.js mrdoob/three.js
+```
+
 Live mode reads recent public GitHub Events for force-push signals and prints the same story timeline. Optional `GITHUB_TOKEN` / `GH_TOKEN` raises rate limits; if unset, the CLI soft-tries `gh auth token` when the GitHub CLI is logged in. The visual demo stays offline-fixtures so it never pretends it scanned a repo it did not.
 
 ## What you are looking at
