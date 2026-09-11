@@ -6,22 +6,27 @@
 
 Green = still on the default branch. Red = wiped by a force-push.
 
-### Open the timeline (no clone)
+### Zero install (start here)
 
-**[Live demo →](https://caoshurong.github.io/forcepush-ghost/demo/)** — red ✕ timeline in the browser.
+**[Live demo →](https://caoshurong.github.io/forcepush-ghost/demo/)** — red ✕ timeline in the browser. Offline fixtures only; no auth, no clone.
 
-### Try it in 10 seconds (offline)
+Or open `demo/index.html` after clone — same story, zero network.
+
+### CLI (after clone, or once published to npm)
 
 ```bash
+# from a clone:
+node bin/forcepush-ghost.js --fixture scandal-a
+
+# once on npm (package not published yet — use clone/Pages until then):
 npx forcepush-ghost --fixture scandal-a
 ```
-
-Or open `demo/index.html` — two scandal fixtures and one clean bill of health play with zero install and zero network.
 
 ### Live public scan (CLI)
 
 ```bash
-npx forcepush-ghost owner/repo
+node bin/forcepush-ghost.js owner/repo
+# or: npx forcepush-ghost owner/repo   # after npm publish
 ```
 
 Live mode reads recent public GitHub Events for force-push signals and prints the same story timeline. Optional `GITHUB_TOKEN` / `GH_TOKEN` raises rate limits. The visual demo stays offline-fixtures so it never pretends it scanned a repo it did not.
@@ -33,12 +38,12 @@ A public timeline of commits that used to exist on a branch and then disappeared
 ## Offline fixtures
 
 ```bash
-npx forcepush-ghost --fixture scandal-a
-npx forcepush-ghost --fixture scandal-b
-npx forcepush-ghost --fixture clean
+node bin/forcepush-ghost.js --fixture scandal-a
+node bin/forcepush-ghost.js --fixture scandal-b
+node bin/forcepush-ghost.js --fixture clean
 ```
 
-Open `demo/index.html` for the visual timeline (red ✕ = wiped).
+Open the [Live demo](https://caoshurong.github.io/forcepush-ghost/demo/) for the visual timeline (red ✕ = wiped).
 
 ## Limitations
 
@@ -46,6 +51,7 @@ Open `demo/index.html` for the visual timeline (red ✕ = wiped).
 - Demo UI is offline fixtures; live `owner/repo` is CLI for now
 - Offline fixtures are sanitized — not real scandals dressed up as live results
 - Story/timeline positioning only — not a secret scanner and not secret recovery
+- `npx forcepush-ghost` works only after the package is on npm; until then use Pages or `node bin/…` from a clone
 
 ## License
 
