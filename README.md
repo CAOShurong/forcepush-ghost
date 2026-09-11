@@ -15,16 +15,19 @@ Or open `demo/index.html` after clone — same story, zero network.
 ### CLI (after clone, or once published to npm)
 
 ```bash
-# from a clone:
+# from a clone (Path B primary):
+node bin/forcepush-ghost.js --fixture fork-witness-a
+
+# classic scandal timeline still available:
 node bin/forcepush-ghost.js --fixture scandal-a
 
 # once on npm (package not published yet — use clone/Pages until then):
-npx forcepush-ghost --fixture scandal-a
+npx forcepush-ghost --fixture fork-witness-a
 
 # scripting: structured JSON of the same timeline object (Pages stays offline; live --vs is CLI-only)
-node bin/forcepush-ghost.js --fixture scandal-a --json
+node bin/forcepush-ghost.js --fixture fork-witness-a --json
 # human-readable indent: add --pretty
-node bin/forcepush-ghost.js --fixture scandal-a --json --pretty
+node bin/forcepush-ghost.js --fixture fork-witness-a --json --pretty
 ```
 
 ### Live public scan (CLI)
@@ -68,10 +71,11 @@ A public timeline of commits that used to exist on a branch and then disappeared
 ## Offline fixtures
 
 ```bash
+node bin/forcepush-ghost.js --fixture fork-witness-a   # Path B primary — offline dual-rail
+node bin/forcepush-ghost.js --fixture fork-witness-clean
 node bin/forcepush-ghost.js --fixture scandal-a
 node bin/forcepush-ghost.js --fixture scandal-b
 node bin/forcepush-ghost.js --fixture clean
-node bin/forcepush-ghost.js --fixture fork-witness-a   # offline dual-rail preview
 ```
 
 Open the [Live demo](https://caoshurong.github.io/forcepush-ghost/demo/) for the visual timeline (red ✕ = wiped).
