@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.5
+
+- Pages share-card + OG punch-up
+- Honest CLI help (node bin first)
+- Launch PATHS freeze (no fake npx)
+
+
 ## 0.1.4 — 2026-09-11
 
 - Live CLI soft-falls back to `gh auth token` when `GITHUB_TOKEN` / `GH_TOKEN` unset (helps unauthenticated rate limits)
