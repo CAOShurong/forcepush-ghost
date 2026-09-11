@@ -85,6 +85,30 @@ test("fixture --json prints parseable structured result", () => {
   assert.ok(data.label);
   assert.ok(data.disclaimer);
   assert.doesNotMatch(r.stdout, /✕ WIPED/);
+  // compact by default (no indent-2 newlines after braces at start of object fields)
+  assert.equal(r.stdout.trim(), JSON.stringify(data));
+});
+
+test("fixture --json --pretty indents with null,2", () => {
+  const r = spawnSync(process.execPath, [bin, "--fixture", "scandal-a", "--json", "--pretty"], {
+    encoding: "utf8",
+  });
+  assert.equal(r.status, 0);
+  assert.equal(r.stderr, "");
+  const data = JSON.parse(r.stdout);
+  assert.equal(data.repo, "example-ci/plugin-mirror");
+  assert.equal(r.stdout.trim(), JSON.stringify(data, null, 2));
+  assert.match(r.stdout, /^\{/m);
+  assert.match(r.stdout, /\n  "repo":/);
+});
+
+test("--pretty alone does not switch to JSON (human timeline)", () => {
+  const r = spawnSync(process.execPath, [bin, "--fixture", "scandal-a", "--pretty"], {
+    encoding: "utf8",
+  });
+  assert.equal(r.status, 0);
+  assert.match(r.stdout, /WIPED/);
+  assert.throws(() => JSON.parse(r.stdout));
 });
 
 test("fixture fork-witness --json includes mode and dual statuses", () => {
@@ -97,10 +121,14 @@ test("fixture fork-witness --json includes mode and dual statuses", () => {
   assert.ok(data.events.some((e) => e.upstreamStatus || e.forkStatus || e.status));
 });
 
-test("CLI --help documents --json", () => {
+test("CLI --help documents --json / --pretty and Events pagination cap", () => {
   const r = spawnSync(process.execPath, [bin, "--help"], { encoding: "utf8" });
   assert.equal(r.status, 0);
   assert.match(r.stdout, /--json/);
+  assert.match(r.stdout, /--pretty/);
+  assert.match(r.stdout, /3 pages|hard cap of 3/i);
+  assert.match(r.stdout, /X-RateLimit-Remaining|rate-limit/i);
+  assert.match(r.stdout, /never invent|refuse to invent/i);
 });
 
 test("CLI --vs same-repo still exits 2 with --json (no success JSON)", () => {
