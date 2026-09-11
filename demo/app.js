@@ -22,15 +22,16 @@ const playForkWitness = document.getElementById("playForkWitness");
 
 const SHARE_FORK_WITNESS =
   "Upstream wiped it. The fork still remembers… pick Fork-witness A — https://caoshurong.github.io/forcepush-ghost/demo/ (offline dual-rail; story, not a scanner).";
+const SHARE_FORK_CLEAN =
+  "Both tips still match — no wipe to remember. Offline dual-rail control: https://caoshurong.github.io/forcepush-ghost/demo/ — pick Fork-witness clean. Story, not a scanner.";
 const SHARE_CLASSIC =
   "Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.";
 
 function syncShareCard(id) {
   if (!shareText) return;
-  shareText.textContent =
-    id === "fork-witness-a" || id === "fork-witness-clean"
-      ? SHARE_FORK_WITNESS
-      : SHARE_CLASSIC;
+  if (id === "fork-witness-a") shareText.textContent = SHARE_FORK_WITNESS;
+  else if (id === "fork-witness-clean") shareText.textContent = SHARE_FORK_CLEAN;
+  else shareText.textContent = SHARE_CLASSIC;
 }
 
 async function loadFixture(id) {
