@@ -4,12 +4,10 @@
 
 **Text:** Offline dual-rail demo (zero install): https://caoshurong.github.io/forcepush-ghost/demo/ — pick Fork-witness A. Same SHA: upstream ✕ / fork ●.
 
-Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.9
+Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.10
 
-Clone CLI fixtures: `node bin/forcepush-ghost.js --fixture fork-witness-a`
+Clone CLI: `node bin/forcepush-ghost.js --fixture fork-witness-a` · JSON: add `--json`
 
-Live showcase (needs GitHub API access): `node bin/forcepush-ghost.js mrdoob/three.js`
+Live showcase: `node bin/forcepush-ghost.js mrdoob/three.js` · live `--vs alteredq` (CLI only).
 
-Optional follow-up (CLI only): `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq` — verified Upstream ✕ | Fork ●. Pages never runs live `--vs`.
-
-Closest tools hunt secrets in dangling commits; this one is only the story/timeline. Not recovery, not malware detection. npm package pending — don’t rely on `npx` yet.
+Story/timeline only — not a secret scanner, not recovery. npm package pending — don’t rely on `npx` yet.
