@@ -28,3 +28,6 @@ Story/timeline only — not a secret scanner, not recovery. npm not published ye
 
 ## Paths
 Pages (Fork-witness A) → Release → clone CLI Path B → `--json` / live showcase / live `--vs`. No registry install claims.
+
+## Footnote (keep on HOLD packs; do not lead with this)
+GitHub Activity can filter Force pushes / show `before` SHA — same shape as our timeline. Never claim we replace Activity or add recovery.

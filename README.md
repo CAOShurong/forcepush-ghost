@@ -68,6 +68,14 @@ Live mode reads recent public GitHub Events for force-push signals and prints th
 
 A public timeline of commits that used to exist on a branch and then disappeared after a force-push. Offline fixtures are sanitized reconstructions so the story is always reproducible. Live scan is story/timeline only — not a secret scanner.
 
+## Real-world shape (sanitized in fixtures)
+
+- **Jenkins, Nov 2013** — misconfigured Gerrit replication force-pushed stale clones across ~186 repos → Fixture Scandal A ([summary](https://www.jenkins.io/blog/2013/11/25/summary-report-git-repository-disruption-incident-of-nov-10th/), [InfoQ](https://www.infoq.com/news/2013/11/use-the-force/))
+- **CocoaPods Specs, Jan 2014** — libgit2/GitHub web-editor corruption forced a Specs history rewrite → Fixture Scandal B ([postmortem](https://blog.cocoapods.org/Repairing-Our-Broken-Specs-Repository/))
+- **GitHub Protected Branches, Sep 2015** — product motivation included blocking accidental force-pushes that overwrite others' work → *why wipe matters* background only ([announcement](https://github.blog/news-insights/product-news/protected-branches-and-required-status-checks/)). **This tool does not detect protected branches.**
+
+Names/SHAs in fixtures are fictional. Not live scans of `jenkinsci/*` or `CocoaPods/Specs`.
+
 ## Offline fixtures
 
 ```bash
@@ -98,6 +106,7 @@ Pages: pick **Fork-witness A** in the demo select. Hook: *Upstream wiped it. The
 - Demo UI is offline fixtures; live `owner/repo` and live `--vs` are CLI only (Pages never runs live `--vs`)
 - Offline fixtures are sanitized — not real scandals dressed up as live results
 - Story/timeline positioning only — not a secret scanner and not secret recovery
+- GitHub's Activity view can filter Force pushes and show a `before` SHA — same shape as our ✕ timeline. We do **not** replace Activity, and we do **not** offer recovery/restore buttons
 - `npx forcepush-ghost` works only after the package is on npm; until then use Pages or `node bin/…` from a clone
 
 ## License
