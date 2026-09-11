@@ -52,6 +52,7 @@ Verified dual-hit showcase (Upstream ✕ | Fork ● on shared tip SHA):
 ```bash
 node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq
 # optional alt fork: --vs brunosimon
+# optional alt: pocketbase/pocketbase --vs fondoger
 ```
 
 **Pages stays offline fixtures** — the demo never runs live `--vs`.

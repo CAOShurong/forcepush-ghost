@@ -5,7 +5,7 @@
 3. **CLI from clone:** `node bin/forcepush-ghost.js --fixture scandal-a`
 4. **CLI JSON (scripting):** `node bin/forcepush-ghost.js --fixture scandal-a --json` — structured stdout; Pages stays offline
 5. **Fork-witness dual-rail (offline):** Pages demo → pick **Fork-witness A**; or `node bin/forcepush-ghost.js --fixture fork-witness-a`
-6. **Live fork-witness (CLI only):** `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq` (verified Upstream ✕ | Fork ●; optional alt `--vs brunosimon`)
+6. **Live fork-witness (CLI only):** `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq` (verified Upstream ✕ | Fork ●; optional alt `--vs brunosimon`; also `pocketbase/pocketbase --vs fondoger`)
 7. **Live showcase (CLI):** `node bin/forcepush-ghost.js mrdoob/three.js` (also `pocketbase/pocketbase`)
 8. **npm / GitHub Packages:** blocked — do not claim `npx` works yet.
 
