@@ -14,11 +14,17 @@ npx forcepush-ghost --fixture scandal-a
 
 Or open `demo/index.html` — two scandal fixtures and one clean bill of health play with zero install and zero network.
 
-Live `owner/repo` scan is not in this V0. The demo never pretends it scanned a repo it did not.
+### Live public repo (optional)
+
+```bash
+npx forcepush-ghost owner/repo
+```
+
+Uses recent public GitHub Events only. If the API fails or rate-limits, the CLI exits without inventing a timeline — use `--fixture` instead. This is a **timeline / story** tool — not a secret scanner.
 
 ## What you are looking at
 
-A public timeline of commits that used to exist on a branch and then disappeared after a force-push. Offline fixtures are sanitized reconstructions so the story is always reproducible.
+Commits that used to exist on a branch and then disappeared after a force-push, shown as a red-✕ timeline. Offline fixtures are sanitized reconstructions so the story is always reproducible.
 
 ## Offline fixtures
 
@@ -28,13 +34,11 @@ npx forcepush-ghost --fixture scandal-b
 npx forcepush-ghost --fixture clean
 ```
 
-Open `demo/index.html` for the visual timeline (red ✕ = wiped).
-
 ## Limitations
 
-- V0 ships the offline story demo ahead of live scan
-- Live public-repo scan comes in a follow-up when wired for real
-- Offline fixtures are sanitized — not real scandals dressed up as live results
+- Live mode only sees the recent public Events window — older rewrites may be invisible
+- Offline fixtures are sanitized demos, never dressed up as a live scan of your target
+- Not a secret scanner and not secret recovery
 
 ## License
 

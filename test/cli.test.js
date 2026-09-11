@@ -21,15 +21,13 @@ test("clean fixture has no wiped marker", () => {
   assert.match(r.stdout, /ALIVE/);
 });
 
-test("owner/repo live scan prints a timeline (clean or wiped)", () => {
-  const r = spawnSync(
-    process.execPath,
-    [bin, "octocat/Hello-World"],
-    {
-      encoding: "utf8",
-      env: { ...process.env, GH_TOKEN: process.env.GH_TOKEN || "", GITHUB_TOKEN: process.env.GITHUB_TOKEN || "" },
-    }
-  );
-  // Network may fail in CI-less boxes; accept success timeline or fixture fallback
-  assert.match(r.stdout + r.stderr, /ALIVE|WIPED|Clean bill|Fixture A|GitHub API/i);
+test("live failure refuses fixture substitution", () => {
+  const r = spawnSync(process.execPath, [bin, "acme/does-not-exist-zz"], {
+    encoding: "utf8",
+    env: { ...process.env, GH_TOKEN: "", GITHUB_TOKEN: "", PATH: process.env.PATH },
+  });
+  const out = r.stdout + r.stderr;
+  // Either a real clean/not_found timeline, or hard fail — never Fixture A dump
+  assert.doesNotMatch(out, /Falling back to offline Fixture A/i);
+  assert.doesNotMatch(out, /example-org\/docs-site/);
 });

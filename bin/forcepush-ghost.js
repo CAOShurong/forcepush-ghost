@@ -1,25 +1,36 @@
 #!/usr/bin/env node
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { scanPublicRepo, formatTimeline } from "../src/scan.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
+const ALLOWED = new Set(["scandal-a", "scandal-b", "clean"]);
 
 function usage() {
   console.log(`forcepush-ghost — The force-push scandal timeline for any public repo.
 
 Usage:
-  npx forcepush-ghost owner/repo
   npx forcepush-ghost --fixture scandal-a|scandal-b|clean
+  npx forcepush-ghost owner/repo
 
-Offline fixtures always work. Live mode uses public GitHub Events (story/timeline only).
+Offline fixtures always work (recommended first look).
+Live mode uses recent public GitHub Events only (story/timeline — not a secret scanner).
+On live failure we refuse to invent results — use --fixture instead.
 `);
 }
 
 function printFixture(id) {
+  if (!ALLOWED.has(id)) {
+    console.error(`Unknown fixture "${id}". Use: scandal-a | scandal-b | clean`);
+    process.exit(1);
+  }
   const path = join(root, "fixtures", `${id}.json`);
+  if (!existsSync(path)) {
+    console.error(`Missing fixture file: ${path}`);
+    process.exit(1);
+  }
   const data = JSON.parse(readFileSync(path, "utf8"));
   console.log(formatTimeline(data));
 }
@@ -37,7 +48,7 @@ if (args[0] === "--fixture") {
 
 const target = args[0];
 if (!/^[\w.-]+\/[\w.-]+$/.test(target)) {
-  console.error("Expected owner/repo");
+  console.error("Expected owner/repo or --fixture scandal-a|scandal-b|clean");
   process.exit(1);
 }
 
@@ -47,7 +58,8 @@ try {
   console.log(formatTimeline(data));
 } catch (err) {
   console.error(String(err?.message || err));
-  console.error("Falling back to offline Fixture A so the story stays visible:\n");
-  printFixture("scandal-a");
-  process.exitCode = 1;
+  console.error("Live scan failed — refusing to substitute a fixture (that would be a false claim).");
+  console.error("Try: npx forcepush-ghost --fixture scandal-a");
+  console.error("Or open demo/index.html");
+  process.exit(2);
 }
