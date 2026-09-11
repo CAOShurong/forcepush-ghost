@@ -1,11 +1,11 @@
-# npm publish checklist — forcepush-ghost@0.1.11
+# npm publish checklist — forcepush-ghost@0.1.12
 
 ## Pre-flight
 - [ ] `git status` clean on main; tip includes README Pages-first honesty
 - [ ] `npm test` + `bash scripts/claim-check.sh` PASS
 - [ ] `npm whoami` succeeds (**blocker today: ENEEDAUTH**)
 - [ ] `npm view forcepush-ghost` is 404 (name free) before first publish
-- [ ] `package.json` version is `0.1.11` (do not rewrite older tags)
+- [ ] `package.json` version is `0.1.12` (do not rewrite older tags)
 - [ ] `npm pack --dry-run` files list looks right
 
 ## Publish
@@ -16,8 +16,8 @@ npm publish --access public
 
 ## Post-publish verify
 ```bash
-npm view forcepush-ghost version   # expect 0.1.11
-npx --yes forcepush-ghost@0.1.11 --fixture scandal-a
+npm view forcepush-ghost version   # expect 0.1.12
+npx --yes forcepush-ghost@0.1.12 --fixture scandal-a
 ```
 
 ## Then

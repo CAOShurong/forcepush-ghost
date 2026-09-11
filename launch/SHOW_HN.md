@@ -4,10 +4,10 @@
 
 **Text:** Offline dual-rail demo (zero install): https://caoshurong.github.io/forcepush-ghost/demo/ — pick Fork-witness A. Same SHA: upstream ✕ / fork ●.
 
-Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.11
+Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.12
 
-Clone CLI: `node bin/forcepush-ghost.js --fixture fork-witness-a` · JSON: add `--json`
+Clone CLI: `node bin/forcepush-ghost.js --fixture fork-witness-a` · JSON: `--json` (optional `--pretty`)
 
-Live showcase: `node bin/forcepush-ghost.js mrdoob/three.js` · live `--vs alteredq` (CLI only; optional alt `--vs` pocketbase/fondoger).
+Live showcase: `node bin/forcepush-ghost.js mrdoob/three.js` · live `--vs alteredq` (CLI only).
 
 Story/timeline only — not a secret scanner, not recovery. npm package pending — don’t rely on `npx` yet.

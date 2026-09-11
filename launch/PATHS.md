@@ -1,9 +1,9 @@
-# Launch install paths (v0.1.11)
+# Launch install paths (v0.1.12)
 
 1. **Primary — Pages demo:** https://caoshurong.github.io/forcepush-ghost/demo/
-2. **Secondary — GitHub Release:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.11
+2. **Secondary — GitHub Release:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.12
 3. **CLI from clone:** `node bin/forcepush-ghost.js --fixture scandal-a`
-4. **CLI JSON (scripting):** `node bin/forcepush-ghost.js --fixture scandal-a --json` — structured stdout; Pages stays offline
+4. **CLI JSON (scripting):** `node bin/forcepush-ghost.js --fixture scandal-a --json` (optional `--pretty`) — structured stdout; Pages stays offline
 5. **Fork-witness dual-rail (offline):** Pages demo → pick **Fork-witness A**; or `node bin/forcepush-ghost.js --fixture fork-witness-a`
 6. **Live fork-witness (CLI only):** `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq` (verified Upstream ✕ | Fork ●; optional alt `--vs brunosimon`; also `pocketbase/pocketbase --vs fondoger`)
 7. **Live showcase (CLI):** `node bin/forcepush-ghost.js mrdoob/three.js` (also `pocketbase/pocketbase`)
@@ -13,5 +13,3 @@ Pages never runs live `--vs` — offline fixtures only.
 Same-repo `--vs` refused (exit 2).
 External X / Show HN remain **HOLD** until Star PM / user authorization.
 Post-publish: Pages stays #1; add registry install after Dist verifies.
-
-Pending tip (unreleased): **0.1.12** adds `--json --pretty` + Events pagination help — do not retarget Release CTA until Dist tags `v0.1.12`.
