@@ -4,6 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>forcepush-ghost — scandal timeline</title>
+  <meta name="description" content="Offline scandal timeline of force-pushed commits — green still on main, red wiped. This page uses fixtures only; live scan is CLI." />
+  <link rel="canonical" href="https://caoshurong.github.io/forcepush-ghost/demo/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="forcepush-ghost" />
+  <meta property="og:title" content="forcepush-ghost — force-push scandal timeline" />
+  <meta property="og:description" content="Green = still on main. Red ✕ = wiped by a force-push. Offline fixtures demo — not a secret scanner." />
+  <meta property="og:url" content="https://caoshurong.github.io/forcepush-ghost/demo/" />
+  <meta property="og:image" content="https://caoshurong.github.io/forcepush-ghost/demo/timeline.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="960" />
+  <meta property="og:image:height" content="420" />
+  <meta property="og:image:alt" content="Red-X scandal timeline: wiped commits vs commits still on main" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="forcepush-ghost — force-push scandal timeline" />
+  <meta name="twitter:description" content="Offline demo: green still on main, red ✕ wiped. Not a secret scanner." />
+  <meta name="twitter:image" content="https://caoshurong.github.io/forcepush-ghost/demo/timeline.png" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
@@ -11,7 +27,10 @@
     <p class="eyebrow">forcepush-ghost</p>
     <h1>The force-push scandal timeline for any public repo.</h1>
     <p class="sub"><span class="alive">● Green</span> = still on the default branch. <span class="wiped">✕ Red</span> = wiped by a force-push.</p>
-    <p class="hero-gif"><img src="./timeline.gif" width="960" alt="Force-push scandal timeline: red wiped commits, green still on main" /></p>
+    <figure class="hero-gif">
+      <img src="./timeline.gif" width="960" height="420" alt="Force-push scandal timeline: red wiped commits, green still on main" />
+      <figcaption>● green = still on main · ✕ red = wiped · this page = offline fixtures</figcaption>
+    </figure>
   </header>
 
   <section class="rail-wrap" aria-label="Horizontal scandal rail">
