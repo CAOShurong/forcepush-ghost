@@ -1,4 +1,4 @@
-# X / Twitter — one-click final pack (GO — Star PM)
+# X / Twitter — one-click final pack (HOLD — wait for Star PM go)
 
 Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.
 
