@@ -1,24 +1,28 @@
-# One-click outbound pack — v0.1.6 (HOLD — wait for Star PM go)
+# One-click outbound pack — v0.1.7 (HOLD — wait for Star PM go)
 
 Star PM says go → paste these. Do not invent npx.
 
 ## X (primary)
-Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.
+Upstream wiped it. The fork still remembers — dual-rail offline: https://caoshurong.github.io/forcepush-ghost/demo/ (pick Fork-witness A). Story, not a scanner.
+
+Alt (classic red ✕): same demo → Scandal A.
 
 ## Show HN
-Title: Show HN: forcepush-ghost – a red-X timeline of force-pushed commits
+Title: Show HN: forcepush-ghost – upstream wiped it, the fork still remembers
 
-Text: Offline demo first (zero install): https://caoshurong.github.io/forcepush-ghost/demo/ — red ✕ = wiped off the default branch.
+Text: Offline dual-rail demo (zero install): https://caoshurong.github.io/forcepush-ghost/demo/ — pick Fork-witness A. Same SHA: upstream ✕ / fork ●.
 
-Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.6
+Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.7
 
-Clone CLI: `node bin/forcepush-ghost.js --fixture scandal-a`
+Clone CLI: `node bin/forcepush-ghost.js --fixture fork-witness-a`
+
+Classic scandal: `node bin/forcepush-ghost.js --fixture scandal-a`
 
 Live showcase: `node bin/forcepush-ghost.js mrdoob/three.js`
 
-Story/timeline only — not a secret scanner. npm not published yet.
+Story/timeline only — not a secret scanner, not recovery. npm not published yet.
 
 ## Paths
-Pages → Release → clone CLI → live showcase. No registry install claims.
+Pages (Fork-witness A) → Release → clone CLI → live showcase. No registry install claims.
 
 Alt live showcase: `node bin/forcepush-ghost.js pocketbase/pocketbase`

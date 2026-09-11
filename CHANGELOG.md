@@ -1,9 +1,10 @@
 # Changelog
 
-## Unreleased — fork-witness offline V0.2 preview
+## 0.1.7 — 2026-09-11
 
 - Offline dual-rail fixtures `fork-witness-a` / `fork-witness-clean` (Pages + CLI)
 - Demo dual rail: upstream ✕ vs fork ● on shared tip SHA
+- Launch packs retargeted to Fork-witness A primary CTA (external X/Show HN still HOLD)
 - No live `--vs`; no restore CTA
 
 ## 0.1.6 — 2026-09-11
