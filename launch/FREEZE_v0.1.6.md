@@ -7,7 +7,7 @@
 **npm / npx:** NOT available
 
 ## Frozen X / Show HN
-See `launch/READY_TO_POST.md` (one-click pack). External post GO — Star PM lifted HOLD this cycle (Pages-first X then Show HN).
+See `launch/READY_TO_POST.md` (one-click pack). External post HOLD — wait for Star PM / user authorization before any external post.
 
 ## Honesty
 - Pages = offline fixtures (+ showcase tip pointing to CLI for live ✕)
