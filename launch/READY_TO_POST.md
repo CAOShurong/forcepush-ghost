@@ -20,3 +20,5 @@ Story/timeline only — not a secret scanner. npm not published yet.
 
 ## Paths
 Pages → Release → clone CLI → live showcase. No registry install claims.
+
+Alt live showcase: `node bin/forcepush-ghost.js pocketbase/pocketbase`
