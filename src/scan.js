@@ -155,8 +155,37 @@ export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxC
   };
 }
 
+function statusMark(status) {
+  if (status === "wiped") return "✕ WIPED";
+  if (status === "absent") return "· ——";
+  return "● ALIVE";
+}
+
 export function formatTimeline(data) {
   const lines = [];
+  if (data.mode === "fork-witness") {
+    const up = data.upstream || { repo: data.repo, branch: data.branch };
+    const fk = data.fork || {};
+    lines.push(`\n${data.label}`);
+    lines.push(`Upstream: ${up.repo} (${up.branch || "main"})`);
+    lines.push(`Fork:     ${fk.repo || "?"} (${fk.branch || "main"})`);
+    if (data.caption) lines.push(data.caption);
+    lines.push("");
+    for (const ev of data.events) {
+      const left = statusMark(ev.upstreamStatus || ev.status);
+      const right = statusMark(ev.forkStatus || ev.status);
+      lines.push(`${ev.short}  ${ev.message}`);
+      lines.push(`  Upstream ${left.padEnd(8)}  |  Fork ${right}`);
+      lines.push(`  ${ev.author}  ${ev.timestamp}`);
+      if (ev.note) lines.push(`  ${ev.note}`);
+      lines.push("");
+    }
+    lines.push(data.disclaimer);
+    lines.push("Offline fork-witness fixture — not a live upstream↔fork compare.");
+    lines.push("Open demo/index.html or the Pages demo for the dual-rail view.\n");
+    return lines.join("\n");
+  }
+
   lines.push(`\n${data.repo} (${data.branch}) — ${data.label}\n`);
   for (const ev of data.events) {
     const mark = ev.status === "wiped" ? "✕ WIPED" : "● ALIVE";

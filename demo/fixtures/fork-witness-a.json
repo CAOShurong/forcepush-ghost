@@ -1,0 +1,50 @@
+{
+  "id": "fork-witness-a",
+  "mode": "fork-witness",
+  "label": "Fork-witness A — upstream wipe, fork still holds tip (offline V0.2)",
+  "repo": "example-labs/widget-core",
+  "branch": "main",
+  "upstream": { "repo": "example-labs/widget-core", "branch": "main" },
+  "fork": { "repo": "contrib-mirror/widget-core", "branch": "main" },
+  "scannedAt": "2026-09-11T00:00:00Z",
+  "disclaimer": "Offline fork-witness preview (V0.2). Sanitized reconstruction — names/SHAs are fictional. Not a live upstream↔fork compare.",
+  "sourceNote": "Fictional dual-rail story for the Pages/CLI offline demo. No live --vs.",
+  "caption": "Upstream force-pushed. Fork still has the tip.",
+  "hook": "Upstream wiped it. The fork still remembers.",
+  "events": [
+    {
+      "sha": "4e8c21a9f0b3d7e6c5a1b2d3e4f567890123abcd",
+      "short": "4e8c21a",
+      "message": "Stabilize release checklist",
+      "author": "maintainer-a",
+      "timestamp": "2026-07-12T09:15:00Z",
+      "upstreamStatus": "alive",
+      "forkStatus": "alive",
+      "status": "alive",
+      "note": "Shared history still present on both sides."
+    },
+    {
+      "sha": "9f2d7b1c8a4e60d3b5c7e9f0123456789abcdef0",
+      "short": "9f2d7b1",
+      "message": "Ship experimental telemetry probe",
+      "author": "dev-alice",
+      "timestamp": "2026-08-03T14:22:00Z",
+      "upstreamStatus": "wiped",
+      "forkStatus": "alive",
+      "status": "wiped",
+      "wipedBy": "force-push",
+      "note": "Shared tip SHA — ✕ wiped on upstream after force-push; ● still alive on the fork."
+    },
+    {
+      "sha": "c0ffee12ab34cd56ef7890aa11bb22cc33dd44ee",
+      "short": "c0ffee1",
+      "message": "Rewind main to pre-probe tip",
+      "author": "maintainer-a",
+      "timestamp": "2026-08-03T18:05:00Z",
+      "upstreamStatus": "alive",
+      "forkStatus": "absent",
+      "status": "alive",
+      "note": "New upstream tip after the force-push; fork default still points at the wiped SHA."
+    }
+  ]
+}

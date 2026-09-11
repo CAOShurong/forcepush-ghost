@@ -32,3 +32,24 @@ test("live failure refuses fixture substitution", () => {
   assert.doesNotMatch(out, /example-org\/docs-site/);
   assert.doesNotMatch(out, /example-ci\/plugin-mirror/);
 });
+
+test("fixture fork-witness-a prints upstream/fork dual story", () => {
+  const r = spawnSync(process.execPath, [bin, "--fixture", "fork-witness-a"], { encoding: "utf8" });
+  assert.equal(r.status, 0);
+  const out = r.stdout;
+  assert.match(out, /Upstream/i);
+  assert.match(out, /Fork/i);
+  assert.match(out, /WIPED|wiped|✕/i);
+  assert.match(out, /ALIVE|alive|●/i);
+  assert.doesNotMatch(out, /\blive --vs\b/i);
+  assert.doesNotMatch(out, /\brestore\b/i);
+  assert.doesNotMatch(out, /\brecover\b/i);
+});
+
+test("fixture fork-witness-clean exits 0 without wipe drama", () => {
+  const r = spawnSync(process.execPath, [bin, "--fixture", "fork-witness-clean"], { encoding: "utf8" });
+  assert.equal(r.status, 0);
+  assert.match(r.stdout, /Upstream/i);
+  assert.match(r.stdout, /Fork/i);
+  assert.doesNotMatch(r.stdout, /\brestore\b/i);
+});

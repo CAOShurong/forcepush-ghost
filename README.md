@@ -47,9 +47,22 @@ A public timeline of commits that used to exist on a branch and then disappeared
 node bin/forcepush-ghost.js --fixture scandal-a
 node bin/forcepush-ghost.js --fixture scandal-b
 node bin/forcepush-ghost.js --fixture clean
+node bin/forcepush-ghost.js --fixture fork-witness-a   # offline dual-rail preview
 ```
 
 Open the [Live demo](https://caoshurong.github.io/forcepush-ghost/demo/) for the visual timeline (red ✕ = wiped).
+
+
+### Fork-witness offline preview (V0.2)
+
+Dual-rail fixtures: same SHA on **upstream ✕** vs **fork ●**. Offline only — not a live `--vs`.
+
+```bash
+node bin/forcepush-ghost.js --fixture fork-witness-a
+node bin/forcepush-ghost.js --fixture fork-witness-clean
+```
+
+Pages: pick **Fork-witness A** in the demo select. Hook: *Upstream wiped it. The fork still remembers.*
 
 ## Limitations
 

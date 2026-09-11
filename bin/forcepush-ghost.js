@@ -7,13 +7,13 @@ import { scanPublicRepo, formatTimeline } from "../src/scan.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
-const ALLOWED = new Set(["scandal-a", "scandal-b", "clean"]);
+const ALLOWED = new Set(["scandal-a", "scandal-b", "clean", "fork-witness-a", "fork-witness-clean"]);
 
 function usage() {
   console.log(`forcepush-ghost — The force-push scandal timeline for any public repo.
 
 Usage:
-  node bin/forcepush-ghost.js --fixture scandal-a|scandal-b|clean
+  node bin/forcepush-ghost.js --fixture scandal-a|scandal-b|clean|fork-witness-a|fork-witness-clean
   node bin/forcepush-ghost.js owner/repo
   npx forcepush-ghost …   # only after npm publish
 
@@ -25,7 +25,7 @@ On live failure we refuse to invent results — use --fixture or the Pages demo 
 
 function printFixture(id) {
   if (!ALLOWED.has(id)) {
-    console.error(`Unknown fixture "${id}". Use: scandal-a | scandal-b | clean`);
+    console.error(`Unknown fixture "${id}". Use: scandal-a | scandal-b | clean | fork-witness-a | fork-witness-clean`);
     process.exit(1);
   }
   const path = join(root, "fixtures", `${id}.json`);
@@ -50,7 +50,7 @@ if (args[0] === "--fixture") {
 
 const target = args[0];
 if (!/^[\w.-]+\/[\w.-]+$/.test(target)) {
-  console.error("Expected owner/repo or --fixture scandal-a|scandal-b|clean");
+  console.error("Expected owner/repo or --fixture scandal-a|scandal-b|clean|fork-witness-a|fork-witness-clean");
   process.exit(1);
 }
 

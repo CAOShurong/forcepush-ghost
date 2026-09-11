@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — fork-witness offline V0.2 preview
+
+- Offline dual-rail fixtures `fork-witness-a` / `fork-witness-clean` (Pages + CLI)
+- Demo dual rail: upstream ✕ vs fork ● on shared tip SHA
+- No live `--vs`; no restore CTA
+
 ## 0.1.6 — 2026-09-11
 
 - Live scan: prefer public activity feed `force_push` signals (not only Events `PushEvent.forced`)

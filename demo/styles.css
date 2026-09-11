@@ -248,3 +248,109 @@ footer code { display: inline-block; background: var(--card); padding: 0.4rem 0.
   line-height: 1.4;
 }
 .showcase-note .wiped { color: var(--wiped); font-weight: 600; }
+
+.fw-preview {
+  max-width: 880px;
+  margin: 0 auto 1.25rem;
+  padding: 0.85rem 1rem 1rem;
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--wiped) 22%, var(--alive) 18%, var(--line));
+  border-radius: 14px;
+}
+.fw-preview-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.fw-preview-hook {
+  margin: 0 0 0.45rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+.fw-preview-body {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+.fw-preview .alive { color: var(--alive); font-weight: 600; }
+.fw-preview .wiped { color: var(--wiped); font-weight: 600; }
+
+.dual-wrap {
+  max-width: 880px;
+  margin: 0 auto 1.25rem;
+}
+.dual-caption {
+  margin: 0 0 0.65rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: 0.01em;
+}
+.dual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+@media (max-width: 720px) {
+  .dual-grid { grid-template-columns: 1fr; }
+}
+.dual-side {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.35rem 0.25rem 0.55rem;
+  overflow-x: auto;
+}
+.dual-label {
+  margin: 0.45rem 0.65rem 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.dual-label.wiped-label { color: var(--wiped); }
+.dual-label.alive-label { color: var(--alive); }
+.dual-side .rail { min-height: 110px; padding-top: 0.65rem; }
+.rail .node.absent .mark {
+  background: #1a2230;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  box-shadow: none;
+}
+.rail .node.absent .cap { color: var(--muted); }
+.rail .shared-sha {
+  display: inline-block;
+  margin-top: 0.15rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  color: #ffd4a8;
+}
+.badge.absent {
+  background: rgba(139, 155, 176, 0.15);
+  color: var(--muted);
+}
+.timeline li.dual-hit {
+  border-color: color-mix(in srgb, var(--wiped) 40%, var(--alive) 25%, var(--line));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--alive) 12%, transparent),
+    0 0 28px rgba(255, 77, 77, 0.06);
+}
+.timeline li.absent .dot {
+  background: #1a2230;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+}
+
+.fw-preview-fig { margin: 0.75rem 0 0; padding: 0; }
+.fw-preview-fig img {
+  display: block;
+  width: min(100%, 880px);
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--wiped) 28%, var(--alive) 18%, var(--line));
+  background: #070b10;
+}

@@ -46,6 +46,16 @@
 
 
 
+
+  <section class="fw-preview" id="fwNote" aria-label="Fork still remembers offline preview">
+    <p class="fw-preview-title">Fork still remembers (offline) — V0.2 preview</p>
+    <p class="fw-preview-hook">Upstream wiped it. The fork still remembers.</p>
+    <p class="fw-preview-body">Same SHA: upstream <span class="wiped">✕</span> / fork <span class="alive">●</span>. Pick <strong>Fork-witness A</strong> below for the dual rail. Offline fixtures only — not a live upstream↔fork compare. No restore.</p>
+    <figure class="fw-preview-fig">
+      <img src="./fork-witness.png" width="960" height="420" alt="Dual rail: upstream wiped tip vs fork still alive on the same SHA" />
+    </figure>
+  </section>
+
   <section class="showcase" aria-label="Try a live showcase repo">
     <p class="showcase-title">Try showcase — real public repo</p>
     <p class="showcase-body">This page stays <strong>offline fixtures</strong>. For a live red ✕ on a real repo (verified on <code>v0.1.6+</code>):</p>
@@ -65,8 +75,22 @@ node bin/forcepush-ghost.js mrdoob/three.js</pre>
     <button type="button" id="copyShare" class="share-copy">Copy</button>
   </section>
 
-  <section class="rail-wrap" aria-label="Horizontal scandal rail">
+  <section class="rail-wrap" id="singleRailWrap" aria-label="Horizontal scandal rail">
     <div class="rail" id="rail"></div>
+  </section>
+
+  <section class="dual-wrap" id="dualWrap" hidden aria-label="Fork-witness dual rail">
+    <p class="dual-caption" id="dualCaption">Upstream force-pushed. Fork still has the tip.</p>
+    <div class="dual-grid">
+      <div class="dual-side">
+        <p class="dual-label wiped-label">Upstream</p>
+        <div class="rail" id="upstreamRail"></div>
+      </div>
+      <div class="dual-side">
+        <p class="dual-label alive-label">Fork</p>
+        <div class="rail" id="forkRail"></div>
+      </div>
+    </div>
   </section>
 
   <section class="controls">
@@ -75,6 +99,8 @@ node bin/forcepush-ghost.js mrdoob/three.js</pre>
         <option value="scandal-a">Scandal A — org rewind (Jenkins-shaped)</option>
         <option value="scandal-b">Scandal B — oops rewrite</option>
         <option value="clean">Clean bill of health</option>
+        <option value="fork-witness-a">Fork-witness A — upstream ✕ / fork ● (offline V0.2)</option>
+        <option value="fork-witness-clean">Fork-witness clean — both sides match</option>
       </select>
     </label>
     <button id="replay" type="button">Replay wipe</button>
