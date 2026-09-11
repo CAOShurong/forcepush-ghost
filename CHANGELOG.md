@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.6 — 2026-09-11
+
+- Live scan: prefer public activity feed `force_push` signals (not only Events `PushEvent.forced`)
+- Still refuses fixture substitution on hard API failure
+- Tests cover activity + events dual path
+
 ## 0.1.5
 
 - Pages share-card + OG punch-up

@@ -18,7 +18,7 @@ Usage:
   npx forcepush-ghost …   # only after npm publish
 
 Offline fixtures / Pages demo always work (recommended first look).
-Live mode uses recent public GitHub Events only (story/timeline — not a secret scanner).
+Live mode uses recent public activity + events windows (story/timeline — not a secret scanner).
 On live failure we refuse to invent results — use --fixture or the Pages demo instead.
 `);
 }
