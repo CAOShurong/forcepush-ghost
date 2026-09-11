@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync, existsSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { scanPublicRepo, formatTimeline } from "../src/scan.js";
@@ -52,14 +53,34 @@ if (!/^[\w.-]+\/[\w.-]+$/.test(target)) {
   process.exit(1);
 }
 
-const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || undefined;
+function resolveGithubToken() {
+  const fromEnv = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+  if (fromEnv) return fromEnv;
+  try {
+    const r = spawnSync("gh", ["auth", "token"], {
+      encoding: "utf8",
+      timeout: 3000,
+      env: process.env,
+    });
+    if (r.status === 0) {
+      const t = (r.stdout || "").trim();
+      if (t) return t;
+    }
+  } catch {
+    // gh CLI optional
+  }
+  return undefined;
+}
+
+const token = resolveGithubToken();
 try {
   const data = await scanPublicRepo(target, { token });
   console.log(formatTimeline(data));
 } catch (err) {
   console.error(String(err?.message || err));
   console.error("Live scan failed — refusing to substitute a fixture (that would be a false claim).");
-  console.error("Try: npx forcepush-ghost --fixture scandal-a");
-  console.error("Or open demo/index.html");
+  console.error("Try: node bin/forcepush-ghost.js --fixture scandal-a");
+  console.error("Or open the Pages demo / demo/index.html");
+  console.error("Rate-limited? Set GITHUB_TOKEN / GH_TOKEN, or install `gh` and `gh auth login`.");
   process.exit(2);
 }

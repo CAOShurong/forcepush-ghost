@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4 — 2026-09-11
+
+- Live CLI soft-falls back to `gh auth token` when `GITHUB_TOKEN` / `GH_TOKEN` unset (helps unauthenticated rate limits)
+- Clearer live-failure hints (fixture / Pages / token); demo honesty commit retained from tip
+- Launch paths retargeted to Release v0.1.4 + Pages demo
+
 ## 0.1.3 — 2026-09-11
 
 - 10-second how-to-play strip above the fold on the Pages demo

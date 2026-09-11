@@ -1,6 +1,6 @@
 {
   "name": "forcepush-ghost",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "The force-push scandal timeline for any public repo.",
   "bin": {
     "forcepush-ghost": "./bin/forcepush-ghost.js"
