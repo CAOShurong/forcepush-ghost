@@ -107,3 +107,10 @@ footer code { display: inline-block; background: var(--card); padding: 0.4rem 0.
   0%, 100% { box-shadow: 0 0 10px var(--wiped-glow); }
   50% { box-shadow: 0 0 26px var(--wiped-glow); }
 }
+
+.hero-gif { margin: 1rem 0 0; }
+.hero-gif img {
+  display: block; width: min(100%, 880px); height: auto;
+  border-radius: 14px; border: 1px solid var(--line);
+  box-shadow: 0 0 40px rgba(255, 77, 77, 0.12);
+}
