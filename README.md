@@ -6,33 +6,35 @@
 
 Green = still on the default branch. Red = wiped by a force-push.
 
+### Try it in 10 seconds (offline)
+
 ```bash
-npx forcepush-ghost owner/repo
+npx forcepush-ghost --fixture scandal-a
 ```
 
-Or open `demo/index.html` — two offline scandal fixtures play immediately. No install required for the demo.
+Or open `demo/index.html` — two scandal fixtures and one clean bill of health play with zero install and zero network.
+
+Live `owner/repo` scan is not in this V0. The demo never pretends it scanned a repo it did not.
 
 ## What you are looking at
 
-A public timeline of commits that used to exist on a branch and then disappeared after a force-push. Point it at any public GitHub repo. If history is clean, you get a clean bill of health — the demo never goes blank.
+A public timeline of commits that used to exist on a branch and then disappeared after a force-push. Offline fixtures are sanitized reconstructions so the story is always reproducible.
 
-## Try the offline fixtures
-
-Open `demo/index.html` in a browser. Fixture A and Fixture B load without network.
-
-## Scan another public repo
+## Offline fixtures
 
 ```bash
-npx forcepush-ghost someorg/somerepo
+npx forcepush-ghost --fixture scandal-a
+npx forcepush-ghost --fixture scandal-b
+npx forcepush-ghost --fixture clean
 ```
 
-Uses only public GitHub data. This is a **timeline / story** tool — not a secret scanner.
+Open `demo/index.html` for the visual timeline (red ✕ = wiped).
 
 ## Limitations
 
-- Public repositories only
-- Depends on what GitHub still exposes for deleted refs / events
-- Offline fixtures are sanitized reconstructions for demo reliability
+- V0 ships the offline story demo ahead of live scan
+- Live public-repo scan comes in a follow-up when wired for real
+- Offline fixtures are sanitized — not real scandals dressed up as live results
 
 ## License
 

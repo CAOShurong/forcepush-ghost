@@ -20,3 +20,10 @@ test("clean fixture has no wiped marker", () => {
   assert.doesNotMatch(r.stdout, /✕ WIPED/);
   assert.match(r.stdout, /ALIVE/);
 });
+
+test("owner/repo refuses false live-scan claim", () => {
+  const r = spawnSync(process.execPath, [bin, "acme/widgets"], { encoding: "utf8" });
+  assert.equal(r.status, 2);
+  assert.match(r.stderr, /not wired/i);
+  assert.doesNotMatch(r.stdout + r.stderr, /Showing Fixture/i);
+});

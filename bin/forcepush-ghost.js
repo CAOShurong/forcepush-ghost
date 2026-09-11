@@ -2,6 +2,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { scanPublicRepo, formatTimeline } from "../src/scan.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -13,22 +14,14 @@ Usage:
   npx forcepush-ghost owner/repo
   npx forcepush-ghost --fixture scandal-a|scandal-b|clean
 
-Offline fixtures always work. Live GitHub scan lands in a follow-up release when API access is available.
+Offline fixtures always work. Live mode uses public GitHub Events (story/timeline only).
 `);
 }
 
 function printFixture(id) {
   const path = join(root, "fixtures", `${id}.json`);
   const data = JSON.parse(readFileSync(path, "utf8"));
-  console.log(`\n${data.repo} (${data.branch}) — ${data.label}\n`);
-  for (const ev of data.events) {
-    const mark = ev.status === "wiped" ? "✕ WIPED" : "● ALIVE";
-    console.log(`${mark}  ${ev.short}  ${ev.message}`);
-    console.log(`         ${ev.author}  ${ev.timestamp}`);
-    if (ev.note) console.log(`         ${ev.note}`);
-  }
-  console.log(`\n${data.disclaimer}`);
-  console.log("Open demo/index.html for the visual timeline.\n");
+  console.log(formatTimeline(data));
 }
 
 const args = process.argv.slice(2);
@@ -38,8 +31,7 @@ if (args.length === 0 || args.includes("-h") || args.includes("--help")) {
 }
 
 if (args[0] === "--fixture") {
-  const id = args[1] || "scandal-a";
-  printFixture(id);
+  printFixture(args[1] || "scandal-a");
   process.exit(0);
 }
 
@@ -49,6 +41,13 @@ if (!/^[\w.-]+\/[\w.-]+$/.test(target)) {
   process.exit(1);
 }
 
-console.log(`Live scan for ${target} is not wired in this offline V0 yet.`);
-console.log("Showing Fixture A so the timeline story is still visible:\n");
-printFixture("scandal-a");
+const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || undefined;
+try {
+  const data = await scanPublicRepo(target, { token });
+  console.log(formatTimeline(data));
+} catch (err) {
+  console.error(String(err?.message || err));
+  console.error("Falling back to offline Fixture A so the story stays visible:\n");
+  printFixture("scandal-a");
+  process.exitCode = 1;
+}
