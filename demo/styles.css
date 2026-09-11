@@ -132,3 +132,29 @@ footer code { display: inline-block; background: var(--card); padding: 0.4rem 0.
   letter-spacing: 0.01em;
 }
 
+
+.how-to {
+  max-width: 880px;
+  margin: 0 auto 1.25rem;
+  padding: 0.85rem 1rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.how-to-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.how-to ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--fg);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.how-to li { margin: 0.25rem 0; }
+.how-to .alive { color: var(--alive); font-weight: 600; }
+.how-to .wiped { color: var(--wiped); font-weight: 600; }
