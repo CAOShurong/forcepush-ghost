@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.8 — 2026-09-11
+
+- Live CLI `--vs`: `owner/repo --vs forkOwner` or `--vs forkOwner/forkRepo`
+- `scanForkWitness` dual-rail (upstream Events/compare + fork commit probe)
+- Honesty: `--vs` API fail exits 2, never substitutes fixtures; fork-missing SHA → upstream ✕ / fork ——
+- Pages stays offline fixtures — never claims live `--vs`
+- claim-check bans fake live `--vs` on Pages/demo
+
 ## 0.1.7 — 2026-09-11
 
 - Offline dual-rail fixtures `fork-witness-a` / `fork-witness-clean` (Pages + CLI)

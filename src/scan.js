@@ -4,11 +4,36 @@
  *
  * Public Events payloads often omit `forced`. We also treat a push as a
  * rewrite signal when `before...head` is diverged/behind or `before` 404s.
+ *
+ * Live `--vs` fork-witness: upstream rewrite signals + fork commit probes.
  */
 
 async function ghJson(url, { headers, fetchImpl }) {
   const res = await fetchImpl(url, { headers });
   return res;
+}
+
+
+/** Resolve --vs forkOwner or forkOwner/forkRepo against upstream owner/repo. */
+export function resolveForkRepo(upstreamOwnerRepo, vsArg) {
+  if (vsArg == null || vsArg === "") {
+    throw new Error("Missing value after --vs (expected forkOwner or forkOwner/forkRepo)");
+  }
+  const [upOwner, upRepo] = String(upstreamOwnerRepo).split("/");
+  if (!upOwner || !upRepo) throw new Error("Expected upstream owner/repo before --vs");
+  const s = String(vsArg);
+  if (/^[\w.-]+\/[\w.-]+$/.test(s)) return s;
+  if (/^[\w.-]+$/.test(s)) return `${s}/${upRepo}`;
+  throw new Error(`Invalid --vs value "${vsArg}". Use forkOwner or forkOwner/forkRepo`);
+}
+
+function authHeaders(token) {
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "forcepush-ghost",
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
 }
 
 async function isNonFastForward(owner, repo, before, head, { headers, fetchImpl }) {
@@ -28,28 +53,15 @@ async function isNonFastForward(owner, repo, before, head, { headers, fetchImpl 
   return { wiped: false, reason: `compare-${status || "ok"}` };
 }
 
-export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxCompares = 12 } = {}) {
-  const [owner, repo] = String(ownerRepo).split("/");
-  if (!owner || !repo) throw new Error("Expected owner/repo");
-
-  const headers = {
-    Accept: "application/vnd.github+json",
-    "User-Agent": "forcepush-ghost",
-  };
-  if (token) headers.Authorization = `Bearer ${token}`;
-
+/**
+ * Shared rewrite detection over recent PushEvents.
+ * Returns wiped rows, alive hints, and before-SHAs from rewrite pushes.
+ */
+async function collectUpstreamSignals(owner, repo, { headers, fetchImpl, maxCompares = 12 }) {
   const eventsUrl = `https://api.github.com/repos/${owner}/${repo}/events?per_page=100`;
   const res = await ghJson(eventsUrl, { headers, fetchImpl });
   if (res.status === 404) {
-    return {
-      repo: ownerRepo,
-      branch: "unknown",
-      label: "Repo not found or private",
-      disclaimer: "Public scan only.",
-      events: [],
-      clean: null,
-      error: "not_found",
-    };
+    return { notFound: true, wiped: [], aliveHints: [], beforeShas: [], rawError: null };
   }
   if (!res.ok) {
     const body = await res.text();
@@ -58,6 +70,7 @@ export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxC
   const raw = await res.json();
   const wiped = [];
   const aliveHints = [];
+  const beforeShas = [];
   let compares = 0;
 
   for (const ev of raw) {
@@ -83,10 +96,23 @@ export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxC
       }
     }
 
+    if (forced && payload.before && !/^0+$/.test(payload.before)) {
+      beforeShas.push({
+        sha: payload.before,
+        short: payload.before.slice(0, 7),
+        message: `Wiped tip before rewrite on ${payload.ref || "unknown"}`,
+        author: ev.actor?.login || "unknown",
+        timestamp: ev.created_at,
+        note: noteExtra || "before SHA from a forced / non-fast-forward push.",
+      });
+    }
+
     for (const c of commits) {
+      const full = c.sha || "";
       const item = {
-        sha: (c.sha || "").slice(0, 7),
-        short: (c.sha || "").slice(0, 7),
+        sha: full.slice(0, 7),
+        fullSha: full,
+        short: full.slice(0, 7),
         message: c.message?.split("\n")[0] || "(no message)",
         author: c.author?.name || ev.actor?.login || "unknown",
         timestamp: ev.created_at,
@@ -103,6 +129,7 @@ export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxC
     if (forced && commits.length === 0) {
       wiped.push({
         sha: (payload.head || "unknown").slice(0, 7),
+        fullSha: payload.head || "",
         short: (payload.head || "unknown").slice(0, 7),
         message: `Rewrite signal on ${payload.ref || "unknown"}`,
         author: ev.actor?.login || "unknown",
@@ -112,6 +139,59 @@ export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxC
         note: noteExtra || "Forced / non-fast-forward push with no commit payloads.",
       });
     }
+  }
+
+  return { notFound: false, wiped, aliveHints, beforeShas, rawError: null };
+}
+
+/** Probe whether a fork still has a commit SHA (full or abbreviated). */
+async function forkHasCommit(forkOwner, forkRepo, sha, { headers, fetchImpl }) {
+  if (!sha || sha === "unknown" || /^-+$/.test(sha)) return "absent";
+  // Prefer commits API — accepts abbreviated SHAs when unique.
+  const commitsUrl = `https://api.github.com/repos/${forkOwner}/${forkRepo}/commits/${encodeURIComponent(sha)}`;
+  let res = await ghJson(commitsUrl, { headers, fetchImpl });
+  if (res.status === 200) return "alive";
+  if (res.status === 404) {
+    // Fallback: git/commits (wants full SHA; still useful when Events give 40-char).
+    if (sha.length >= 40) {
+      const gitUrl = `https://api.github.com/repos/${forkOwner}/${forkRepo}/git/commits/${encodeURIComponent(sha)}`;
+      const gitRes = await ghJson(gitUrl, { headers, fetchImpl });
+      if (gitRes.status === 200) return "alive";
+      // commits already 404'd — treat other statuses as absent, but fail closed on rate limit
+      if (gitRes.status === 403 || gitRes.status === 429) {
+        throw new Error(`GitHub API ${gitRes.status} probing fork git/commits/${sha.slice(0, 7)}`);
+      }
+    }
+    return "absent";
+  }
+  if (res.status === 422) return "absent"; // ambiguous / invalid SHA
+  if (res.status === 403 || res.status === 429) {
+    throw new Error(`GitHub API ${res.status} probing fork commit ${sha.slice(0, 7)}`);
+  }
+  throw new Error(`GitHub API ${res.status} probing fork commit ${sha.slice(0, 7)}`);
+}
+
+export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxCompares = 12 } = {}) {
+  const [owner, repo] = String(ownerRepo).split("/");
+  if (!owner || !repo) throw new Error("Expected owner/repo");
+
+  const headers = authHeaders(token);
+  const { notFound, wiped, aliveHints } = await collectUpstreamSignals(owner, repo, {
+    headers,
+    fetchImpl,
+    maxCompares,
+  });
+
+  if (notFound) {
+    return {
+      repo: ownerRepo,
+      branch: "unknown",
+      label: "Repo not found or private",
+      disclaimer: "Public scan only.",
+      events: [],
+      clean: null,
+      error: "not_found",
+    };
   }
 
   const events = [...wiped, ...aliveHints.slice(0, 5)].sort((a, b) =>
@@ -155,6 +235,175 @@ export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxC
   };
 }
 
+/**
+ * Live upstream↔fork dual-rail compare.
+ * Fail closed on API errors — callers must never substitute fixtures.
+ */
+export async function scanForkWitness(
+  upstreamOwnerRepo,
+  forkOwnerRepo,
+  { token, fetchImpl = fetch, maxCompares = 12 } = {}
+) {
+  const [upOwner, upRepo] = String(upstreamOwnerRepo).split("/");
+  const [fkOwner, fkRepo] = String(forkOwnerRepo).split("/");
+  if (!upOwner || !upRepo) throw new Error("Expected upstream owner/repo");
+  if (!fkOwner || !fkRepo) throw new Error("Expected fork owner/repo");
+
+  const headers = authHeaders(token);
+  const { notFound, wiped, aliveHints, beforeShas } = await collectUpstreamSignals(upOwner, upRepo, {
+    headers,
+    fetchImpl,
+    maxCompares,
+  });
+
+  if (notFound) {
+    throw new Error(`Upstream repo not found or private: ${upstreamOwnerRepo}`);
+  }
+
+  // Probe targets: wiped tip = before SHAs first, then wiped commit SHAs from rewrite pushes.
+  const probeList = [];
+  const seen = new Set();
+  function enqueue(entry) {
+    const key = (entry.fullSha || entry.sha || "").toLowerCase();
+    if (!key || key === "unknown" || /^-+$/.test(key)) return;
+    const dedupe = key.length >= 7 ? key.slice(0, 7) : key;
+    if (seen.has(dedupe)) return;
+    seen.add(dedupe);
+    probeList.push(entry);
+  }
+  for (const b of beforeShas) {
+    enqueue({
+      sha: b.short,
+      fullSha: b.sha,
+      short: b.short,
+      message: b.message,
+      author: b.author,
+      timestamp: b.timestamp,
+      note: b.note,
+      kind: "before",
+    });
+  }
+  for (const w of wiped) {
+    enqueue({
+      sha: w.short,
+      fullSha: w.fullSha || w.sha,
+      short: w.short,
+      message: w.message,
+      author: w.author,
+      timestamp: w.timestamp,
+      note: w.note,
+      kind: "wiped",
+    });
+  }
+
+  const dualEvents = [];
+  let anyDualHit = false;
+
+  for (const item of probeList) {
+    const probeSha = item.fullSha || item.sha;
+    const forkStatus = await forkHasCommit(fkOwner, fkRepo, probeSha, { headers, fetchImpl });
+    const upstreamStatus = "wiped";
+    if (upstreamStatus === "wiped" && forkStatus === "alive") anyDualHit = true;
+    dualEvents.push({
+      sha: probeSha,
+      short: item.short,
+      message: item.message,
+      author: item.author,
+      timestamp: item.timestamp,
+      upstreamStatus,
+      forkStatus,
+      status: "wiped",
+      wipedBy: "force-push",
+      note:
+        forkStatus === "alive"
+          ? "Shared tip SHA — ✕ wiped on upstream after force-push; ● still alive on the fork."
+          : forkStatus === "absent"
+            ? "Upstream rewrite signal; fork does not have this SHA (synced away, never forked, or private)."
+            : item.note,
+    });
+  }
+
+  // Honest clean dual-rail when no wipe signals in the window.
+  if (dualEvents.length === 0) {
+    const sample = aliveHints.slice(0, 3);
+    const events =
+      sample.length > 0
+        ? await Promise.all(
+            sample.map(async (a) => {
+              const probeSha = a.fullSha || a.sha;
+              let forkStatus = "alive";
+              try {
+                forkStatus = await forkHasCommit(fkOwner, fkRepo, probeSha, { headers, fetchImpl });
+              } catch {
+                forkStatus = "absent";
+              }
+              return {
+                sha: probeSha,
+                short: a.short,
+                message: a.message,
+                author: a.author,
+                timestamp: a.timestamp,
+                upstreamStatus: "alive",
+                forkStatus,
+                status: "alive",
+                note: "No upstream rewrite signal in recent public events.",
+              };
+            })
+          )
+        : [
+            {
+              sha: "-------",
+              short: "-------",
+              message: "No recent force-push signals in public events",
+              author: "forcepush-ghost",
+              timestamp: new Date().toISOString(),
+              upstreamStatus: "alive",
+              forkStatus: "alive",
+              status: "alive",
+              note: "Clean dual-rail — no wipe drama in the Events window.",
+            },
+          ];
+
+    return {
+      id: "live-fork-witness",
+      mode: "fork-witness",
+      live: true,
+      label: "Live fork-witness — clean bill (no rewrite signals in window)",
+      repo: upstreamOwnerRepo,
+      branch: "default",
+      upstream: { repo: upstreamOwnerRepo, branch: "default" },
+      fork: { repo: forkOwnerRepo, branch: "default" },
+      caption: "Upstream and fork both still have the tip.",
+      disclaimer:
+        "Live upstream↔fork compare via public Events + commit probe. Story/timeline only — not a secret scanner.",
+      events,
+      clean: true,
+    };
+  }
+
+  dualEvents.sort((a, b) => String(a.timestamp).localeCompare(String(b.timestamp)));
+
+  return {
+    id: "live-fork-witness",
+    mode: "fork-witness",
+    live: true,
+    label: anyDualHit
+      ? "Live fork-witness — upstream wipe, fork still holds tip"
+      : "Live fork-witness — upstream rewrite signal; fork missing probed SHA(s)",
+    repo: upstreamOwnerRepo,
+    branch: "default",
+    upstream: { repo: upstreamOwnerRepo, branch: "default" },
+    fork: { repo: forkOwnerRepo, branch: "default" },
+    caption: anyDualHit
+      ? "Upstream force-pushed. Fork still has the tip."
+      : undefined,
+    disclaimer:
+      "Live upstream↔fork compare via public Events + commit probe. Story/timeline only — not a secret scanner.",
+    events: dualEvents,
+    clean: false,
+  };
+}
+
 function statusMark(status) {
   if (status === "wiped") return "✕ WIPED";
   if (status === "absent") return "· ——";
@@ -181,7 +430,11 @@ export function formatTimeline(data) {
       lines.push("");
     }
     lines.push(data.disclaimer);
-    lines.push("Offline fork-witness fixture — not a live upstream↔fork compare.");
+    if (data.live) {
+      lines.push("Live fork-witness — CLI `--vs` only. Pages demo stays offline fixtures.");
+    } else {
+      lines.push("Offline fork-witness fixture — not a live upstream↔fork compare.");
+    }
     lines.push("Open demo/index.html or the Pages demo for the dual-rail view.\n");
     return lines.join("\n");
   }
