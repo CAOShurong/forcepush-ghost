@@ -20,6 +20,9 @@ node bin/forcepush-ghost.js --fixture scandal-a
 
 # once on npm (package not published yet — use clone/Pages until then):
 npx forcepush-ghost --fixture scandal-a
+
+# scripting: structured JSON of the same timeline object (Pages stays offline; live --vs is CLI-only)
+node bin/forcepush-ghost.js --fixture scandal-a --json
 ```
 
 ### Live public scan (CLI)

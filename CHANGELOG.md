@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.10 — 2026-09-11
+
+- CLI `--json`: print structured JSON of the same scan/timeline object `formatTimeline` consumes (stdout)
+- Works with `--fixture`, live `owner/repo`, and live `owner/repo --vs fork`
+- Honesty unchanged: API / same-repo `--vs` failures stay non-zero; errors on stderr (no fake success JSON)
+- README / PATHS: `--json` for scripting; Pages stays offline; live `--vs` remains CLI-only
+- External X / Show HN still HOLD; no npx claim; no GitHub Release/tag in this ship
+
 ## 0.1.9 — 2026-09-11
 
 - Document verified live `--vs` dual-hit: `mrdoob/three.js --vs alteredq` (optional alt: `brunosimon`)
