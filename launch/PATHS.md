@@ -1,7 +1,7 @@
 # Launch install paths (v0.1.8)
 
 1. **Primary — Pages demo:** https://caoshurong.github.io/forcepush-ghost/demo/
-2. **Primary — GitHub Release:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.7 (until 0.1.8 ships)
+2. **Primary — GitHub Release:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.8
 3. **CLI from clone:** `node bin/forcepush-ghost.js --fixture scandal-a`
 4. **Fork-witness dual-rail (offline):** Pages demo → pick **Fork-witness A**; or `node bin/forcepush-ghost.js --fixture fork-witness-a`
 5. **Live fork-witness (CLI only):** `node bin/forcepush-ghost.js upstream/repo --vs forkOwner`

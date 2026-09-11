@@ -4,7 +4,7 @@
 
 **Text:** Offline dual-rail demo (zero install): https://caoshurong.github.io/forcepush-ghost/demo/ — pick Fork-witness A. Same SHA: upstream ✕ / fork ●.
 
-Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.7
+Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.8
 
 Clone CLI fixtures: `node bin/forcepush-ghost.js --fixture fork-witness-a`
 

@@ -1,6 +1,7 @@
 # Launch freeze sketch — v0.1.8 (live `--vs`, Pages still offline)
 
 **Primary CTA:** https://caoshurong.github.io/forcepush-ghost/demo/ (Fork-witness A dual-rail, offline)  
+**Secondary CTA:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.8  
 **CLI fixtures:** `node bin/forcepush-ghost.js --fixture fork-witness-a`  
 **Live fork-witness CLI:** `node bin/forcepush-ghost.js owner/repo --vs forkOwner`  
 **Classic scandal:** `node bin/forcepush-ghost.js --fixture scandal-a`  
@@ -12,3 +13,6 @@
 - Live `--vs` is CLI-only; API miss → exit 2, no fixture substitution
 - Fork missing SHA → upstream ✕ / fork —— (no invented dual-hit)
 - No restore / secret-scanner language
+
+## Outbound
+External X / Show HN remain **HOLD** — wait for Star PM / user authorization.
