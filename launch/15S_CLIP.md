@@ -1,6 +1,6 @@
 # 15s clip plan (story/timeline only) — HOLD, do not post
 
-**v0.1.16+:** Path B (fork-witness hook) is the default Pages share/OG/hero; Path A remains classic Scandal fixtures.
+**v0.1.16+** (tip Activity-honesty): Path B (fork-witness hook) is the default Pages share/OG/hero; Path A remains classic Scandal fixtures.
 
 Target: X / Show HN reply GIF or screen recording of https://caoshurong.github.io/forcepush-ghost/demo/
 
@@ -35,5 +35,5 @@ When demo fixture is **Fork-witness clean**, share must **not** use the wipe hoo
 
 Do not show wipe copy on the clean control path.
 
-**Forbidden:** secrets / scanner / ForceMemo / malware / fake npx / GO lift / Pages live `--vs`.
-**Out of scope:** live CLI `--vs` (demo never runs it).
+**Forbidden:** secrets / scanner / ForceMemo / malware / fake npx / GO lift / Pages live `--vs` / restore CTA / claiming we replace GitHub Activity.
+**Out of scope:** live CLI `--vs` (demo never runs it); replacing GitHub Activity; restore/recover CTAs.
