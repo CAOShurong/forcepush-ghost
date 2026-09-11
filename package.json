@@ -1,0 +1,41 @@
+{
+  "name": "forcepush-ghost",
+  "version": "0.1.0",
+  "description": "The force-push scandal timeline for any public repo.",
+  "bin": {
+    "forcepush-ghost": "./bin/forcepush-ghost.js"
+  },
+  "type": "module",
+  "scripts": {
+    "demo": "node scripts/serve-demo.js",
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "force-push",
+    "git",
+    "github",
+    "timeline",
+    "osint"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "demo",
+    "fixtures",
+    "scripts",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CAOShurong/forcepush-ghost"
+  },
+  "homepage": "https://github.com/CAOShurong/forcepush-ghost#readme",
+  "bugs": {
+    "url": "https://github.com/CAOShurong/forcepush-ghost/issues"
+  }
+}

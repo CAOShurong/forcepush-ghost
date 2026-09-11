@@ -1,0 +1,37 @@
+{
+  "id": "scandal-a",
+  "label": "Fixture A — sanitized public reconstruction",
+  "repo": "example-org/docs-site",
+  "branch": "main",
+  "scannedAt": "2026-09-01T12:00:00Z",
+  "disclaimer": "Synthetic demo fixture. Names and SHAs are fictional.",
+  "events": [
+    {
+      "sha": "a1b2c3d",
+      "short": "a1b2c3d",
+      "message": "Add production API keys to config example",
+      "author": "dev-alpha",
+      "timestamp": "2026-03-10T09:12:00Z",
+      "status": "wiped",
+      "wipedBy": "force-push",
+      "note": "Commit vanished after force-push; replaced by sanitized history."
+    },
+    {
+      "sha": "b2c3d4e",
+      "short": "b2c3d4e",
+      "message": "Revert: remove keys, rewrite history",
+      "author": "dev-alpha",
+      "timestamp": "2026-03-10T09:40:00Z",
+      "status": "alive",
+      "note": "Current tip after rewrite."
+    },
+    {
+      "sha": "c3d4e5f",
+      "short": "c3d4e5f",
+      "message": "Docs: never commit secrets",
+      "author": "dev-beta",
+      "timestamp": "2026-03-11T14:02:00Z",
+      "status": "alive"
+    }
+  ]
+}

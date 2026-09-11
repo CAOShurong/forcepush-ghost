@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>forcepush-ghost — scandal timeline</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">forcepush-ghost</p>
+    <h1>The force-push scandal timeline for any public repo.</h1>
+    <p class="sub">Green = still on the default branch. Red = wiped by a force-push.</p>
+  </header>
+
+  <section class="controls">
+    <label>Fixture
+      <select id="fixtureSelect">
+        <option value="scandal-a">Scandal A</option>
+        <option value="scandal-b">Scandal B</option>
+        <option value="clean">Clean repo</option>
+      </select>
+    </label>
+    <button id="replay" type="button">Replay timeline</button>
+    <span class="hint">Offline fixtures — no network required.</span>
+  </section>
+
+  <section class="meta" id="meta"></section>
+  <ol class="timeline" id="timeline" aria-live="polite"></ol>
+  <p class="legend"><span class="alive">● alive</span> <span class="wiped">✕ wiped</span></p>
+
+  <footer>
+    <code>npx forcepush-ghost owner/repo</code>
+    <p>Story / timeline tool — not a secret scanner.</p>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

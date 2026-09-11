@@ -1,0 +1,37 @@
+{
+  "id": "scandal-b",
+  "label": "Fixture B — sanitized public reconstruction",
+  "repo": "example-lab/model-cards",
+  "branch": "main",
+  "scannedAt": "2026-09-01T12:00:00Z",
+  "disclaimer": "Synthetic demo fixture. Names and SHAs are fictional.",
+  "events": [
+    {
+      "sha": "d4e5f6a",
+      "short": "d4e5f6a",
+      "message": "Publish internal eval scores ahead of embargo",
+      "author": "lab-gamma",
+      "timestamp": "2026-05-02T18:20:00Z",
+      "status": "wiped",
+      "wipedBy": "force-push",
+      "note": "Removed from main within the hour."
+    },
+    {
+      "sha": "e5f6a7b",
+      "short": "e5f6a7b",
+      "message": "Hold scores until public blog",
+      "author": "lab-gamma",
+      "timestamp": "2026-05-02T19:05:00Z",
+      "status": "wiped",
+      "wipedBy": "force-push"
+    },
+    {
+      "sha": "f6a7b8c",
+      "short": "f6a7b8c",
+      "message": "Public model card (embargo-safe)",
+      "author": "lab-delta",
+      "timestamp": "2026-05-03T10:00:00Z",
+      "status": "alive"
+    }
+  ]
+}
