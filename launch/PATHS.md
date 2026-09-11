@@ -14,4 +14,4 @@ Same-repo `--vs` refused (exit 2).
 External X / Show HN remain **HOLD** until Star PM / user authorization.
 Post-publish: Pages stays #1; add registry install after Dist verifies.
 
-Tip docs on main (ahead of tag, no 0.1.17): Real-world shape trio + Activity honesty footnote on README/demo — never claim we replace Activity or add recovery.
+Tip docs on main (ahead of tag, no 0.1.17): Real-world shape trio + Activity honesty on README/demo + 15s forbid Activity-replace/restore CTA — never claim we replace Activity or add recovery.
