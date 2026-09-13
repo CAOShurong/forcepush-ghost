@@ -15,14 +15,14 @@ Or open `demo/index.html` after clone — same story, zero network.
 ### CLI (after clone, or once published to npm)
 
 ```bash
-# from a clone (Path B primary):
+# zero install from GitHub:
+npx github:CAOShurong/forcepush-ghost --fixture fork-witness-a
+
+# from a clone:
 node bin/forcepush-ghost.js --fixture fork-witness-a
 
 # classic scandal timeline still available:
 node bin/forcepush-ghost.js --fixture scandal-a
-
-# once on npm (package not published yet — use clone/Pages until then):
-npx forcepush-ghost --fixture fork-witness-a
 
 # scripting: structured JSON of the same timeline object (Pages stays offline; live --vs is CLI-only)
 node bin/forcepush-ghost.js --fixture fork-witness-a --json
@@ -33,8 +33,8 @@ node bin/forcepush-ghost.js --fixture fork-witness-a --json --pretty
 ### Live public scan (CLI)
 
 ```bash
-node bin/forcepush-ghost.js owner/repo
-# or: npx forcepush-ghost owner/repo   # after npm publish
+npx github:CAOShurong/forcepush-ghost owner/repo
+# from a clone: node bin/forcepush-ghost.js owner/repo
 ```
 
 Showcase (real public repo with live ✕ on tip):
