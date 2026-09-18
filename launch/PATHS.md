@@ -4,6 +4,7 @@
 2. **Secondary — GitHub Release:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.17
 3. **Zero-install CLI (GitHub, not registry):** `npx github:CAOShurong/forcepush-ghost --fixture fork-witness-a`
 4. **CLI from clone (Path B primary):** `node bin/forcepush-ghost.js --fixture fork-witness-a`
+4b. **Global from GitHub (still no registry):** `npm i -g github:CAOShurong/forcepush-ghost` then `forcepush-ghost --fixture fork-witness-a`
 5. **CLI JSON (scripting):** `node bin/forcepush-ghost.js --fixture fork-witness-a --json` (optional `--pretty`) — structured stdout; Pages stays offline
 6. **Classic scandal (Path A still available):** `node bin/forcepush-ghost.js --fixture scandal-a`
 7. **Live fork-witness (CLI only):** `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq` (verified Upstream ✕ | Fork ●; optional alt `--vs brunosimon`; also `pocketbase/pocketbase --vs fondoger`)

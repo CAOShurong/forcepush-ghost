@@ -18,7 +18,8 @@ Usage:
   node bin/forcepush-ghost.js owner/repo
   node bin/forcepush-ghost.js owner/repo --vs forkOwner
   node bin/forcepush-ghost.js owner/repo --vs forkOwner/forkRepo
-  npx forcepush-ghost …   # only after npm publish
+  npx github:CAOShurong/forcepush-ghost …   # zero-install (no registry)
+  npx forcepush-ghost …                    # only after npm publish
 
 Options:
   --json     Print structured JSON of the scan/timeline result (stdout) instead of the human timeline (compact by default)

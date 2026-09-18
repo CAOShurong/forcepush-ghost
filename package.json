@@ -1,14 +1,16 @@
 {
   "name": "forcepush-ghost",
   "version": "0.1.17",
-  "description": "Upstream wiped it. The fork still remembers — force-push scandal timeline + fork-witness dual-rail.",
+  "description": "Upstream wiped it. The fork still remembers \u2014 force-push scandal timeline + fork-witness dual-rail.",
   "bin": {
     "forcepush-ghost": "./bin/forcepush-ghost.js"
   },
   "type": "module",
   "scripts": {
     "demo": "node scripts/serve-demo.js",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "path-b": "node bin/forcepush-ghost.js --fixture fork-witness-a",
+    "smoke:github": "npx --yes github:CAOShurong/forcepush-ghost --fixture fork-witness-a"
   },
   "keywords": [
     "force-push",
