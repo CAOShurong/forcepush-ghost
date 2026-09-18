@@ -27,7 +27,7 @@ Live fork-witness (CLI only): `node bin/forcepush-ghost.js mrdoob/three.js --vs 
 Story/timeline only — not a secret scanner, not recovery. Registry npm not published yet (use Pages / `npx github:…` / clone).
 
 ## Tip ahead OK
-`main` tip is +4 honesty docs past Release `v0.1.17` — intentional; no `v0.1.18` for docs-only. Outbound still pins Release URL + Pages tip demo.
+`main` is honesty-docs ahead of Release `v0.1.17` — intentional; no `v0.1.18` for docs-only; do not pin ephemeral tip SHAs. Outbound still pins Release URL + Pages tip demo.
 
 ## Paths
 Pages (Fork-witness A) → Release → `npx github:…` / clone Path B → `--json` / live showcase / live `--vs`. No registry `npx` claims.
