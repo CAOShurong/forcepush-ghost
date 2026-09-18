@@ -1,6 +1,6 @@
 # FREEZE v0.1.17 — 2026-09-18
 
-Tip: `b437a96` = Release `v0.1.17` **+4 honesty docs** (tip ahead OK — no `v0.1.18` for docs-only).
+Tip: Release `v0.1.17` + honesty-docs on `main` (tip ahead OK — no `v0.1.18` for docs-only; do not pin ephemeral tip SHAs).
 
 ## Ship checklist
 - [x] package.json 0.1.17
