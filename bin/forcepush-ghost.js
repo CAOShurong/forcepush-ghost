@@ -14,7 +14,7 @@ function usage() {
   console.log(`forcepush-ghost — The force-push scandal timeline for any public repo.
 
 Usage:
-  node bin/forcepush-ghost.js --fixture scandal-a|scandal-b|clean|fork-witness-a|fork-witness-clean
+  node bin/forcepush-ghost.js --fixture fork-witness-a|fork-witness-clean|scandal-a|scandal-b|clean   # Path B primary; Path A alternate
   node bin/forcepush-ghost.js owner/repo
   node bin/forcepush-ghost.js owner/repo --vs forkOwner
   node bin/forcepush-ghost.js owner/repo --vs forkOwner/forkRepo

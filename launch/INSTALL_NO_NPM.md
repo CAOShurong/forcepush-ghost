@@ -2,9 +2,11 @@
 
 Registry `npx forcepush-ghost` is **unpublished** — do not claim it.
 
-## Preferred (zero install)
+## Preferred (zero install) — Path B primary
 1. Pages: https://caoshurong.github.io/forcepush-ghost/demo/
 2. `npx github:CAOShurong/forcepush-ghost --fixture fork-witness-a`
+
+Path A (`--fixture scandal-a`) is **alternate** only — do not lead with it.
 
 ## Clone / global (still no registry)
 ```bash

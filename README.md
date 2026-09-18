@@ -12,16 +12,22 @@ Same SHA: upstream ✕ wiped · fork ● still alive. Classic scandal timeline G
 
 Or open `demo/index.html` after clone — same story, zero network.
 
-### CLI (GitHub one-liner, clone, or npm once published)
+### CLI — Path B primary (GitHub one-liner / clone; registry later)
+
+Path B = `fork-witness-a` dual-rail. Path A (`scandal-a`) is **alternate** only. See [`launch/INSTALL_NO_NPM.md`](launch/INSTALL_NO_NPM.md).
 
 ```bash
-# zero install from GitHub:
+# zero install from GitHub (Path B):
 npx github:CAOShurong/forcepush-ghost --fixture fork-witness-a
 
-# from a clone:
+# from a clone (Path B):
 node bin/forcepush-ghost.js --fixture fork-witness-a
+# or: npm run path-b
 
-# classic scandal timeline still available:
+# global from GitHub (still no registry):
+# npm i -g github:CAOShurong/forcepush-ghost && forcepush-ghost --fixture fork-witness-a
+
+# Path A alternate (classic scandal timeline):
 node bin/forcepush-ghost.js --fixture scandal-a
 
 # scripting: structured JSON of the same timeline object (Pages stays offline; live --vs is CLI-only)
