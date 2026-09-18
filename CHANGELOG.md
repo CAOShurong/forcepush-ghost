@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.17 — 2026-09-18
+
+- **npx github one-liner:** README documents `npx github:CAOShurong/forcepush-ghost` as zero-registry install (npm still unpublished)
+- Tip honesty already on main: Real-world shape trio + Activity honesty + 15s Activity-replace/restore forbid
+- External X / Show HN remain **HOLD**; npm still unpublished (ENEEDAUTH) — Pages zero-install #1
+- Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.17
+
 ## 0.1.16 — 2026-09-11
 
 - **FW story wedge honesty:** fixture captions + Pages share blurb stay honest on fork-witness-clean (no fake wipe); PB/clean background notes in fixture docs

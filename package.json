@@ -1,6 +1,6 @@
 {
   "name": "forcepush-ghost",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "Upstream wiped it. The fork still remembers — force-push scandal timeline + fork-witness dual-rail.",
   "bin": {
     "forcepush-ghost": "./bin/forcepush-ghost.js"
