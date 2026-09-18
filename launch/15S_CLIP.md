@@ -7,13 +7,13 @@ Target: X / Show HN reply GIF or screen recording of https://caoshurong.github.i
 **Primary CTA:** Pages offline demo — Path B default (`fork-witness.gif` / OG `fork-witness.png`; Path A Scandal still available)
 **Status:** pack ready — record/post only after Star PM + user authorize outbound.
 
-## Path A — Scandal wipe
+## Path A — Scandal wipe (alternate; not default open)
 | t | shot | overlay |
 |---|---|---|
-| 0–2s | Hero timeline.gif first frame red ✕ | Force-push wiped it? |
-| 2–6s | Figcaption ●/✕ | offline fixtures |
+| 0–2s | Switch fixture → Scandal A (hero stays Path B GIF on tip) | Force-push wiped it? |
+| 2–6s | Figcaption ●/✕ · offline fixtures | story, not a scanner |
 | 6–11s | Scandal A → Replay wipe | red pulse |
-| 11–15s | Share-card + URL | story, not a scanner |
+| 11–15s | Share-card swaps to classic line + URL | story, not a scanner |
 
 **Share freeze (Path A):** `Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.`
 
