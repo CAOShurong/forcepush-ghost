@@ -10,4 +10,4 @@ Clone CLI: `node bin/forcepush-ghost.js --fixture fork-witness-a` · JSON: `--js
 
 Live showcase: `node bin/forcepush-ghost.js mrdoob/three.js` · live `--vs alteredq` (CLI only).
 
-Story/timeline only — not a secret scanner, not recovery. npm package pending — don’t rely on `npx` yet.
+Story/timeline only — not a secret scanner, not recovery. Registry npm unpublished — `npx github:CAOShurong/forcepush-ghost` OK; never claim registry `npx forcepush-ghost`.
