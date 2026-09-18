@@ -1,4 +1,4 @@
-# One-click outbound pack — v0.1.17 (HOLD — wait for Star PM go)
+# One-click outbound pack — tip 0.1.18 / Release still v0.1.17 until Dist cuts (HOLD — wait for Star PM go)
 
 Star PM says go → paste these. **Do not post until go.**
 **Do not auto-lift HOLD / GO** — only Star PM or user 「发」. Path B (FW-A dual-rail GIF) is the lead; Path A Scandal is alternate only.
@@ -33,6 +33,8 @@ Story/timeline only — not a secret scanner, not recovery. Registry npm not pub
 
 ## Paths
 Pages (Fork-witness A) → Release → `npx github:…` / clone Path B → `--json` / live showcase / live `--vs`. No registry `npx` claims.
+
+Live CLI note (do not lead X/Show HN with this): live / `--vs` fetches hard-timeout default **60s** (`--timeout` / `FORCEPUSH_GHOST_TIMEOUT_MS`) → stderr + **EXIT 2**; never substitute fixtures or invent rows.
 
 ## Footnote (keep on HOLD packs; do not lead with this)
 GitHub Activity can filter Force pushes / show `before` SHA — same shape as our timeline. Never claim we replace Activity or add recovery.

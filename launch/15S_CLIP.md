@@ -1,6 +1,6 @@
 # 15s clip plan (story/timeline only) — HOLD, do not post
 
-**v0.1.17+** (tip Activity-honesty + github one-liner): Path B (fork-witness hook) is the default Pages share/OG/hero; Path A remains classic Scandal fixtures.
+**v0.1.18 tip** (AbortSignal timeout + Activity-honesty + github one-liner); Release cut pending Dist: Path B (fork-witness hook) is the default Pages share/OG/hero; Path A remains classic Scandal fixtures.
 
 Target: X / Show HN reply GIF or screen recording of https://caoshurong.github.io/forcepush-ghost/demo/
 
@@ -17,7 +17,7 @@ Target: X / Show HN reply GIF or screen recording of https://caoshurong.github.i
 
 **Share freeze (Path A):** `Force-push wiped it? Red ✕ timeline (offline): https://caoshurong.github.io/forcepush-ghost/demo/ — story, not a scanner.`
 
-## Path B — Fork-witness A (default @ v0.1.17+)
+## Path B — Fork-witness A (default @ tip 0.1.18 / Pages Path B)
 | t | shot | overlay |
 |---|---|---|
 | 0–2s | Hero **`fork-witness.gif`** (FW-A already selected) | Upstream wiped it. The fork still remembers… |
@@ -37,4 +37,5 @@ Do not show wipe copy on the clean control path.
 
 **Forbidden:** secrets / scanner / ForceMemo / malware / registry `npx forcepush-ghost` (unpublished) / GO lift / Pages live `--vs` / restore CTA / claiming we replace GitHub Activity.
 **CLI honesty (if spoken):** only `npx github:CAOShurong/forcepush-ghost` or clone — never registry `npx`. Clip stays Pages Path B; do not demo registry install.
-**Out of scope:** live CLI `--vs` (demo never runs it); replacing GitHub Activity; restore/recover CTAs.
+**Out of scope:** live CLI `--vs` in the clip (demo never runs it); inventing rows on timeout; replacing GitHub Activity; restore/recover CTAs.
+**CLI (off-clip):** live/`--vs` hard-timeout default 60s → EXIT 2; never substitute fixtures.
