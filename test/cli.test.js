@@ -22,7 +22,7 @@ test("clean fixture has no wiped marker", () => {
 });
 
 test("live failure refuses fixture substitution", () => {
-  const r = spawnSync(process.execPath, [bin, "acme/does-not-exist-zz"], {
+  const r = spawnSync(process.execPath, [bin, "acme/does-not-exist-zz", "--timeout", "3000"], {
     encoding: "utf8",
     env: { ...process.env, GH_TOKEN: "", GITHUB_TOKEN: "", PATH: process.env.PATH },
   });
