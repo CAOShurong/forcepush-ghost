@@ -1,5 +1,8 @@
 # Show HN — one-click final pack (HOLD — wait for Star PM go)
 
+**Do not auto-lift HOLD / GO.** Path B FW-A dual-rail leads; Path A is alternate only.
+
+
 **Title:** Show HN: forcepush-ghost – upstream wiped it, the fork still remembers
 
 **Text:** Offline dual-rail demo (zero install): https://caoshurong.github.io/forcepush-ghost/demo/ — pick Fork-witness A. Same SHA: upstream ✕ / fork ●.

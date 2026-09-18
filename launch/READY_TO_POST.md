@@ -1,6 +1,8 @@
 # One-click outbound pack — v0.1.17 (HOLD — wait for Star PM go)
 
-Star PM says go → paste these. **Do not post until go.** Registry `npx forcepush-ghost` banned until publish; `npx github:CAOShurong/forcepush-ghost` is OK.
+Star PM says go → paste these. **Do not post until go.**
+**Do not auto-lift HOLD / GO** — only Star PM or user 「发」. Path B (FW-A dual-rail GIF) is the lead; Path A Scandal is alternate only.
+ Registry `npx forcepush-ghost` banned until publish; `npx github:CAOShurong/forcepush-ghost` is OK.
 
 ## X (primary)
 Upstream wiped it. The fork still remembers — dual-rail offline: https://caoshurong.github.io/forcepush-ghost/demo/ (pick Fork-witness A). Story, not a scanner.
