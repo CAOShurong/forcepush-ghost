@@ -26,4 +26,4 @@ npm run path-b
 npm run smoke:github
 ```
 
-External X / Show HN remain **HOLD**. Release tag `v0.1.18` is Dist-gated; until cut, pin Release URL at `v0.1.17` and tip via Pages / `npx github:…`.
+External X / Show HN remain **HOLD**. Release pin: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.18 — tip via Pages / `npx github:…`.

@@ -1,7 +1,7 @@
-# Launch install paths (package 0.1.18 · Release pin still v0.1.17 until Dist cut)
+# Launch install paths (v0.1.18)
 
 1. **Primary — Pages demo:** https://caoshurong.github.io/forcepush-ghost/demo/
-2. **Secondary — GitHub Release (current pin):** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.17
+2. **Secondary — GitHub Release:** https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.18
 3. **Zero-install CLI (GitHub, not registry):** `npx github:CAOShurong/forcepush-ghost --fixture fork-witness-a`
 4. **CLI from clone (Path B primary):** `node bin/forcepush-ghost.js --fixture fork-witness-a`
 4b. **Global from GitHub (still no registry):** `npm i -g github:CAOShurong/forcepush-ghost` then `forcepush-ghost --fixture fork-witness-a`
@@ -16,6 +16,6 @@ Same-repo `--vs` refused (exit 2).
 
 **Live timeout (tip 0.1.18, CLI only):** default **60s** hard AbortSignal on live / `--vs` GitHub fetches; override `--timeout <ms>` or `FORCEPUSH_GHOST_TIMEOUT_MS`. On timeout: stderr + **EXIT 2** — never invent rows / never substitute fixtures. Offline Path B fixtures ignore timeout. Do **not** lead marketing with the timeout story.
 
-**Tip vs Release:** `main` tip carries package **0.1.18** (AbortSignal product cut). Release tag **v0.1.18** is Dist-gated after this PATHS retarget — until then secondary pin stays `v0.1.17`. **Do not pin ephemeral tip SHAs.** Pages / `npx github:…` follow `main`.
+**Release pin:** [v0.1.18](https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.18) @ AbortSignal live timeout. Pages / `npx github:…` follow `main`. **Do not pin ephemeral tip SHAs.**
 External X / Show HN remain **HOLD** until Star PM / user authorization.
 Post-publish: Pages stays #1; registry `npx` only after Dist verifies.
