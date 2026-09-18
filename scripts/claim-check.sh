@@ -27,7 +27,7 @@ fake_vs=$(rg -n -i \
   -e 'demo[^\n]{0,30}runs[^\n]{0,30}live[^\n]{0,20}--vs' \
   "$root/demo" "$root/README.md" "$root/index.html" 2>/dev/null || true)
 fake_vs=$(printf '%s\n' "$fake_vs" | rg -v -i \
-  'not a live|no live --vs|never runs live|stays offline|offline fixtures only|not a live upstream|cli (--vs )?only|cli only' \
+  'not a live|no live --vs|never runs live|stays offline|offline fixtures only|not a live upstream|cli (--vs )?only|cli only|never runs live --vs / --vs auto|Pages never.*--vs auto' \
   || true)
 if [[ -n "${fake_vs// }" ]]; then
   echo "CLAIM CHECK FAIL (fake live --vs on Pages/demo):"
@@ -50,5 +50,14 @@ fi
 
 test -f "$root/demo/timeline.gif" || { echo "missing timeline.gif"; exit 1; }
 test -f "$root/demo/fork-witness.gif" || { echo "missing fork-witness.gif"; exit 1; }
+# Pages must document that --vs auto stays CLI-only / never live on Pages
+auto_lock=$(rg -n -i 'never runs live --vs / --vs auto|never runs live `--vs` / `--vs auto`|Pages never.*--vs auto' \
+  "$root/README.md" "$root/demo" "$root/bin" 2>/dev/null || true)
+if [[ -z "${auto_lock// }" ]]; then
+  echo "CLAIM CHECK FAIL (missing Pages-never-auto-live --vs lock in README/demo/bin):"
+  echo "Expected an affirmative 'never runs live --vs / --vs auto' (or equivalent) line."
+  exit 1
+fi
+
 echo "CLAIM CHECK PASS"
 echo "GIF OK"

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.19 — 2026-09-18
+
+- **`--vs auto` (CLI only):** enumerate capped public forks of upstream, probe which still hold wiped/`before` tip SHAs, pick a public fork that still holds tip SHA (prefer higher stargazers among holders — **never** claim "best"/"most scandalous"/最佳)
+- Find none → **EXIT 2**, clear error — never invent dual-hit / never substitute fixtures
+- Rate-limit honest: hard cap **2** fork pages (~60 forks); stop early on `X-RateLimit-Remaining=0` and say so on stderr + disclaimer
+- Explicit `--vs forkOwner` / `forkOwner/forkRepo` unchanged; AbortSignal timeout from 0.1.18 still applies; same-repo `--vs` still exit 2
+- Pages stays offline forever — never runs live `--vs` / `--vs auto` (claim-check + docs)
+- Story/timeline only — not a secret scanner; HOLD outbound untouched
+- Tests (mocked fetch): auto dual-hit; auto finds none → fail closed; rate-limit early stop honest
+
+
 ## 0.1.18 — 2026-09-18
 
 - **Hard timeout on live GitHub fetches:** `AbortSignal` / AbortController deadline on live `owner/repo` and `owner/repo --vs` paths (default **60000 ms**)
