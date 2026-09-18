@@ -12,7 +12,7 @@ Same SHA: upstream ✕ wiped · fork ● still alive. Classic scandal timeline G
 
 Or open `demo/index.html` after clone — same story, zero network.
 
-### CLI (after clone, or once published to npm)
+### CLI (GitHub one-liner, clone, or npm once published)
 
 ```bash
 # zero install from GitHub:
@@ -107,7 +107,7 @@ Pages: pick **Fork-witness A** in the demo select. Hook: *Upstream wiped it. The
 - Offline fixtures are sanitized — not real scandals dressed up as live results
 - Story/timeline positioning only — not a secret scanner and not secret recovery
 - GitHub's Activity view can filter Force pushes and show a `before` SHA — same shape as our ✕ timeline. We do **not** replace Activity, and we do **not** offer recovery/restore buttons
-- `npx forcepush-ghost` works only after the package is on npm; until then use Pages or `node bin/…` from a clone
+- Registry `npx forcepush-ghost` works only after npm publish; until then use Pages, `npx github:CAOShurong/forcepush-ghost`, or `node bin/…` from a clone
 
 ## License
 
