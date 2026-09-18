@@ -6,6 +6,7 @@
  * rewrite signal when `before...head` is diverged/behind or `before` 404s.
  *
  * Live `--vs` fork-witness: upstream rewrite signals + fork commit probes.
+ * Live `--vs auto`: capped public-fork pick that still holds tip SHA(s).
  */
 
 /** Default hard timeout for live GitHub fetches (ms). Override via FORCEPUSH_GHOST_TIMEOUT_MS or --timeout. */
@@ -64,10 +65,22 @@ async function ghJson(url, { headers, fetchImpl, signal }) {
 }
 
 
+/** True when --vs auto (case-insensitive). */
+export function isAutoVs(vsArg) {
+  return String(vsArg ?? "").trim().toLowerCase() === "auto";
+}
+
+/** Hard caps for --vs auto fork enumeration (honest: never claim we scanned all forks). */
+export const AUTO_FORK_MAX_PAGES = 2;
+export const AUTO_FORK_PER_PAGE = 30;
+
 /** Resolve --vs forkOwner or forkOwner/forkRepo against upstream owner/repo. */
 export function resolveForkRepo(upstreamOwnerRepo, vsArg) {
   if (vsArg == null || vsArg === "") {
-    throw new Error("Missing value after --vs (expected forkOwner or forkOwner/forkRepo)");
+    throw new Error("Missing value after --vs (expected forkOwner, forkOwner/forkRepo, or auto)");
+  }
+  if (isAutoVs(vsArg)) {
+    throw new Error('Invalid --vs value "auto" for resolveForkRepo — use scanForkWitnessAuto / CLI --vs auto');
   }
   const [upOwner, upRepo] = String(upstreamOwnerRepo).split("/");
   if (!upOwner || !upRepo) throw new Error("Expected upstream owner/repo before --vs");
@@ -75,7 +88,7 @@ export function resolveForkRepo(upstreamOwnerRepo, vsArg) {
   let resolved;
   if (/^[\w.-]+\/[\w.-]+$/.test(s)) resolved = s;
   else if (/^[\w.-]+$/.test(s)) resolved = `${s}/${upRepo}`;
-  else throw new Error(`Invalid --vs value "${vsArg}". Use forkOwner or forkOwner/forkRepo`);
+  else throw new Error(`Invalid --vs value "${vsArg}". Use forkOwner, forkOwner/forkRepo, or auto`);
   const upstream = `${upOwner}/${upRepo}`;
   if (resolved.toLowerCase() === upstream.toLowerCase()) {
     throw new Error(
@@ -323,6 +336,155 @@ async function forkHasCommit(forkOwner, forkRepo, sha, { headers, fetchImpl, sig
     throw new Error(`GitHub API ${res.status} probing fork commit ${sha.slice(0, 7)}`);
   }
   throw new Error(`GitHub API ${res.status} probing fork commit ${sha.slice(0, 7)}`);
+}
+
+/**
+ * List public forks (stargazers desc) with a hard page cap.
+ * Stops early when X-RateLimit-Remaining is 0 — never pretends to scan all forks.
+ */
+export async function listPublicForks(
+  owner,
+  repo,
+  {
+    headers,
+    fetchImpl,
+    maxPages = AUTO_FORK_MAX_PAGES,
+    perPage = AUTO_FORK_PER_PAGE,
+    signal,
+  } = {}
+) {
+  const forks = [];
+  let url = `https://api.github.com/repos/${owner}/${repo}/forks?sort=stargazers&per_page=${perPage}`;
+  let pagesFetched = 0;
+  let stoppedEarly = null;
+
+  while (url && pagesFetched < maxPages) {
+    const res = await ghJson(url, { headers, fetchImpl, signal });
+    pagesFetched += 1;
+
+    if (res.status === 404) {
+      return { notFound: true, forks: [], pagesFetched, stoppedEarly: null };
+    }
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`GitHub API ${res.status} listing forks: ${body.slice(0, 200)}`);
+    }
+
+    const raw = await res.json();
+    for (const f of Array.isArray(raw) ? raw : []) {
+      if (!f || f.private === true) continue;
+      const full = f.full_name || (f.owner?.login && f.name ? `${f.owner.login}/${f.name}` : null);
+      if (!full) continue;
+      forks.push({
+        full_name: full,
+        stargazers_count: Number(f.stargazers_count) || 0,
+        owner: f.owner?.login,
+      });
+    }
+
+    const remaining = headerGet(res, "X-RateLimit-Remaining");
+    if (remaining != null && String(remaining).trim() === "0") {
+      stoppedEarly = "rate-limit";
+      break;
+    }
+
+    const next = parseLinkNext(headerGet(res, "Link"));
+    url = next && pagesFetched < maxPages ? next : null;
+  }
+
+  return { notFound: false, forks, pagesFetched, stoppedEarly };
+}
+
+/**
+ * Among capped public forks, pick one that still holds any tip SHA.
+ * Prefer higher stargazers among holders (API sort=stargazers + first dual-hit).
+ * Never invent a dual-hit. Never claim "best" / "most scandalous".
+ */
+export async function pickPublicForkHoldingTips(
+  upstreamOwnerRepo,
+  tipShas,
+  {
+    headers,
+    fetchImpl,
+    signal,
+    maxPages = AUTO_FORK_MAX_PAGES,
+    perPage = AUTO_FORK_PER_PAGE,
+  } = {}
+) {
+  const [upOwner, upRepo] = String(upstreamOwnerRepo).split("/");
+  if (!upOwner || !upRepo) throw new Error("Expected upstream owner/repo");
+  const tips = (tipShas || []).map((s) => String(s || "").trim()).filter(Boolean);
+  if (tips.length === 0) {
+    const err = new Error(
+      "No wiped/before tip SHA in recent upstream Events window — nothing for --vs auto to match against a fork."
+    );
+    err.code = "VS_AUTO_NO_TIPS";
+    throw err;
+  }
+
+  const listed = await listPublicForks(upOwner, upRepo, {
+    headers,
+    fetchImpl,
+    maxPages,
+    perPage,
+    signal,
+  });
+  if (listed.notFound) {
+    throw new Error(`Upstream repo not found or private: ${upstreamOwnerRepo}`);
+  }
+
+  const upstreamKey = `${upOwner}/${upRepo}`.toLowerCase();
+  let forksExamined = 0;
+  let selected = null;
+  let probeStoppedEarly = listed.stoppedEarly;
+
+  for (const fork of listed.forks) {
+    const full = fork.full_name;
+    if (!full || full.toLowerCase() === upstreamKey) continue;
+    const [fkOwner, fkRepo] = full.split("/");
+    if (!fkOwner || !fkRepo) continue;
+    forksExamined += 1;
+
+    let holds = false;
+    for (const sha of tips) {
+      try {
+        const status = await forkHasCommit(fkOwner, fkRepo, sha, {
+          headers,
+          fetchImpl,
+          signal,
+        });
+        if (status === "alive") {
+          holds = true;
+          break;
+        }
+      } catch (err) {
+        if (isAbortOrTimeoutError(err)) throw err;
+        // 403/429 while probing — fail closed rather than invent a hit
+        if (/GitHub API (403|429)/.test(String(err.message || err))) {
+          probeStoppedEarly = "rate-limit";
+          break;
+        }
+        throw err;
+      }
+    }
+    if (probeStoppedEarly === "rate-limit" && !holds && selected == null) {
+      // Stop examining further forks when rate-limited mid-probe.
+      break;
+    }
+    if (holds) {
+      selected = full;
+      break; // first holder in stargazers-desc order
+    }
+  }
+
+  return {
+    selectedFork: selected,
+    forksExamined,
+    forkPagesFetched: listed.pagesFetched,
+    forksListed: listed.forks.length,
+    stoppedEarly: probeStoppedEarly,
+    tipCount: tips.length,
+  };
 }
 
 export async function scanPublicRepo(
@@ -585,6 +747,125 @@ export async function scanForkWitness(
     events: dualEvents,
     clean: false,
   };
+  } finally {
+    owned?.clear();
+  }
+}
+
+/**
+ * Live --vs auto: enumerate capped public forks, pick one that still holds
+ * wiped/before tip SHA(s), then run the same dual-rail compare.
+ * Find none → throw (CLI exits 2). Never invent dual-hit / never substitute fixtures.
+ */
+export async function scanForkWitnessAuto(
+  upstreamOwnerRepo,
+  {
+    token,
+    fetchImpl = fetch,
+    maxCompares = 12,
+    timeoutMs,
+    signal,
+    maxForkPages = AUTO_FORK_MAX_PAGES,
+    forkPerPage = AUTO_FORK_PER_PAGE,
+  } = {}
+) {
+  const [upOwner, upRepo] = String(upstreamOwnerRepo).split("/");
+  if (!upOwner || !upRepo) throw new Error("Expected upstream owner/repo");
+
+  const headers = authHeaders(token);
+  const ms = resolveTimeoutMs({ timeoutMs });
+  const owned = signal ? null : makeTimeoutSignal(ms);
+  const abortSignal = signal || owned.signal;
+  try {
+    const { notFound, wiped, beforeShas, stoppedEarly: eventsStopped } = await collectUpstreamSignals(
+      upOwner,
+      upRepo,
+      {
+        headers,
+        fetchImpl,
+        maxCompares,
+        signal: abortSignal,
+      }
+    );
+
+    if (notFound) {
+      throw new Error(`Upstream repo not found or private: ${upstreamOwnerRepo}`);
+    }
+
+    const tipShas = [];
+    const seen = new Set();
+    for (const b of beforeShas) {
+      const sha = b.sha;
+      if (!sha || seen.has(sha.toLowerCase())) continue;
+      seen.add(sha.toLowerCase());
+      tipShas.push(sha);
+    }
+    for (const w of wiped) {
+      const sha = w.fullSha || w.sha;
+      if (!sha || sha === "unknown" || /^-+$/.test(sha)) continue;
+      const key = sha.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      tipShas.push(sha);
+    }
+
+    let pick;
+    try {
+      pick = await pickPublicForkHoldingTips(upstreamOwnerRepo, tipShas, {
+        headers,
+        fetchImpl,
+        signal: abortSignal,
+        maxPages: maxForkPages,
+        perPage: forkPerPage,
+      });
+    } catch (err) {
+      if (err && err.code === "VS_AUTO_NO_TIPS") throw err;
+      throw err;
+    }
+
+    const rateNote =
+      pick.stoppedEarly === "rate-limit" || eventsStopped === "rate-limit"
+        ? ` Rate-limit Remaining=0 — stopped early; did not scan all forks (hard cap ${maxForkPages} page(s) / ~${maxForkPages * forkPerPage} forks).`
+        : ` Hard cap ${maxForkPages} fork page(s) (~${maxForkPages * forkPerPage} forks) — did not scan all forks.`;
+
+    if (!pick.selectedFork) {
+      const err = new Error(
+        `No public fork still holds tip SHA (examined ${pick.forksExamined} fork(s) across ${pick.forkPagesFetched} page(s)).${rateNote} Refusing to invent a dual-hit.`
+      );
+      err.code = "VS_AUTO_NONE";
+      err.autoMeta = pick;
+      throw err;
+    }
+
+    // Reuse explicit --vs path for the chosen fork (same dual-rail honesty).
+    const data = await scanForkWitness(upstreamOwnerRepo, pick.selectedFork, {
+      token,
+      fetchImpl,
+      maxCompares,
+      timeoutMs: ms,
+      signal: abortSignal,
+    });
+
+    data.auto = {
+      selectedFork: pick.selectedFork,
+      forksExamined: pick.forksExamined,
+      forkPagesFetched: pick.forkPagesFetched,
+      stoppedEarly: pick.stoppedEarly || eventsStopped || null,
+      note: "public fork still holds tip SHA",
+    };
+    // Honest label — never "best" / "most scandalous"
+    if (data.caption && /Fork still has the tip/i.test(data.caption)) {
+      data.caption = "Upstream force-pushed. Public fork still holds tip SHA.";
+    }
+    data.label = data.clean
+      ? data.label
+      : "Live fork-witness (--vs auto) — public fork still holds tip SHA";
+    const baseDisclaimer =
+      data.disclaimer ||
+      "Live upstream↔fork compare via public Events + commit probe. Story/timeline only — not a secret scanner.";
+    data.disclaimer =
+      `${baseDisclaimer} --vs auto examined ${pick.forksExamined} public fork(s) across ${pick.forkPagesFetched} page(s).${rateNote} Pages never runs live --vs / --vs auto.`;
+    return data;
   } finally {
     owned?.clear();
   }

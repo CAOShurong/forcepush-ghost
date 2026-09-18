@@ -6,10 +6,14 @@ import { dirname, join } from "node:path";
 import {
   scanPublicRepo,
   scanForkWitness,
+  scanForkWitnessAuto,
   formatTimeline,
   resolveForkRepo,
+  isAutoVs,
   resolveTimeoutMs,
   DEFAULT_TIMEOUT_MS,
+  AUTO_FORK_MAX_PAGES,
+  AUTO_FORK_PER_PAGE,
   isAbortOrTimeoutError,
 } from "../src/scan.js";
 
@@ -26,6 +30,7 @@ Usage:
   node bin/forcepush-ghost.js owner/repo
   node bin/forcepush-ghost.js owner/repo --vs forkOwner
   node bin/forcepush-ghost.js owner/repo --vs forkOwner/forkRepo
+  node bin/forcepush-ghost.js owner/repo --vs auto
   npx github:CAOShurong/forcepush-ghost …   # zero-install (no registry)
   npx forcepush-ghost …                    # only after npm publish
 
@@ -40,8 +45,9 @@ Live mode uses recent public activity + events windows (story/timeline — not a
 Live Events follow Link rel="next" up to a hard cap of 3 pages (per_page=100); if X-RateLimit-Remaining hits 0, stop early and keep results so far — never invent timeline rows.
 Live GitHub fetches abort after a hard timeout (default ${DEFAULT_TIMEOUT_MS} ms ≈ 60s); override with --timeout <ms> or FORCEPUSH_GHOST_TIMEOUT_MS. On timeout: clear error on stderr, exit 2 — never substitute fixtures or invent timeline rows.
 Live --vs compares upstream rewrite signals against a fork's commit graph.
+--vs auto enumerates capped public forks (hard cap ${AUTO_FORK_MAX_PAGES} pages / ~${AUTO_FORK_MAX_PAGES * AUTO_FORK_PER_PAGE} forks, stargazers order), probes which still hold wiped/before tip SHA(s), and picks a public fork that still holds tip SHA (prefer higher stargazers among holders — never claim "best"/"most scandalous"). Find none → exit 2; never invent a dual-hit / never substitute fixtures. Rate-limit Remaining=0 → stop early and say so.
 On live / --vs failure we refuse to invent results — use --fixture or the Pages demo instead.
-Pages demo stays offline fixtures — it never runs live --vs.
+Pages demo stays offline fixtures — it never runs live --vs / --vs auto.
 --json is for scripting; --json --pretty for humans; human timeline remains the default.
 `);
 }
@@ -82,6 +88,10 @@ function parseArgs(argv) {
       out.fixture = argv[++i] || "scandal-a";
     } else if (a === "--vs") {
       out.vs = argv[++i];
+      if (out.vs == null || out.vs === "") {
+        console.error("Expected forkOwner, forkOwner/forkRepo, or auto after --vs");
+        process.exit(1);
+      }
     } else if (a === "--timeout") {
       const raw = argv[++i];
       if (raw == null || raw === "" || !Number.isFinite(Number(raw)) || Number(raw) <= 0) {
@@ -91,6 +101,9 @@ function parseArgs(argv) {
       out.timeoutMs = Math.floor(Number(raw));
     } else if (!a.startsWith("-") && !out.target) {
       out.target = a;
+    } else if (!a.startsWith("-") && out.vs == null && /^auto$/i.test(a)) {
+      // bare auto token after owner/repo
+      out.vs = "auto";
     } else if (!a.startsWith("-")) {
       // ignore extras
     } else {
@@ -138,7 +151,7 @@ function reportLiveFailure(err, { vs, timeoutMs }) {
   }
   if (vs) {
     console.error("Try offline: node bin/forcepush-ghost.js --fixture fork-witness-a");
-    console.error("Or open the Pages demo / demo/index.html (offline fixtures only — no live --vs).");
+    console.error("Or open the Pages demo / demo/index.html (offline fixtures only — no live --vs / --vs auto).");
   } else {
     console.error("Try: node bin/forcepush-ghost.js --fixture scandal-a");
     console.error("Or open the Pages demo / demo/index.html");
@@ -161,12 +174,45 @@ if (args.fixture != null) {
 if (!args.target || !OWNER_REPO.test(args.target)) {
   console.error("Expected owner/repo or --fixture scandal-a|scandal-b|clean|fork-witness-a|fork-witness-clean");
   if (args.vs != null) {
-    console.error("For live fork-witness: node bin/forcepush-ghost.js owner/repo --vs forkOwner");
+    console.error("For live fork-witness: node bin/forcepush-ghost.js owner/repo --vs forkOwner|auto");
   }
   process.exit(1);
 }
 
 if (args.vs !== null && args.vs !== undefined) {
+  const token = resolveGithubToken();
+  const timeoutMs = resolveTimeoutMs({ timeoutMs: args.timeoutMs });
+
+  if (isAutoVs(args.vs)) {
+    try {
+      const data = await scanForkWitnessAuto(args.target, { token, timeoutMs });
+      if (data?.auto) {
+        const a = data.auto;
+        console.error(
+          `--vs auto: examined ${a.forksExamined} fork(s) across ${a.forkPagesFetched} page(s); public fork ${a.selectedFork} still holds tip SHA.`
+        );
+        if (a.stoppedEarly === "rate-limit") {
+          console.error(
+            `--vs auto: rate-limit Remaining=0 — stopped early; did not scan all forks (hard cap ${AUTO_FORK_MAX_PAGES} pages / ~${AUTO_FORK_MAX_PAGES * AUTO_FORK_PER_PAGE} forks).`
+          );
+        }
+      }
+      emitResult(data, args.json, args.pretty);
+    } catch (err) {
+      const code = err?.code;
+      if (code === "VS_AUTO_NONE" || code === "VS_AUTO_NO_TIPS") {
+        console.error(String(err.message || err));
+        console.error("Refusing to invent a dual-hit or substitute a fixture.");
+        console.error("Try offline: node bin/forcepush-ghost.js --fixture fork-witness-a");
+        console.error("Or pass an explicit fork: --vs forkOwner");
+        console.error("Pages demo stays offline — never runs live --vs / --vs auto.");
+        process.exit(2);
+      }
+      reportLiveFailure(err, { vs: true, timeoutMs });
+    }
+    process.exit(0);
+  }
+
   let forkRepo;
   try {
     forkRepo = resolveForkRepo(args.target, args.vs);
@@ -177,8 +223,6 @@ if (args.vs !== null && args.vs !== undefined) {
     if (/same-repo --vs/i.test(msg)) process.exit(2);
     process.exit(1);
   }
-  const token = resolveGithubToken();
-  const timeoutMs = resolveTimeoutMs({ timeoutMs: args.timeoutMs });
   try {
     const data = await scanForkWitness(args.target, forkRepo, { token, timeoutMs });
     emitResult(data, args.json, args.pretty);

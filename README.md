@@ -54,9 +54,12 @@ node bin/forcepush-ghost.js mrdoob/three.js
 ```bash
 node bin/forcepush-ghost.js upstream/repo --vs forkOwner
 node bin/forcepush-ghost.js upstream/repo --vs forkOwner/forkRepo
+node bin/forcepush-ghost.js upstream/repo --vs auto
 ```
 
 Same repo name when only `forkOwner` is given. Probes whether a fork still holds wiped / `before` tip SHAs after an upstream rewrite. Fail closed: API errors exit 2 and never substitute fixtures; fork missing a SHA prints upstream ✕ / fork ——. Same-repo `--vs` (upstream === fork) is refused with exit 2 — pick a different fork owner.
+
+`--vs auto` enumerates capped public forks (hard cap 2 pages / ~60 forks, stargazers order), probes which still hold wiped/`before` tip SHA(s), and picks a **public fork that still holds tip SHA** (prefer higher stargazers among holders — never claim "best"/"most scandalous"). Find none → exit 2; never invent a dual-hit. Rate-limit Remaining=0 → stop early and say so. Prefer an explicit `--vs forkOwner` when you already know the witness.
 
 Verified dual-hit showcase (Upstream ✕ | Fork ● on shared tip SHA):
 
@@ -66,7 +69,7 @@ node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq
 # optional alt: pocketbase/pocketbase --vs fondoger
 ```
 
-**Pages stays offline fixtures** — the demo never runs live `--vs`.
+**Pages stays offline fixtures** — the demo never runs live `--vs` / `--vs auto`.
 
 Live mode reads recent public GitHub Events for force-push signals and prints the same story timeline. Optional `GITHUB_TOKEN` / `GH_TOKEN` raises rate limits; if unset, the CLI soft-tries `gh auth token` when the GitHub CLI is logged in. The visual demo stays offline-fixtures so it never pretends it scanned a repo it did not.
 
@@ -109,7 +112,7 @@ Pages: pick **Fork-witness A** in the demo select. Hook: *Upstream wiped it. The
 ## Limitations
 
 - Live scan uses the public Events window only — older rewrites can fall outside it; Events pagination follows Link next up to 3 pages and stops early on rate-limit remaining=0 (no invented rows)
-- Demo UI is offline fixtures; live `owner/repo` and live `--vs` are CLI only (Pages never runs live `--vs`)
+- Demo UI is offline fixtures; live `owner/repo` and live `--vs` / `--vs auto` are CLI only (Pages never runs live `--vs` / `--vs auto`)
 - Offline fixtures are sanitized — not real scandals dressed up as live results
 - Story/timeline positioning only — not a secret scanner and not secret recovery
 - GitHub's Activity view can filter Force pushes and show a `before` SHA — same shape as our ✕ timeline. We do **not** replace Activity, and we do **not** offer recovery/restore buttons
