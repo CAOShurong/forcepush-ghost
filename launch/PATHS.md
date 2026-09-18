@@ -12,5 +12,7 @@
 
 Pages never runs live `--vs` — offline fixtures only.
 Same-repo `--vs` refused (exit 2).
+
+**Tip ahead OK:** `main` tip (`b6d886c`) is **+3 honesty docs** past Release tag `v0.1.17` (registry-`npx` ban · `npx github:…` allow · 15s clip). No code change — do **not** cut `v0.1.18` for this. Pages / `npx github:CAOShurong/forcepush-ghost` follow tip; Release URL stays the secondary pin.
 External X / Show HN remain **HOLD** until Star PM / user authorization.
 Post-publish: Pages stays #1; registry `npx` only after Dist verifies.
