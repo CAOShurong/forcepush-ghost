@@ -223,7 +223,7 @@ test("CLI --vs parse: owner-only and owner/repo help text", () => {
 test("CLI --vs API fail exits 2 and never dumps fixture", () => {
   const r = spawnSync(
     process.execPath,
-    [bin, "acme/does-not-exist-zz-xyz", "--vs", "mirror"],
+    [bin, "acme/does-not-exist-zz-xyz", "--vs", "mirror", "--timeout", "3000"],
     {
       encoding: "utf8",
       env: {

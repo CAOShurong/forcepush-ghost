@@ -8,8 +8,58 @@
  * Live `--vs` fork-witness: upstream rewrite signals + fork commit probes.
  */
 
-async function ghJson(url, { headers, fetchImpl }) {
-  const res = await fetchImpl(url, { headers });
+/** Default hard timeout for live GitHub fetches (ms). Override via FORCEPUSH_GHOST_TIMEOUT_MS or --timeout. */
+export const DEFAULT_TIMEOUT_MS = 60_000;
+
+/** Resolve timeout ms from explicit option, then env, then default. */
+export function resolveTimeoutMs({ timeoutMs, env = process.env } = {}) {
+  if (timeoutMs != null && timeoutMs !== "") {
+    const n = Number(timeoutMs);
+    if (Number.isFinite(n) && n > 0) return Math.floor(n);
+  }
+  const fromEnv = env?.FORCEPUSH_GHOST_TIMEOUT_MS;
+  if (fromEnv != null && String(fromEnv).trim() !== "") {
+    const n = Number(fromEnv);
+    if (Number.isFinite(n) && n > 0) return Math.floor(n);
+  }
+  return DEFAULT_TIMEOUT_MS;
+}
+
+/** True when fetch/abort aborted due to timeout or AbortSignal. */
+export function isAbortOrTimeoutError(err) {
+  if (!err) return false;
+  const name = err.name || "";
+  if (name === "TimeoutError" || name === "AbortError") return true;
+  if (err.code === "ABORT_ERR" || err.code === "ERR_ABORT") return true;
+  const msg = String(err.message || err);
+  return /aborted|timed? ?out|TimeoutError|AbortError/i.test(msg);
+}
+
+function makeTimeoutSignal(timeoutMs) {
+  // AbortController + ref'd setTimeout so the hard deadline still fires when
+  // fetchImpl is a mock that never touches the network (AbortSignal.timeout
+  // alone may not keep the event loop alive). Caller must clear() when done
+  // so a successful scan does not pin the process for the full window.
+  const c = new AbortController();
+  const t = setTimeout(() => {
+    const err = new Error(`Timed out after ${timeoutMs}ms waiting for GitHub`);
+    err.name = "TimeoutError";
+    err.code = "ABORT_ERR";
+    try {
+      c.abort(err);
+    } catch {
+      c.abort();
+    }
+  }, timeoutMs);
+  const clear = () => clearTimeout(t);
+  c.signal.addEventListener("abort", clear, { once: true });
+  return { signal: c.signal, clear };
+}
+
+async function ghJson(url, { headers, fetchImpl, signal }) {
+  const opts = { headers };
+  if (signal) opts.signal = signal;
+  const res = await fetchImpl(url, opts);
   return res;
 }
 
@@ -44,10 +94,10 @@ function authHeaders(token) {
   return headers;
 }
 
-async function isNonFastForward(owner, repo, before, head, { headers, fetchImpl }) {
+async function isNonFastForward(owner, repo, before, head, { headers, fetchImpl, signal }) {
   if (!before || !head || /^0+$/.test(before)) return false;
   const url = `https://api.github.com/repos/${owner}/${repo}/compare/${before}...${head}`;
-  const res = await ghJson(url, { headers, fetchImpl });
+  const res = await ghJson(url, { headers, fetchImpl, signal });
   if (res.status === 404) {
     // before commit vanished from the reachable graph — classic rewrite smell
     return { wiped: true, reason: "before-commit-missing" };
@@ -90,7 +140,7 @@ function parseLinkNext(linkHeader) {
 async function fetchEventsPages(
   owner,
   repo,
-  { headers, fetchImpl, maxPages = 3 }
+  { headers, fetchImpl, maxPages = 3, signal }
 ) {
   const all = [];
   const seenIds = new Set();
@@ -99,7 +149,7 @@ async function fetchEventsPages(
   let stoppedEarly = null;
 
   while (url && pagesFetched < maxPages) {
-    const res = await ghJson(url, { headers, fetchImpl });
+    const res = await ghJson(url, { headers, fetchImpl, signal });
     pagesFetched += 1;
 
     if (res.status === 404) {
@@ -140,7 +190,7 @@ async function fetchEventsPages(
 async function collectUpstreamSignals(
   owner,
   repo,
-  { headers, fetchImpl, maxCompares = 12, maxEventPages = 3 }
+  { headers, fetchImpl, maxCompares = 12, maxEventPages = 3, signal }
 ) {
   const {
     notFound,
@@ -150,6 +200,7 @@ async function collectUpstreamSignals(
     headers,
     fetchImpl,
     maxPages: maxEventPages,
+    signal,
   });
   if (notFound) {
     return {
@@ -179,13 +230,16 @@ async function collectUpstreamSignals(
         const verdict = await isNonFastForward(owner, repo, payload.before, payload.head, {
           headers,
           fetchImpl,
+          signal,
         });
         if (verdict.wiped) {
           forced = true;
           noteExtra = `Inferred rewrite via ${verdict.reason} (Events often omit forced=true).`;
         }
-      } catch {
-        // compare failures should not invent wipes
+      } catch (err) {
+        // Abort/timeout must fail closed — never invent wipes or keep going.
+        if (isAbortOrTimeoutError(err)) throw err;
+        // other compare failures should not invent wipes
       }
     }
 
@@ -245,17 +299,17 @@ async function collectUpstreamSignals(
 }
 
 /** Probe whether a fork still has a commit SHA (full or abbreviated). */
-async function forkHasCommit(forkOwner, forkRepo, sha, { headers, fetchImpl }) {
+async function forkHasCommit(forkOwner, forkRepo, sha, { headers, fetchImpl, signal }) {
   if (!sha || sha === "unknown" || /^-+$/.test(sha)) return "absent";
   // Prefer commits API — accepts abbreviated SHAs when unique.
   const commitsUrl = `https://api.github.com/repos/${forkOwner}/${forkRepo}/commits/${encodeURIComponent(sha)}`;
-  let res = await ghJson(commitsUrl, { headers, fetchImpl });
+  let res = await ghJson(commitsUrl, { headers, fetchImpl, signal });
   if (res.status === 200) return "alive";
   if (res.status === 404) {
     // Fallback: git/commits (wants full SHA; still useful when Events give 40-char).
     if (sha.length >= 40) {
       const gitUrl = `https://api.github.com/repos/${forkOwner}/${forkRepo}/git/commits/${encodeURIComponent(sha)}`;
-      const gitRes = await ghJson(gitUrl, { headers, fetchImpl });
+      const gitRes = await ghJson(gitUrl, { headers, fetchImpl, signal });
       if (gitRes.status === 200) return "alive";
       // commits already 404'd — treat other statuses as absent, but fail closed on rate limit
       if (gitRes.status === 403 || gitRes.status === 429) {
@@ -271,68 +325,79 @@ async function forkHasCommit(forkOwner, forkRepo, sha, { headers, fetchImpl }) {
   throw new Error(`GitHub API ${res.status} probing fork commit ${sha.slice(0, 7)}`);
 }
 
-export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxCompares = 12 } = {}) {
+export async function scanPublicRepo(
+  ownerRepo,
+  { token, fetchImpl = fetch, maxCompares = 12, timeoutMs, signal } = {}
+) {
   const [owner, repo] = String(ownerRepo).split("/");
   if (!owner || !repo) throw new Error("Expected owner/repo");
 
   const headers = authHeaders(token);
-  const { notFound, wiped, aliveHints } = await collectUpstreamSignals(owner, repo, {
-    headers,
-    fetchImpl,
-    maxCompares,
-  });
+  const ms = resolveTimeoutMs({ timeoutMs });
+  const owned = signal ? null : makeTimeoutSignal(ms);
+  const abortSignal = signal || owned.signal;
+  try {
+    const { notFound, wiped, aliveHints } = await collectUpstreamSignals(owner, repo, {
+      headers,
+      fetchImpl,
+      maxCompares,
+      signal: abortSignal,
+    });
 
-  if (notFound) {
+    if (notFound) {
+      return {
+        repo: ownerRepo,
+        branch: "unknown",
+        label: "Repo not found or private",
+        disclaimer: "Public scan only.",
+        events: [],
+        clean: null,
+        error: "not_found",
+      };
+    }
+
+    const events = [...wiped, ...aliveHints.slice(0, 5)].sort((a, b) =>
+      String(a.timestamp).localeCompare(String(b.timestamp))
+    );
+
+    if (events.length === 0) {
+      return {
+        id: "live-clean",
+        repo: ownerRepo,
+        branch: "default",
+        label: "Clean bill of health (no force-push signals in recent public events)",
+        disclaimer:
+          "Based on recent public Events + limited compare checks. Older rewrites may be outside the API window.",
+        events: [
+          {
+            sha: "-------",
+            short: "-------",
+            message: "No recent force-push signals in public events",
+            author: "forcepush-ghost",
+            timestamp: new Date().toISOString(),
+            status: "alive",
+            note: "Clean proof page — demo does not go blank.",
+          },
+        ],
+        clean: true,
+      };
+    }
+
     return {
-      repo: ownerRepo,
-      branch: "unknown",
-      label: "Repo not found or private",
-      disclaimer: "Public scan only.",
-      events: [],
-      clean: null,
-      error: "not_found",
-    };
-  }
-
-  const events = [...wiped, ...aliveHints.slice(0, 5)].sort((a, b) =>
-    String(a.timestamp).localeCompare(String(b.timestamp))
-  );
-
-  if (events.length === 0) {
-    return {
-      id: "live-clean",
+      id: "live",
       repo: ownerRepo,
       branch: "default",
-      label: "Clean bill of health (no force-push signals in recent public events)",
+      label: wiped.length
+        ? `Live scan — ${wiped.length} force-push / rewrite signal(s)`
+        : "Live scan — recent pushes, no rewrite signal in window",
       disclaimer:
-        "Based on recent public Events + limited compare checks. Older rewrites may be outside the API window.",
-      events: [
-        {
-          sha: "-------",
-          short: "-------",
-          message: "No recent force-push signals in public events",
-          author: "forcepush-ghost",
-          timestamp: new Date().toISOString(),
-          status: "alive",
-          note: "Clean proof page — demo does not go blank.",
-        },
-      ],
-      clean: true,
+        "Public Events + compare heuristics. Story/timeline only — not a secret scanner.",
+      events,
+      clean: wiped.length === 0,
     };
+  } finally {
+    owned?.clear();
   }
-
-  return {
-    id: "live",
-    repo: ownerRepo,
-    branch: "default",
-    label: wiped.length
-      ? `Live scan — ${wiped.length} force-push / rewrite signal(s)`
-      : "Live scan — recent pushes, no rewrite signal in window",
-    disclaimer:
-      "Public Events + compare heuristics. Story/timeline only — not a secret scanner.",
-    events,
-    clean: wiped.length === 0,
-  };
 }
 
 /**
@@ -342,7 +407,7 @@ export async function scanPublicRepo(ownerRepo, { token, fetchImpl = fetch, maxC
 export async function scanForkWitness(
   upstreamOwnerRepo,
   forkOwnerRepo,
-  { token, fetchImpl = fetch, maxCompares = 12 } = {}
+  { token, fetchImpl = fetch, maxCompares = 12, timeoutMs, signal } = {}
 ) {
   const [upOwner, upRepo] = String(upstreamOwnerRepo).split("/");
   const [fkOwner, fkRepo] = String(forkOwnerRepo).split("/");
@@ -358,10 +423,15 @@ export async function scanForkWitness(
   }
 
   const headers = authHeaders(token);
+  const ms = resolveTimeoutMs({ timeoutMs });
+  const owned = signal ? null : makeTimeoutSignal(ms);
+  const abortSignal = signal || owned.signal;
+  try {
   const { notFound, wiped, aliveHints, beforeShas } = await collectUpstreamSignals(upOwner, upRepo, {
     headers,
     fetchImpl,
     maxCompares,
+    signal: abortSignal,
   });
 
   if (notFound) {
@@ -409,7 +479,7 @@ export async function scanForkWitness(
 
   for (const item of probeList) {
     const probeSha = item.fullSha || item.sha;
-    const forkStatus = await forkHasCommit(fkOwner, fkRepo, probeSha, { headers, fetchImpl });
+    const forkStatus = await forkHasCommit(fkOwner, fkRepo, probeSha, { headers, fetchImpl, signal: abortSignal });
     const upstreamStatus = "wiped";
     if (upstreamStatus === "wiped" && forkStatus === "alive") anyDualHit = true;
     dualEvents.push({
@@ -441,8 +511,13 @@ export async function scanForkWitness(
               const probeSha = a.fullSha || a.sha;
               let forkStatus = "alive";
               try {
-                forkStatus = await forkHasCommit(fkOwner, fkRepo, probeSha, { headers, fetchImpl });
-              } catch {
+                forkStatus = await forkHasCommit(fkOwner, fkRepo, probeSha, {
+                  headers,
+                  fetchImpl,
+                  signal: abortSignal,
+                });
+              } catch (err) {
+                if (isAbortOrTimeoutError(err)) throw err;
                 forkStatus = "absent";
               }
               return {
@@ -510,6 +585,9 @@ export async function scanForkWitness(
     events: dualEvents,
     clean: false,
   };
+  } finally {
+    owned?.clear();
+  }
 }
 
 function statusMark(status) {

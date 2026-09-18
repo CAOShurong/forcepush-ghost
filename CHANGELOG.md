@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.18 — 2026-09-18
+
+- **Hard timeout on live GitHub fetches:** `AbortSignal` / AbortController deadline on live `owner/repo` and `owner/repo --vs` paths (default **60000 ms**)
+- Override via `--timeout <ms>` or env `FORCEPUSH_GHOST_TIMEOUT_MS`
+- On abort/timeout: clear stderr (`Timed out after …ms waiting for GitHub`), **exit 2** — never substitute fixtures or invent timeline rows
+- Fixtures offline path unchanged (no network); same-repo `--vs` refuse still exit 2
+- Story/timeline only — not a secret scanner
+- Tests: hanging/aborted fetch + CLI `--timeout 1` / env timeout → exit 2 without fixture dump
+
+
 ## 0.1.17 — 2026-09-18
 
 - **npx github one-liner:** README documents `npx github:CAOShurong/forcepush-ghost` as zero-registry install (npm still unpublished)
