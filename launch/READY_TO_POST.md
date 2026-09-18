@@ -1,4 +1,4 @@
-# One-click outbound pack — Release v0.1.18 @ 35d604d (HOLD — wait for Star PM go)
+# One-click outbound pack — Release v0.1.19 (HOLD — wait for Star PM go)
 
 Star PM says go → paste these. **Do not post until go.**
 **Do not auto-lift HOLD / GO** — only Star PM or user 「发」. Path B (FW-A dual-rail GIF) is the lead; Path A Scandal is alternate only.
@@ -14,7 +14,7 @@ Title: Show HN: forcepush-ghost – upstream wiped it, the fork still remembers
 
 Text: Offline dual-rail demo (zero install): https://caoshurong.github.io/forcepush-ghost/demo/ — pick Fork-witness A. Same SHA: upstream ✕ / fork ●.
 
-Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.18
+Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.19
 
 Clone CLI (Path B): `node bin/forcepush-ghost.js --fixture fork-witness-a`
 
@@ -24,15 +24,15 @@ JSON (scripting): `node bin/forcepush-ghost.js --fixture fork-witness-a --json` 
 
 Live showcase: `node bin/forcepush-ghost.js mrdoob/three.js`
 
-Live fork-witness (CLI only): `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq` — Pages never claims live `--vs`. Optional alt: `pocketbase/pocketbase --vs fondoger`.
+Live fork-witness (CLI only): `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq` — or `--vs auto` to pick a public fork that still holds tip SHA. Pages never claims live `--vs` / `--vs auto`. Optional alt: `pocketbase/pocketbase --vs fondoger`.
 
 Story/timeline only — not a secret scanner, not recovery. Registry npm not published yet (use Pages / `npx github:…` / clone).
 
 ## Tip ahead OK
-Outbound pins Release **v0.1.18** + Pages Path B demo. Live/`--vs` hard-timeout 60s → EXIT 2 (footnote only). Do not pin ephemeral tip SHAs. **HOLD — do not post.**
+Outbound pins Release **v0.1.19** + Pages Path B demo. Live/`--vs` hard-timeout 60s → EXIT 2 (footnote only). Do not pin ephemeral tip SHAs. **HOLD — do not post.**
 
 ## Paths
-Pages (Fork-witness A) → Release → `npx github:…` / clone Path B → `--json` / live showcase / live `--vs`. No registry `npx` claims.
+Pages (Fork-witness A) → Release → `npx github:…` / clone Path B → `--json` / live showcase / live `--vs` / `--vs auto`. No registry `npx` claims.
 
 Live CLI note (do not lead X/Show HN with this): live / `--vs` fetches hard-timeout default **60s** (`--timeout` / `FORCEPUSH_GHOST_TIMEOUT_MS`) → stderr + **EXIT 2**; never substitute fixtures or invent rows.
 

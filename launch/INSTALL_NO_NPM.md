@@ -1,4 +1,4 @@
-# Install without npm registry (package 0.1.18)
+# Install without npm registry (package 0.1.19)
 
 Registry `npx forcepush-ghost` is **unpublished** — do not claim it.
 
@@ -20,10 +20,12 @@ forcepush-ghost --fixture fork-witness-a
 ## Live / `--vs` only (not Path B lead)
 Hard timeout default **60s** → EXIT 2 on hang (`--timeout` / `FORCEPUSH_GHOST_TIMEOUT_MS`). Never substitutes fixtures. Offline fixtures / Pages ignore this.
 
+`--vs auto` (CLI only): picks a capped public fork that still holds tip SHA; find none → EXIT 2. Pages never runs live `--vs` / `--vs auto`.
+
 ## Smoke (maintainers)
 ```bash
 npm run path-b
 npm run smoke:github
 ```
 
-External X / Show HN remain **HOLD**. Release pin: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.18 — tip via Pages / `npx github:…`.
+External X / Show HN remain **HOLD**. Release pin: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.19 — tip via Pages / `npx github:…`.
