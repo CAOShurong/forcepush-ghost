@@ -366,3 +366,130 @@ test("CLI --vs without value mentions auto option", () => {
   assert.equal(r.status, 1);
   assert.match(r.stderr, /auto/i);
 });
+
+test("scanForkWitnessAuto success JSON schema locks auto.* + Pages-never disclaimer", async () => {
+  const fake = async (url) => {
+    const u = String(url);
+    if (u.includes("/events")) {
+      return {
+        ok: true,
+        status: 200,
+        headers: { "X-RateLimit-Remaining": "50" },
+        json: async () => [forcedPushEvent()],
+      };
+    }
+    if (u.includes("/forks")) {
+      return {
+        ok: true,
+        status: 200,
+        headers: { "X-RateLimit-Remaining": "49" },
+        json: async () => [
+          {
+            full_name: "mirror/widget",
+            stargazers_count: 10,
+            private: false,
+            owner: { login: "mirror" },
+            name: "widget",
+          },
+        ],
+      };
+    }
+    if (u.includes(`/repos/mirror/widget/commits/${before}`)) {
+      return { ok: true, status: 200, json: async () => ({ sha: before }) };
+    }
+    if (u.includes("/commits/")) {
+      return { ok: false, status: 404, json: async () => ({}), text: async () => "gone" };
+    }
+    return {
+      ok: false,
+      status: 500,
+      text: async () => `unmocked ${u}`,
+      json: async () => ({}),
+      headers: {},
+    };
+  };
+
+  const data = await scanForkWitnessAuto("acme/widget", { fetchImpl: fake });
+  assert.ok(data.auto);
+  assert.equal(data.auto.selectedFork, "mirror/widget");
+  assert.equal(typeof data.auto.forksExamined, "number");
+  assert.ok(data.auto.forksExamined >= 1);
+  assert.equal(typeof data.auto.forkPagesFetched, "number");
+  assert.ok(data.auto.forkPagesFetched >= 1);
+  assert.equal(data.auto.note, "public fork still holds tip SHA");
+  // stoppedEarly may be null when no rate-limit — field must exist on schema
+  assert.ok("stoppedEarly" in data.auto);
+  assert.match(data.disclaimer, /Pages never runs live --vs \/ --vs auto/i);
+  assert.match(data.disclaimer, /examined \d+ public fork/i);
+  assert.doesNotMatch(JSON.stringify(data), /best|most scandal|最佳|scandalous/i);
+  // timeline fields only — no score / secrets / confidence
+  assert.equal(data.score, undefined);
+  assert.equal(data.secrets, undefined);
+  assert.equal(data.confidence, undefined);
+
+  const out = formatTimeline(data);
+  assert.match(out, /Pages never runs live --vs \/ --vs auto|Pages demo stays offline/i);
+  assert.match(out, /CLI `--vs` only|CLI --vs only/i);
+  assert.doesNotMatch(out, /best|scandalous|最佳/i);
+});
+
+test("scanForkWitnessAuto: skips private forks (never pick private as witness)", async () => {
+  const probed = [];
+  const fake = async (url) => {
+    const u = String(url);
+    if (u.includes("/events")) {
+      return {
+        ok: true,
+        status: 200,
+        headers: { "X-RateLimit-Remaining": "50" },
+        json: async () => [forcedPushEvent()],
+      };
+    }
+    if (u.includes("/forks")) {
+      return {
+        ok: true,
+        status: 200,
+        headers: { "X-RateLimit-Remaining": "49" },
+        json: async () => [
+          {
+            full_name: "secret/widget",
+            stargazers_count: 999,
+            private: true,
+            owner: { login: "secret" },
+            name: "widget",
+          },
+          {
+            full_name: "mirror/widget",
+            stargazers_count: 3,
+            private: false,
+            owner: { login: "mirror" },
+            name: "widget",
+          },
+        ],
+      };
+    }
+    if (u.includes("/repos/secret/widget/commits/")) {
+      probed.push("secret");
+      return { ok: true, status: 200, json: async () => ({ sha: before }) };
+    }
+    if (u.includes(`/repos/mirror/widget/commits/${before}`)) {
+      probed.push("mirror");
+      return { ok: true, status: 200, json: async () => ({ sha: before }) };
+    }
+    if (u.includes("/commits/")) {
+      return { ok: false, status: 404, json: async () => ({}), text: async () => "gone" };
+    }
+    return {
+      ok: false,
+      status: 500,
+      text: async () => `unmocked ${u}`,
+      json: async () => ({}),
+      headers: {},
+    };
+  };
+
+  const data = await scanForkWitnessAuto("acme/widget", { fetchImpl: fake });
+  assert.equal(data.auto.selectedFork, "mirror/widget");
+  assert.ok(!probed.includes("secret"), "private fork must not be commit-probed");
+  assert.ok(probed.includes("mirror"));
+});
