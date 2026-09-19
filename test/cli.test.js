@@ -129,6 +129,7 @@ test("CLI --help documents --json / --pretty and Events pagination cap", () => {
   assert.match(r.stdout, /3 pages|hard cap of 3/i);
   assert.match(r.stdout, /X-RateLimit-Remaining|rate-limit/i);
   assert.match(r.stdout, /never invent|refuse to invent/i);
+  assert.match(r.stdout, /compare budget|DEFAULT_MAX_COMPARES|fast-forward noise|diverged\/before-missing/i);
 });
 
 test("CLI --vs same-repo still exits 2 with --json (no success JSON)", () => {

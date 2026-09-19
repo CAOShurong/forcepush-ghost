@@ -493,3 +493,107 @@ test("scanForkWitnessAuto: skips private forks (never pick private as witness)",
   assert.ok(!probed.includes("secret"), "private fork must not be commit-probed");
   assert.ok(probed.includes("mirror"));
 });
+
+test("scanForkWitnessAuto: default compare budget finds tip after FF noise (no invent)", async () => {
+  const tipBefore = "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcd";
+  const tipHead = "efefefefefefefefefefefefefefefefefefefef";
+  const events = [];
+  for (let i = 0; i < 14; i++) {
+    const b = `aa${String(i).padStart(2, "0")}${"c".repeat(36)}`;
+    const h = `bb${String(i).padStart(2, "0")}${"d".repeat(36)}`;
+    events.push({
+      id: `ff${i}`,
+      type: "PushEvent",
+      created_at: `2026-09-19T01:${String(i).padStart(2, "0")}:00Z`,
+      actor: { login: "owner" },
+      payload: {
+        forced: false,
+        ref: "refs/heads/main",
+        before: b,
+        head: h,
+        commits: [{ sha: h, message: "ff", author: { name: "owner" } }],
+      },
+    });
+  }
+  events.push({
+    id: "wipe",
+    type: "PushEvent",
+    created_at: "2026-09-17T09:22:15Z",
+    actor: { login: "owner" },
+    payload: {
+      forced: false,
+      ref: "refs/heads/topic",
+      before: tipBefore,
+      head: tipHead,
+      commits: [],
+    },
+  });
+
+  const fake = async (url) => {
+    const u = String(url);
+    if (u.includes("/events")) {
+      return {
+        ok: true,
+        status: 200,
+        headers: { "X-RateLimit-Remaining": "80" },
+        json: async () => events,
+      };
+    }
+    if (u.includes("/compare/")) {
+      if (u.includes(`${tipBefore}...${tipHead}`)) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ status: "diverged", ahead_by: 2, behind_by: 2 }),
+        };
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ status: "ahead", ahead_by: 1, behind_by: 0 }),
+      };
+    }
+    if (u.includes("/forks")) {
+      return {
+        ok: true,
+        status: 200,
+        headers: { "X-RateLimit-Remaining": "70" },
+        json: async () => [
+          {
+            full_name: "mirror/widget",
+            stargazers_count: 9,
+            private: false,
+            owner: { login: "mirror" },
+            name: "widget",
+          },
+        ],
+      };
+    }
+    if (u.includes(`/repos/mirror/widget/commits/${tipBefore}`)) {
+      return { ok: true, status: 200, json: async () => ({ sha: tipBefore }) };
+    }
+    if (u.includes("/commits/")) {
+      return { ok: false, status: 404, json: async () => ({}), text: async () => "gone" };
+    }
+    return {
+      ok: false,
+      status: 500,
+      text: async () => `unmocked ${u}`,
+      json: async () => ({}),
+      headers: {},
+    };
+  };
+
+  await assert.rejects(
+    () => scanForkWitnessAuto("acme/widget", { fetchImpl: fake, maxCompares: 12 }),
+    (err) => {
+      assert.equal(err.code, "VS_AUTO_NO_TIPS");
+      return true;
+    }
+  );
+
+  const data = await scanForkWitnessAuto("acme/widget", { fetchImpl: fake });
+  assert.equal(data.auto.selectedFork, "mirror/widget");
+  assert.equal(data.clean, false);
+  assert.ok(data.events.some((e) => e.forkStatus === "alive" && e.upstreamStatus === "wiped"));
+});

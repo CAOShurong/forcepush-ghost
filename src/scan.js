@@ -4,6 +4,8 @@
  *
  * Public Events payloads often omit `forced`. We also treat a push as a
  * rewrite signal when `before...head` is diverged/behind or `before` 404s.
+ * Compare budget defaults high enough that busy-repo FF noise does not starve
+ * later in-window diverged/before-missing tip discovery for --vs auto.
  *
  * Live `--vs` fork-witness: upstream rewrite signals + fork commit probes.
  * Live `--vs auto`: capped public-fork pick that still holds tip SHA(s).
@@ -11,6 +13,15 @@
 
 /** Default hard timeout for live GitHub fetches (ms). Override via FORCEPUSH_GHOST_TIMEOUT_MS or --timeout. */
 export const DEFAULT_TIMEOUT_MS = 60_000;
+
+/**
+ * Default compare budget for PushEvents that omit forced=true.
+ * Busy repos burn early compares on fast-forward pushes; rewrite signals
+ * (diverged / before-missing) often appear later in the *same* Events window.
+ * Raise above the old hard 12 so --vs auto tip discovery can use honest
+ * in-window compare hits without inventing dual-hits or widening Events pages.
+ */
+export const DEFAULT_MAX_COMPARES = 40;
 
 /** Resolve timeout ms from explicit option, then env, then default. */
 export function resolveTimeoutMs({ timeoutMs, env = process.env } = {}) {
@@ -203,7 +214,7 @@ async function fetchEventsPages(
 async function collectUpstreamSignals(
   owner,
   repo,
-  { headers, fetchImpl, maxCompares = 12, maxEventPages = 3, signal }
+  { headers, fetchImpl, maxCompares = DEFAULT_MAX_COMPARES, maxEventPages = 3, signal }
 ) {
   const {
     notFound,
@@ -489,7 +500,7 @@ export async function pickPublicForkHoldingTips(
 
 export async function scanPublicRepo(
   ownerRepo,
-  { token, fetchImpl = fetch, maxCompares = 12, timeoutMs, signal } = {}
+  { token, fetchImpl = fetch, maxCompares = DEFAULT_MAX_COMPARES, timeoutMs, signal } = {}
 ) {
   const [owner, repo] = String(ownerRepo).split("/");
   if (!owner || !repo) throw new Error("Expected owner/repo");
@@ -569,7 +580,7 @@ export async function scanPublicRepo(
 export async function scanForkWitness(
   upstreamOwnerRepo,
   forkOwnerRepo,
-  { token, fetchImpl = fetch, maxCompares = 12, timeoutMs, signal } = {}
+  { token, fetchImpl = fetch, maxCompares = DEFAULT_MAX_COMPARES, timeoutMs, signal } = {}
 ) {
   const [upOwner, upRepo] = String(upstreamOwnerRepo).split("/");
   const [fkOwner, fkRepo] = String(forkOwnerRepo).split("/");
@@ -762,7 +773,7 @@ export async function scanForkWitnessAuto(
   {
     token,
     fetchImpl = fetch,
-    maxCompares = 12,
+    maxCompares = DEFAULT_MAX_COMPARES,
     timeoutMs,
     signal,
     maxForkPages = AUTO_FORK_MAX_PAGES,

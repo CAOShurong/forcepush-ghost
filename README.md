@@ -111,7 +111,7 @@ Pages: pick **Fork-witness A** in the demo select. Hook: *Upstream wiped it. The
 
 ## Limitations
 
-- Live scan uses the public Events window only — older rewrites can fall outside it; Events pagination follows Link next up to 3 pages and stops early on rate-limit remaining=0 (no invented rows)
+- Live scan uses the public Events window only — older rewrites can fall outside it; Events pagination follows Link next up to 3 pages and stops early on rate-limit remaining=0 (no invented rows); PushEvents that omit `forced=true` get an honest compare budget (default 40) so busy-repo fast-forward noise does not starve later in-window diverged/before-missing tip discovery for `--vs auto`
 - Demo UI is offline fixtures; live `owner/repo` and live `--vs` / `--vs auto` are CLI only (Pages never runs live `--vs` / `--vs auto`)
 - Offline fixtures are sanitized — not real scandals dressed up as live results
 - Story/timeline positioning only — not a secret scanner and not secret recovery
