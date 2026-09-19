@@ -39,3 +39,8 @@ Do not show wipe copy on the clean control path.
 **CLI honesty (if spoken):** only `npx github:CAOShurong/forcepush-ghost` or clone — never registry `npx`. Clip stays Pages Path B; do not demo registry install.
 **Out of scope:** live CLI `--vs` in the clip (demo never runs it); inventing rows on timeout; replacing GitHub Activity; restore/recover CTAs.
 **CLI (off-clip):** live/`--vs` hard-timeout default 60s → EXIT 2; never substitute fixtures.
+
+## Recorded Path B clip (HOLD — do not post)
+- `launch/path-b-15s.mp4` (~15s) · `launch/path-b-15s.gif`
+- Built from hero `demo/fork-witness.gif` + Path B overlays (FW-A). Offline story only — no live `--vs` / restore / scanner.
+- Post only after Star PM + user 「发」.
