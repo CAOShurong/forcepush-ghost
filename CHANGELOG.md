@@ -2,8 +2,11 @@
 
 ## Unreleased
 
+## 0.1.20 — 2026-09-19
+
 - **Honest compare budget for tip discovery:** default `DEFAULT_MAX_COMPARES` raised **12 → 40** so busy-repo fast-forward PushEvents do not starve later in-window `diverged` / `before-missing` rewrite signals used by live timeline and `--vs auto` (still never invent dual-hits; Events page cap unchanged at 3)
-- CLI `--help` documents the compare budget; package still **0.1.19** (no release cut in this PR)
+- CLI `--help` documents the compare budget
+- Story/timeline only — not a secret scanner; Pages stays offline; npm registry still unpublished
 
 ## 0.1.19 — 2026-09-18
 

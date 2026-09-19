@@ -1,4 +1,4 @@
-# Install without npm registry (package 0.1.19)
+# Install without npm registry (package 0.1.20)
 
 Registry `npx forcepush-ghost` is **unpublished** — do not claim it.
 
@@ -28,4 +28,4 @@ npm run path-b
 npm run smoke:github
 ```
 
-External X / Show HN remain **HOLD**. Release pin: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.19 — tip via Pages / `npx github:…`.
+External X / Show HN remain **HOLD**. Release pin: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.20 — tip via Pages / `npx github:…`.

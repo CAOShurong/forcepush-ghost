@@ -1,12 +1,12 @@
-# npm publish checklist — forcepush-ghost@0.1.19
+# npm publish checklist — forcepush-ghost@0.1.20
 
 ## Pre-flight
 - [ ] `git status` clean on main; tip includes README Pages-first honesty
 - [ ] `npm test` + `bash scripts/claim-check.sh` PASS
 - [ ] `npm whoami` succeeds (**blocker today: ENEEDAUTH** — do not ping user; defer publish)
 - [ ] `npm view forcepush-ghost` is 404 (name free) before first publish
-- [ ] `package.json` version is `0.1.19` (do not rewrite older tags)
-- [ ] `npm pack --dry-run` files list looks right (**verified: 0.1.19 / 27 files**)
+- [ ] `package.json` version is `0.1.20` (do not rewrite older tags)
+- [ ] `npm pack --dry-run` files list looks right (**verified: 0.1.20 / 27 files**)
 
 ## Publish (only after whoami works)
 ```bash
@@ -16,11 +16,11 @@ npm publish --access public
 
 ## Post-publish verify
 ```bash
-npm view forcepush-ghost version   # expect 0.1.19
+npm view forcepush-ghost version   # expect 0.1.20
 # Path B primary (fork-witness):
-npx --yes forcepush-ghost@0.1.19 --fixture fork-witness-a
+npx --yes forcepush-ghost@0.1.20 --fixture fork-witness-a
 # classic Path A still available:
-npx --yes forcepush-ghost@0.1.19 --fixture scandal-a
+npx --yes forcepush-ghost@0.1.20 --fixture scandal-a
 ```
 
 ## Then

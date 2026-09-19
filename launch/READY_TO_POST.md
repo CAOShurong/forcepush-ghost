@@ -1,4 +1,4 @@
-# One-click outbound pack — Release v0.1.19 (HOLD — wait for Star PM go)
+# One-click outbound pack — Release v0.1.20 (HOLD — wait for Star PM go)
 
 Star PM says go → paste these. **Do not post until go.**
 **Do not auto-lift HOLD / GO** — only Star PM or user 「发」. Path B (FW-A dual-rail GIF) is the lead; Path A Scandal is alternate only.
@@ -14,7 +14,7 @@ Title: Show HN: forcepush-ghost – upstream wiped it, the fork still remembers
 
 Text: Offline dual-rail demo (zero install): https://caoshurong.github.io/forcepush-ghost/demo/ — pick Fork-witness A. Same SHA: upstream ✕ / fork ●.
 
-Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.19
+Release: https://github.com/CAOShurong/forcepush-ghost/releases/tag/v0.1.20
 
 Clone CLI (Path B): `node bin/forcepush-ghost.js --fixture fork-witness-a`
 
@@ -29,7 +29,7 @@ Live fork-witness (CLI only): `node bin/forcepush-ghost.js mrdoob/three.js --vs 
 Story/timeline only — not a secret scanner, not recovery. Registry npm not published yet (use Pages / `npx github:…` / clone).
 
 ## Tip ahead OK
-Outbound pins Release **v0.1.19** + Pages Path B demo. Live/`--vs` hard-timeout 60s → EXIT 2 (footnote only). Do not pin ephemeral tip SHAs. **HOLD — do not post.**
+Outbound pins Release **v0.1.20** + Pages Path B demo. Live/`--vs` hard-timeout 60s → EXIT 2 (footnote only). Do not pin ephemeral tip SHAs. **HOLD — do not post.**
 
 ## Paths
 Pages (Fork-witness A) → Release → `npx github:…` / clone Path B → `--json` / live showcase / live `--vs` / `--vs auto`. No registry `npx` claims.

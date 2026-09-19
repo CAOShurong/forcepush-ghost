@@ -1,32 +1,25 @@
-# FREEZE v0.1.20 — DRAFT NOTES (not cut)
+# FREEZE v0.1.20 — 2026-09-19
 
-**Status:** product-delta notes · package still **0.1.19** · **do not cut Release v0.1.20** until Star PM GO / explicit version bump.
-Tip basis: `0e6323e` (merge #10) atop Release `v0.1.19`.
+Tip: Release `v0.1.20` cut from tip after Dist pin (package **0.1.20**). Do not pin ephemeral tip SHAs in PATHS.
 
-## Product delta since v0.1.19 (PR #10) — unlock candidate
+## Product delta
+- **Compare budget 12 → 40** (`DEFAULT_MAX_COMPARES`) — busy-repo fast-forward PushEvents no longer starve later in-window rewrite signals for live timeline / `--vs auto`
+- Still never invent dual-hits; Events page cap unchanged at 3
+- Inherited from 0.1.19: `--vs auto` (public fork still holds tip SHA; find none → EXIT 2; no best/scandalous)
+- Inherited from 0.1.18: AbortSignal live timeout → EXIT 2
 
-1. **Live Events compare budget 12→40** — busy-repo fast-forward PushEvents no longer starve later in-window diverged / before-missing tips for live timeline and `--vs auto`
-2. **No invented dual-hits** — still fail-closed when no wiped/before tip in window; Events page cap remains **3**
-3. **Verified smoke (PM):** `mrdoob/three.js --vs auto` → EXIT **0** / dual-hit (post-#10); pre-#10 window often EXIT 2 empty
+## Ship checklist
+- [x] package.json 0.1.20
+- [x] CHANGELOG 0.1.20
+- [x] PATHS / INSTALL_NO_NPM / NPM_PUBLISH / READY_TO_POST retargeted
+- [x] External X / Show HN: **HOLD** (do not post; only Star PM / user 「发」 lifts)
+- [x] npm registry: unpublished — Pages + `npx github:CAOShurong/forcepush-ghost` / clone Path B (ban registry `npx forcepush-ghost`)
+- [x] Pages demo: offline Path B only — never live `--vs` / `--vs auto`
 
-## Honesty locks since v0.1.19 (PR #9) — tests only
-
-1. **`--vs auto` + AbortSignal timeout → EXIT 2** — never substitute fixtures / invent rows on hang
-2. **Success JSON `auto.*` schema lock** — `selectedFork`, `forksExamined`, `forkPagesFetched`, note = `public fork still holds tip SHA`; Pages-never-live disclaimer
-3. **Private fork skip** — private tip-holder never selected as `--vs auto` witness
-
-## Ship checklist (when cutting — not now)
-- [ ] package.json → 0.1.20 + CHANGELOG (cite #10 compare-budget product delta)
-- [ ] PATHS / READY / HOLD packs retargeted to Release v0.1.20
-- [ ] External X / Show HN: **HOLD** until 「发」
-- [ ] npm registry: still unpublished — Pages + `npx github:CAOShurong/forcepush-ghost` only (ban registry `npx forcepush-ghost`)
-- [ ] Pages offline forever for `--vs` / `--vs auto`
-- [ ] Smokes: claim-check · `three.js --vs auto` live dual-hit · `--timeout` EXIT 2 · private-skip tests
-
-## Install honesty (unchanged)
-- Primary: Pages Path B (offline fixtures)
-- CLI: `npx github:CAOShurong/forcepush-ghost` / clone
-- **Ban:** registry `npx forcepush-ghost` until Dist publishes
+## Install honesty
+1. Pages Path B primary
+2. `npx github:CAOShurong/forcepush-ghost --fixture fork-witness-a`
+3. Release URL secondary pin `v0.1.20`
 
 ## Story lock
-Story/timeline only — not a scanner, not recovery. Never claim we replace GitHub Activity. Never lead with “best/most scandalous” fork. Never claim Pages runs live `--vs` / `--vs auto`.
+Story/timeline only — not a scanner, not recovery. Never claim we replace GitHub Activity.

@@ -7,4 +7,4 @@ Upstream wiped it. The fork still remembers — dual-rail offline: https://caosh
 
 Optional follow-up (CLI, after clone): `node bin/forcepush-ghost.js mrdoob/three.js --vs alteredq` — live Upstream ✕ | Fork ●. Registry npm not published — use `npx github:CAOShurong/forcepush-ghost` or clone; never claim registry `npx forcepush-ghost`.
 
-Optional CLI honesty (do not lead): live/`--vs` ~60s hard timeout → EXIT 2; no invented rows. Release **v0.1.19**. **HOLD.**
+Optional CLI honesty (do not lead): live/`--vs` ~60s hard timeout → EXIT 2; no invented rows. Release **v0.1.20**. **HOLD.**
