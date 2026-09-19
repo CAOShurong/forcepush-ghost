@@ -12,6 +12,7 @@ import {
   isAutoVs,
   resolveTimeoutMs,
   DEFAULT_TIMEOUT_MS,
+  DEFAULT_MAX_COMPARES,
   AUTO_FORK_MAX_PAGES,
   AUTO_FORK_PER_PAGE,
   isAbortOrTimeoutError,
@@ -43,6 +44,7 @@ Options:
 Offline fixtures / Pages demo always work (recommended first look).
 Live mode uses recent public activity + events windows (story/timeline — not a secret scanner).
 Live Events follow Link rel="next" up to a hard cap of 3 pages (per_page=100); if X-RateLimit-Remaining hits 0, stop early and keep results so far — never invent timeline rows.
+PushEvents that omit forced=true get an honest compare budget (default ${DEFAULT_MAX_COMPARES}) so busy-repo fast-forward noise does not starve later in-window diverged/before-missing tip discovery for --vs auto.
 Live GitHub fetches abort after a hard timeout (default ${DEFAULT_TIMEOUT_MS} ms ≈ 60s); override with --timeout <ms> or FORCEPUSH_GHOST_TIMEOUT_MS. On timeout: clear error on stderr, exit 2 — never substitute fixtures or invent timeline rows.
 Live --vs compares upstream rewrite signals against a fork's commit graph.
 --vs auto enumerates capped public forks (hard cap ${AUTO_FORK_MAX_PAGES} pages / ~${AUTO_FORK_MAX_PAGES * AUTO_FORK_PER_PAGE} forks, stargazers order), probes which still hold wiped/before tip SHA(s), and picks a public fork that still holds tip SHA (prefer higher stargazers among holders — never claim "best"/"most scandalous"). Find none → exit 2; never invent a dual-hit / never substitute fixtures. Rate-limit Remaining=0 → stop early and say so.

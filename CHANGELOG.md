@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- **Honest compare budget for tip discovery:** default `DEFAULT_MAX_COMPARES` raised **12 → 40** so busy-repo fast-forward PushEvents do not starve later in-window `diverged` / `before-missing` rewrite signals used by live timeline and `--vs auto` (still never invent dual-hits; Events page cap unchanged at 3)
+- CLI `--help` documents the compare budget; package still **0.1.19** (no release cut in this PR)
+
 ## 0.1.19 — 2026-09-18
 
 - **`--vs auto` (CLI only):** enumerate capped public forks of upstream, probe which still hold wiped/`before` tip SHAs, pick a public fork that still holds tip SHA (prefer higher stargazers among holders — **never** claim "best"/"most scandalous"/最佳)
