@@ -162,3 +162,32 @@ test("FORCEPUSH_GHOST_TIMEOUT_MS=1 drives CLI exit 2", () => {
   assert.equal(r.status, 2, `stderr=${r.stderr}`);
   assert.match(r.stderr, /Timed out after 1ms/i);
 });
+
+test("CLI --vs auto timeout exits 2 without fixture substitution", () => {
+  const r = spawnSync(
+    process.execPath,
+    [bin, "acme/widget", "--vs", "auto", "--timeout", "1"],
+    {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        GH_TOKEN: "",
+        GITHUB_TOKEN: "",
+        FORCEPUSH_GHOST_TIMEOUT_MS: "",
+        PATH: "/usr/bin:/bin",
+      },
+      timeout: 20_000,
+    }
+  );
+  const out = r.stdout + r.stderr;
+  assert.equal(r.status, 2, `stderr=${r.stderr}`);
+  assert.match(r.stderr, /Timed out after 1ms/i);
+  assert.match(r.stderr, /refusing to substitute a fixture|invent timeline/i);
+  // Honest offline hint OK; must not dump fixture dual-rail or invent auto pick
+  assert.doesNotMatch(out, /Upstream force-pushed\. Fork still has the tip/i);
+  assert.doesNotMatch(out, /Live fork-witness — upstream wipe/i);
+  assert.doesNotMatch(out, /example-labs\/widget-core|contrib-mirror\/widget-core/);
+  assert.doesNotMatch(out, /✕ WIPED/);
+  assert.doesNotMatch(out, /--vs auto: examined/i);
+  assert.doesNotMatch(out, /public fork \S+ still holds tip SHA/i);
+});
